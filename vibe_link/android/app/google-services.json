@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "625706484694",
+    "project_id": "vibelink-10a34",
+    "storage_bucket": "vibelink-10a34.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625706484694:android:ee7c0b0b1a61f1d9241a77",
+        "android_client_info": {
+          "package_name": "com.example.vibe_link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbRn8YSWRW-cye5e2D7T8GlsJ2-BdPFrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625706484694:android:4bc5ce2397c0436f241a77",
+        "android_client_info": {
+          "package_name": "com.example.vibelink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbRn8YSWRW-cye5e2D7T8GlsJ2-BdPFrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
