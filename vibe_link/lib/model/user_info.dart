@@ -1,9 +1,10 @@
-class UserInfo {
+class UserInfoMine {
   String? displayName;
   ExternalUrls? externalUrls;
   String? href;
   String? id;
-  List<dynamic>? image;
+  // List<dynamic>? image;
+  String? imgUrl;
   // String? image;
 
   String? type;
@@ -13,14 +14,14 @@ class UserInfo {
   String? product;
   ExplicitContent? explicitContent;
   String? email;
-  List<dynamic>?spotifyBasedGenre;
+  List<dynamic>?topArtists;
 
-  UserInfo(
+  UserInfoMine(
       {this.displayName,
       this.externalUrls,
       this.href,
       this.id,
-      this.image,
+      this.imgUrl,
       this.type,
       this.uri,
       this.followers,
@@ -28,9 +29,9 @@ class UserInfo {
       this.product,
       this.explicitContent,
       this.email,
-      this.spotifyBasedGenre});
+      this.topArtists});
 
-  UserInfo.fromJson(Map<String, dynamic> json) {
+  UserInfoMine.fromJson(Map<String, dynamic> json) {
     displayName = json['display_name'];
     externalUrls = json['external_urls'] != null
         ? new ExternalUrls.fromJson(json['external_urls'])
@@ -38,7 +39,7 @@ class UserInfo {
     href = json['href'];
     id = json['id'];
     if (json['images']!=null) {
-      image = json['images'];
+      imgUrl = json['images'];
       // json['images'].forEach((v) {
       //   images!.add(v);
       // });
@@ -54,7 +55,7 @@ class UserInfo {
         ? new ExplicitContent.fromJson(json['explicit_content'])
         : null;
     email = json['email'];
-    spotifyBasedGenre = json['spotifyGenre'];
+    topArtists = json['spotifyGenre'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,8 +66,8 @@ class UserInfo {
     }
     data['href'] = this.href;
     data['id'] = this.id;
-    if (this.image != null) {
-      data['images'] = this.image;
+    if (this.imgUrl != null) {
+      data['images'] = this.imgUrl;
     }
     data['type'] = this.type;
     data['uri'] = this.uri;

@@ -20,7 +20,10 @@ class AccessError{
         }
         if(jsonDecode(res.body)['error']['message']=="No token provided"){
           print("add '?' sign in place of '&' sign before access_token");
+          return 0;
         }
+        print('unknown error');
+
         // print(jsonDecode(res.body));
       }
       if(res.statusCode==400){

@@ -7,13 +7,13 @@ import 'package:vibe_link/controller/Network/user_network_functions.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/model/user_info.dart';
 
-Future<List<UserInfo>?> FetchRequestNotifications()async{
+Future<List<UserInfoMine>?> FetchRequestNotifications()async{
   // FirebaseCall _firebaseCaller = FirebaseCall(); 
   List<dynamic>? friendRequests = await fetchFriendRequests(); // data called from firebase can be null so null check must be there
   NetworkFunction _fetchUserInfo = NetworkFunction();
-  List<UserInfo>? _userInfo=[];
+  List<UserInfoMine>? _userInfo=[];
   for(int i=0;friendRequests!=null && i<friendRequests.length;i++){
-    UserInfo temp = await _fetchUserInfo.fetchUserInfo(friendRequests[i]);
+    UserInfoMine temp = await _fetchUserInfo.fetchUserInfo(friendRequests[i]);
     _userInfo.add(temp);
   }
   // print(_userInfo);

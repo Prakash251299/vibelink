@@ -13,7 +13,7 @@ import 'package:vibe_link/view/home/loading.dart';
 // import 'package:linkify/view/home/loading.dart';
 
 class ShowmoreSuggestion extends StatefulWidget {
-  List<UserInfo>?totalUsers;
+  List<UserInfoMine>?totalUsers;
   String title="";
   ShowmoreSuggestion(this.totalUsers,this.title,{super.key});
   @override
@@ -61,7 +61,7 @@ class _ShowmoreSuggestionState extends State<ShowmoreSuggestion> {
                                                               Radius.circular(3),
                                                         ),
                                                         child: 
-                                                        widget.totalUsers?[i].image?.length==0?
+                                                        widget.totalUsers?[i].imgUrl==null?
                     
                                                           Container(
                                                             width: 55,
@@ -76,11 +76,9 @@ class _ShowmoreSuggestionState extends State<ShowmoreSuggestion> {
                                                           // imageUrl: "${widget._albumTracks?[position].imgUrl}",
                                                           imageUrl: widget
                                                                       .totalUsers?[i]
-                                                                      .image
-                                                                      ?.length !=
-                                                                  0
-                                                              ? "${widget.totalUsers?[i].image?[0]['url']}"
-                                                              : "",
+                                                                      .imgUrl!=null?widget
+                                                                      .totalUsers![i]
+                                                                      .imgUrl!:'https://example.com/default-image.png',
                                                           // imageUrl: "",
                   
                                                           width: 55,
@@ -115,7 +113,7 @@ class _ShowmoreSuggestionState extends State<ShowmoreSuggestion> {
                                                           color: Colors.white),
                                                     ),
                                                     subtitle: Text(
-                                                      "${widget.totalUsers?[i].spotifyBasedGenre}",
+                                                      "${widget.totalUsers?[i].topArtists}",
                                                       style: TextStyle(
                                                           color: Colors.white70),
                                                       overflow: TextOverflow.ellipsis,

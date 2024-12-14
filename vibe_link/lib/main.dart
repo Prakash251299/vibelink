@@ -41,7 +41,7 @@ class MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  LoginPage _loginController = LoginPage();
+  // LoginPage _loginController = LoginPage();
   var res=0;
   // This widget is the root of the application.
   @override
@@ -90,8 +90,10 @@ class MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
 
-      home: FutureBuilder(future: _loginController.getLoginStatus(), 
+      home: FutureBuilder(future: loginController.getLoginStatus(), 
         builder: (BuildContext context, snapshot) {
+          print('main is fine');
+          print(snapshot.data);
             if (!snapshot.hasData) {
               // while data is loading:
               return Center(
@@ -99,7 +101,10 @@ class MyAppState extends State<MyApp> {
               );
             } else {
               // data loaded:
+              
               final status = snapshot.data;
+              // status=1 means user is installed the app already and data is fetched
+              // status=0 mwans either user is new or has unintalled the app
               return status==1?App():LoginScreen();
             }
           },

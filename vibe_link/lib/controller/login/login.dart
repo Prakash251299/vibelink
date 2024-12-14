@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
 
 import 'package:spotify/spotify.dart';
+import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/view/home/bottom_nav_bar.dart';
 import 'package:vibe_link/view/pick_artists.dart';
@@ -19,9 +20,32 @@ class LoginPage{
   FirebaseFirestore con = FirebaseFirestore.instance;
   ReadWrite _readWrite = ReadWrite();
   Future<int> getLoginStatus() async {
+    // print('came in getLoginStatus');
     if(await _readWrite.getEmail()==""){
       return 0;
     }
+    // FirebaseCall _firebaseCall = FirebaseCall();
+
+    // // if date more than 2 then
+    // DateTime now = DateTime.now();
+    // String date = '${now.day}/${now.month}/${now.year}';
+    // // fetching stored date
+    // String dateStored = await  _readWrite.getDate();
+
+    // DateTime date1 = DateTime.parse(date);
+    // DateTime date2 = DateTime.parse(dateStored);
+    
+    // // Calculate the difference
+    // Duration difference = date2.difference(date1);
+    
+
+
+    // if(difference.inDays>2){
+    //  _readWrite.writeDate(date);
+    //   await _firebaseCall.getUserArtistsWithGenrePercentage();
+    //   await _firebaseCall.storeUserWithGenrePercentage();
+    // }
+    print('checking');
     return 1;
   }
 
@@ -44,7 +68,7 @@ class LoginPage{
 
   Future<int> userExists(email)async{
     // var res = await con.collection('users').get(email);
-    return 1;
+    return 0;
   }
   
   Future<void> login(context)async {
@@ -65,20 +89,17 @@ class LoginPage{
     if(await _loginController.getLoginStatus()==0){
       user = await signInWithGoogle();
       await _readWrite.writeEmail((user.user?.email).toString());
+      // store date too in local storage here
+      DateTime now = DateTime.now();
+      String date = '${now.day}/${now.month}/${now.year}';
+      await _readWrite.writeDate(date);
       if(await userExists(user.user?.email)==0){
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const PickArtistPage()));
+        return;
+
       }
     }
+    Navigator.pop(context); // For removing the previous login screen
     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const App()));
-
-
-
-
-
-
-
-
-    // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PickArtistPage()));
-
   }
 }

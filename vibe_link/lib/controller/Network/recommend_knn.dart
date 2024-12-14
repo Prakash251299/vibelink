@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vibe_link/controller/Network/user_network_functions.dart';
 import 'package:vibe_link/controller/genre/user_genre.dart';
+import 'package:vibe_link/controller/local_storing/read_write.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
@@ -13,21 +14,28 @@ import 'package:vibe_link/model/user_info.dart';
 // import 'package:linkify/controller/genre/user_genre.dart';
 // import 'package:linkify/model/user_info.dart';
 
-Future<List<UserInfo>> KNN_recommender() async {
+Future<List<UserInfoMine>> KNN_recommender() async {
   // print(StaticStore.userGenreWithCount);
   // return;
   Map<dynamic,dynamic> mapOfRecommendedUserIds={};
+  FirebaseCall _firebaseCall = FirebaseCall();
   if(StaticStore.userGenre.length<=0 || StaticStore.userGenre==[]){
-    await fetchTopTrackGenres();
+    // await fetchTopTrackGenres();
+    await _firebaseCall.getUserArtistsWithGenrePercentage();
   }
-  await fetchTopTrackGenresPercentage();
-  print("fetchTopTrackGenresPercentage called");
-  List<UserInfo> recommendedUsers = [];
-  if(StaticStore.userGenreWithCount==null){
-    // pass
-  }else{
-    recommendedUsers = await fetchKNearestNeighbours();
-  }
+  print(StaticStore.userGenre);
+  // return [];
+  // await fetchKNNUsers();
+  List<UserInfoMine> recommendedUsers = [];
+  recommendedUsers = await fetchKNearestNeighbours();
+  // await fetchTopTrackGenresPercentage();
+  // print("fetchTopTrackGenresPercentage called");
+  // List<UserInfoMine> recommendedUsers = [];
+  // if(StaticStore.userGenreWithCount==null){
+  //   // pass
+  // }else{
+  //   recommendedUsers = await fetchKNearestNeighbours();
+  // }
   /* remove current user and friends from mapOfRecommendedUserIds */
   // print(mapOfRecommendedUserIds);
 
@@ -87,39 +95,32 @@ Future<void> genreStoreWithPercentage() async {
 
 // Future<void> genreWiseUserWithPercentage() async {}
 
-Future<List<UserInfo>> fetchKNearestNeighbours() async {
+Future<List<UserInfoMine>> fetchKNearestNeighbours() async {
   Map<dynamic,dynamic> mapOfRecommendedUserIds={};
   var db = FirebaseFirestore.instance;
+  
   List<List<double>> nearness = [[],[],[]];
-  var a = await db
-      .collection("userPercentageGenrewise")
-      .doc("genreUser").get();
-      // print("here");
-      // print(StaticStore.userGenreWithCount?[StaticStore.userGenre?[0]].runtimeType);
-      // print(StaticStore.userGenreWithCount?[StaticStore.userGenre?[0]]);
-      for(int i=0;i<StaticStore.userGenre.length && i<3;i++){
-        // for(int j=0;j<a[StaticStore.userGenre![i]].length;j++){
-        //   applyKNN(0, StaticStore.userGenre?[i], 0, a[StaticStore.userGenre![i]].keys[j]);
+  // List<String> allUSers=[];
+  ReadWrite _readWrite = ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
+  for(int i=0;i<StaticStore.userGenre.length && i<3;i++){
+    var fetchedUsers = await db
+      .collection(StaticStore.userGenre[i]).get();
+      for(int j=0;j<fetchedUsers.docs.length;j++){
+        String id = fetchedUsers.docs[j].id.toString();
+        // if(currentUserEmail!=id){
+          if(mapOfRecommendedUserIds[id]==null){
+            mapOfRecommendedUserIds[id]=1;
+          }else{
+            mapOfRecommendedUserIds[id]=mapOfRecommendedUserIds[id]+1;
+          }
         // }
-        List<double> temp=[];
-        for(var k in a[StaticStore.userGenre[i]].keys){
-          // print("${StaticStore.userGenre?[i]}: $k");
-          // print(k);
-          // print(StaticStore.userGenre![i].runtimeType);
-          // await applyKNN(0, int.parse(k), 0, int.parse(StaticStore.userGenreWithCount![StaticStore.userGenre![i]]));
-          // await applyKNN(0, int.parse(k), 0, 0);
-          double res = applyKNN(0, double.parse(k), 0, double.parse('${StaticStore.userGenreWithCount?[StaticStore.userGenre[i]]}'));
-          temp.add(res);
-        }
-        // temp = [43,5,8,56,2,7];
-        temp.sort();
-        // var t = await sort(temp);
-        // print(temp);
-        nearness[i] = temp;
       }
-  // print(nearness);
-  mapOfRecommendedUserIds = await getAllRecommendationUsers(nearness);
-  List<UserInfo> recommendedUsers = await getUsers(mapOfRecommendedUserIds);
+      // print(fetchedUsers.docs[0].id);
+  }
+  
+  List<UserInfoMine> recommendedUsers = await getUsers(mapOfRecommendedUserIds);
+  // return recommendedUsers;
   return recommendedUsers;
 }
 
@@ -214,6 +215,7 @@ Future<String>getFriendStatus1(requestReceiver)async{
   String requestId = requestIdGenerator(requestReceiver);
   var db = FirebaseFirestore.instance;
   try{
+    
   var a = await db
         .collection("friendStatus")
         .doc('$requestId')
@@ -230,11 +232,12 @@ Future<String>getFriendStatus1(requestReceiver)async{
   }
 }
 
-Future<List<UserInfo>> getUsers(Map<dynamic,dynamic> mapOfRecommendedUserIds)async{
-  Map<dynamic,dynamic> l = await sortMapByValue(mapOfRecommendedUserIds,0);
+Future<List<UserInfoMine>> getUsers(Map<dynamic,dynamic> mapOfRecommendedUserIds)async{
+  Map<dynamic,dynamic> l = await sortMapByValue(mapOfRecommendedUserIds,null);
+  print(l);
   NetworkFunction _networkFunction = NetworkFunction();
   // print(l);
-  List<UserInfo> users=[];
+  List<UserInfoMine> users=[];
   for(var k in l.keys){
     users.add(await _networkFunction.fetchUserInfo(k));
   }

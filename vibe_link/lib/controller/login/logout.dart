@@ -68,7 +68,7 @@ Future<void> deleteAllStaticData()async{
   StaticStore.currentUserName="";
   StaticStore.currentUserEmail="";
   StaticStore.currentUserCountry="";
-  StaticStore.currentUserImage=[];
+  StaticStore.currentUserImageUrl="";
   StaticStore.videoPlayingIndex = -1;
   StaticStore.categoryInfo=[];
   StaticStore.myQueueTrack=[];

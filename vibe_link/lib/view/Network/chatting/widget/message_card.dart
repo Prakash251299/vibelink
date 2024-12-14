@@ -18,7 +18,7 @@ class MessageCard extends StatefulWidget {
   // final ChatUser user;
   // final String message;
   MesInfo _mesInfo;
-  UserInfo _receiverInfo;
+  UserInfoMine _receiverInfo;
   MessageCard(this._mesInfo,this._receiverInfo, {super.key});
   // const MessageCard({super.key,required this.message,required this.user,});
   @override

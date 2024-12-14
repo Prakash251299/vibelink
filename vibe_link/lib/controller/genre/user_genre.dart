@@ -105,7 +105,7 @@ Future<List<String>> fetchTopTrackGenres() async {
     }
   }
 
-  Future<List<String>> getArtistsGenres(String artistIds)async{
+  Future<List<String>> getArtistsGenres(String artistId)async{
     List<String> genres=[];
     ReadWrite _readWrite = ReadWrite();
     while (true) {
@@ -113,7 +113,7 @@ Future<List<String>> fetchTopTrackGenres() async {
       // print("Hhhhh");
 
       /* Fetching album tracks */
-      var res = await get(Uri.parse('https://api.spotify.com/v1/artists?ids=$artistIds&access_token=$accessToken'));
+      var res = await get(Uri.parse('https://api.spotify.com/v1/artists?ids=$artistId&access_token=$accessToken'));
       // var res = await get(Uri.parse('https://api.spotify.com/v1/me/top/artists?limit=30&time_range=short_term&access_token=$accessToken'));
       print(res.statusCode);
       // List<String>genres=[];
@@ -124,13 +124,6 @@ Future<List<String>> fetchTopTrackGenres() async {
         // print(data['items'][0]['genres'][0]);
         // print(data['items'].length);
 
-
-
-        /* For new user */
-        // if(data['items'].length==0){
-        //   // write code for giving user option to select his/her favourite artists
-        //   return [];
-        // }
 
 
 
@@ -226,7 +219,7 @@ Future<List<String>> fetchUserTopArtistGenre() async {
     }
   }
 
-Future<LinkedHashMap> sortMapByValue(var m,int? rev) async {
+Future<LinkedHashMap> sortMapByValue(Map<dynamic,dynamic> m,int? rev) async {
   if(rev==null){
     var sortedKeys = m.keys.toList(growable:false)
       // ..sort((k1, k2) => (m[k1] as num).compareTo(m[k2] as num));

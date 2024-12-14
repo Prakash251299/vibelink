@@ -6,9 +6,12 @@ import 'package:vibe_link/controller/local_songs/get_local_songs/fetch_localsong
 import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
 import 'package:vibe_link/controller/login/logout.dart';
 import 'package:vibe_link/controller/notification/notification_functions.dart';
+import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
+import 'package:vibe_link/view/Login/login_screen.dart';
 import 'package:vibe_link/view/Network/request_notification_screen.dart';
 import 'package:vibe_link/view/local_music/homeNav.dart';
+import 'package:vibe_link/view/pick_artists.dart';
 import 'package:vibe_link/view/sticky/sticky_widgets.dart';
 // import 'package:linkify/controller/home/get_greeting.dart';
 // import 'package:linkify/controller/home/logout.dart';
@@ -146,6 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }),
                                   IconButton(
                                     onPressed: () async {
+                                      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PickArtistPage()));
+
+                                      FirebaseCall _firebaseCall = FirebaseCall();
+                                      await _firebaseCall.call();
+                                      return;
+
                                       print('Sign out called');
                                       if (menuWidth == 0) {
                                         setState(() {
@@ -283,7 +292,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ))),
                                                 onTap: () async {
                                                   await callSignOutApi(context);
-                                                  Navigator.of(context).popUntil((route) => route.isFirst);
+                                                  Navigator.of(context).popUntil((route) => route.isFirst); // popped until route
+                                                  Navigator.pop(context); // popped the route widget too
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));
                                                 },
                                               ),
                                             )

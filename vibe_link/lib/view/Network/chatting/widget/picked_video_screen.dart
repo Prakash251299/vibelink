@@ -24,7 +24,7 @@ import 'package:video_player/video_player.dart';
 class VideoScreen extends StatefulWidget {
   List<XFile> res;
   int position;
-  UserInfo receiverInfo;
+  UserInfoMine receiverInfo;
   String messageId;
   VideoScreen(this.res,this.position,this.receiverInfo,this.messageId, {super.key});
 

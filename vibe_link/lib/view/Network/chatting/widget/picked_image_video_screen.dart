@@ -24,7 +24,7 @@ import 'package:vibe_link/view/Network/chatting/widget/picked_video_screen.dart'
 
 class PickedImageVideo extends StatefulWidget {
   List<XFile> res;
-  UserInfo receiverInfo;
+  UserInfoMine receiverInfo;
   String messageId;
 
   PickedImageVideo(this.res,this.receiverInfo,this.messageId,{super.key});

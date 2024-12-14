@@ -73,7 +73,7 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
                   return Center(child: CircularProgressIndicator(),);
                 }
                 // print(snapshot.data?.first.displayName);
-                List<UserInfo>?friendRequests = snapshot.data;
+                List<UserInfoMine>?friendRequests = snapshot.data;
                 // print("fetching request data from snapshot");
                 // // print(snapshot.data?.doc('sad').get());
                 // List<dynamic>? friendRequests = snapshot.data?.data()?['users'];
@@ -121,7 +121,7 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
                                                   child:
                                                   // StaticStore.currentSongImg==""?
                                                       // CachedNetworkImage(imageUrl: ""),
-                                                      friendRequests[index].image?.length==0?
+                                                      friendRequests[index].imgUrl?.length==null?
                 
                                                       Container(
                                                         width: 55,
@@ -134,10 +134,7 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
                                                   /* For user's friends image */
                                                   :
                                                       CachedNetworkImage(
-                                                    // imageUrl: user.avatar!,
-                
-                                                    imageUrl: friendRequests[index].image?.length==2?"${friendRequests[index].image?[1]['url']}":"${friendRequests[index].image?[0]['url']}",
-                
+                                                    imageUrl: friendRequests[index].imgUrl!=null?friendRequests[index].imgUrl!:'https://example.com/default-image.png',
                                                     width: 55,
                                                     height: 55,
                                                     memCacheHeight:
@@ -164,7 +161,7 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
                                             style: TextStyle(color: Colors.white),
                                           ),
                                           subtitle: Text(
-                                            "${friendRequests[index].spotifyBasedGenre}",
+                                            "${friendRequests[index].topArtists}",
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(color: Colors.grey),
                                           ),

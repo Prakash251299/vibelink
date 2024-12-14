@@ -7,31 +7,49 @@ import 'package:vibe_link/model/user_info.dart';
 // import 'package:linkify/model/user_info.dart';
 
 class NetworkFunction {
-  Future<UserInfo> fetchUserInfo(var userId) async {
+  Future<UserInfoMine> fetchUserInfo(var userId) async {
     var db = FirebaseFirestore.instance;
-    UserInfo users = UserInfo();
-    await db.collection("users").doc(userId).get().then((v) async {
-      // UserInfo k = v.data() as UserInfo;
-      try{
-      users.displayName = v.data()?['name'];
-      // users.displayName = k.displayName;
-      users.image = v.data()?['images'];
-      users.id = v.data()?['id'];
-      // users.id = k.id;
-      // print(users.id);
-      users.spotifyBasedGenre = v.data()?['spotifyGenre'];
-      // print(v.data());
-      return users;
-      }catch(e){
-        print("User id doesn't exist in users collection on firebase");
-      }
-    });
+    UserInfoMine users = UserInfoMine();
+    // print(userId);
+    // return users;
+    DocumentSnapshot<Map<String,dynamic>> userData;
+    try{
+      userData = await db.collection("users").doc(userId).get();
+      users.displayName = userData.data()?['name'];
+      users.email = userId;
+      users.imgUrl = userData.data()?['images'];
+      users.topArtists = userData.data()?['topArtists'];
+      print("knn users' info fetching");
+      // print(users.email);
+    }catch(e){
+      print("User id doesn't exist in users collection on firebase");
+    }
+    // print(userData.data()?['images']);
+    // print(userData.data()?['name']);
+    // print(userData.data()?['topArtists']);
+    // print(users.imgUrl);
+    // .then((v) async {
+    //   // UserInfo k = v.data() as UserInfo;
+    //   try{
+    //   users.displayName = v.data()?['name'];
+    //   // users.displayName = k.displayName;
+    //   users.image = v.data()?['images'];
+    //   // users.id = v.data()?['id'];
+    //   // users.id = k.id;
+    //   // print(users.id);
+    //   users.topArtists = v.data()?['topArtists'];
+    //   // print(v.data());
+    //   return users;
+    //   }catch(e){
+    //     print("User id doesn't exist in users collection on firebase");
+    //   }
+    // });
     return users;
   }
 
-  Future<List<UserInfo>?> fetchRecommendedUsersInfo(numberOfUsers) async {
+  Future<List<UserInfoMine>?> fetchRecommendedUsersInfo(numberOfUsers) async {
     List<dynamic>? likeUsersId = []; // In firebase type is dynamic
-    List<UserInfo>? likeUsersInfo = [];
+    List<UserInfoMine>? likeUsersInfo = [];
     StoreUserInfo _storeUserInfo = StoreUserInfo();
     if(StaticStore.currentUserGenreId=="" || StaticStore.currentUserGenreId==null){
       await _storeUserInfo.fetch_store_user_info();
@@ -74,9 +92,9 @@ class NetworkFunction {
     return likeUsersInfo;
   }
 
-  Future<List<UserInfo>?> fetchAllUsersInfo(numberOfUsers) async {
+  Future<List<UserInfoMine>?> fetchAllUsersInfo(numberOfUsers) async {
     List<dynamic>? allUsersId = []; // In firebase type is dynamic
-    List<UserInfo>? allUsersInfo = [];
+    List<UserInfoMine>? allUsersInfo = [];
     await FirebaseFirestore.instance
         .collection('users')
         .get()
@@ -84,9 +102,11 @@ class NetworkFunction {
       try{
         for(int i=0;i<value.docs.length;i++){
           allUsersId.add(value.docs[i].id);
+          print("fetching all users");
         }
+        // print(allUsersId);
         if(allUsersId.length>2){
-          allUsersId.remove(StaticStore.currentUserId);
+          allUsersId.remove(StaticStore.currentUserEmail);
         }
         if(numberOfUsers<0){
           for (int i = 0;i < allUsersId.length;i++) {

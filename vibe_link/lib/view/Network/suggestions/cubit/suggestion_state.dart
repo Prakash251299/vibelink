@@ -6,7 +6,7 @@ part of 'suggestion_cubit.dart';
 
 class SuggestionState {
   final LoadPage status;
-  List<List<UserInfo>?> recommendedUsers;
+  List<List<UserInfoMine>?> recommendedUsers;
   // final List<User> users;
   // final List<SongModel>? songs;
   // final List<AlbumModeling>? albums;
@@ -34,7 +34,7 @@ class SuggestionState {
 
   SuggestionState copyWith({
     LoadPage? status,
-    List<List<UserInfo>?>? recommendedUsers,
+    List<List<UserInfoMine>?>? recommendedUsers,
     // Map<String,List<dynamic>>?carouselSongs,
     // List<FrontPageCategories>? categories,
     // List<String>?id,

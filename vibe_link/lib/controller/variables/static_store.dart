@@ -18,6 +18,7 @@ class StaticStore{
   ];
   static List<String> userGenre = [];
   static Map<dynamic,dynamic>? userGenreWithCount;
+  static Map<dynamic,dynamic>? userGenreWithDistributedPercentage;
   static String dateStored = "1-1-2024";
   static String dateStored2 = "1-1-2024";
   static var carouselInd = -10;
@@ -35,7 +36,8 @@ class StaticStore{
   static String? currentUserName="";
   static String? currentUserEmail="";
   static String? currentUserCountry="";
-  static List<dynamic>? currentUserImage=[];
+  // static List<dynamic>? currentUserImage=[];
+  static String? currentUserImageUrl="";
   static int videoPlayingIndex = -1;
   static List<FrontPageCategories>categoryInfo=[];
   static List<AlbumTrack> myQueueTrack=[];

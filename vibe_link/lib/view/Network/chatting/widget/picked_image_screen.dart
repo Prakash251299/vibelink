@@ -23,7 +23,7 @@ import 'package:video_player/video_player.dart';
 class ImageScreen extends StatefulWidget {
   List<XFile> res;
   int position;
-  UserInfo receiverInfo;
+  UserInfoMine receiverInfo;
   String messageId;
   ImageScreen(this.res, this.position,this.receiverInfo,this.messageId, {super.key});
 

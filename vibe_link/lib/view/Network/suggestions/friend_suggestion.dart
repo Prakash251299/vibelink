@@ -16,23 +16,6 @@ import 'package:vibe_link/view/Network/suggestions/show_more_suggestion.dart';
 import 'package:vibe_link/view/Network/user_network.dart';
 import 'package:vibe_link/view/home/loading.dart';
 import 'package:vibe_link/view/sticky/sticky_widgets.dart';
-// import 'package:linkify/controller/Network/fetch_friends.dart';
-// import 'package:linkify/controller/Network/user_network_functions.dart';
-// import 'package:linkify/controller/store_to_firebase/firebase_call.dart';
-// import 'package:linkify/model/home/first_page_categories.dart';
-// import 'package:linkify/controller/playlist/playlist_track.dart';
-// import 'package:linkify/controller/home/front_page_data/recommendations.dart';
-// import 'package:linkify/controller/variables/static_store.dart';
-// import 'package:linkify/model/album_track.dart';
-// import 'package:linkify/model/user_info.dart';
-// import 'package:linkify/view/Network/suggestions/cubit/suggestion_cubit.dart';
-// import 'package:linkify/view/Network/suggestions/show_more_suggestion.dart';
-// import 'package:linkify/view/Network/user_network.dart';
-// import 'package:linkify/view/album/album_view.dart';
-// import 'package:linkify/view/Network/chatting/loading_user_img.dart';
-// import 'package:linkify/view/home/loading.dart';
-// import 'package:linkify/view/sticky/sticky_widgets.dart';
-// import 'package:linkify/controller/variables/loading_enum.dart';
 
 class Suggestion extends StatefulWidget {
   // const Suggestion({super.key});
@@ -82,26 +65,14 @@ class _SuggestionState extends State<Suggestion> {
             child: BlocBuilder<SuggestionCubit, SuggestionState>(
                 // child: BlocBuilder(
                 builder: (context, state) {
-              // print("recommendedUsers:");
+              // print("recommendedUsers: ${state.recommendedUsers}");
+              // return SizedBox();
               if (state.status == LoadPage.loading) {
                 return Center(child: CircularProgressIndicator());
               }
-              // print(state.recommendedUsers.length);
 
-              // return
-              // SizedBox();
-              // }));
-
-              // StaticStore.usersLoaded==1?SizedBox():CircularProgressIndicator();
-
-              // StreamBuilder(
-              //     stream: userButtonCaller().asStream(),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.connectionState == ConnectionState.waiting) {
-              //         return Center(child: CircularProgressIndicator());
-              //       }
-              // print(state.recommendedUsers[2]?[2].displayName);
-              // return SizedBox();
+              if(state.status==LoadPage.loaded){
+                print("getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
               return SafeArea(
                 child: Scaffold(
                   appBar: AppBar(
@@ -153,213 +124,215 @@ class _SuggestionState extends State<Suggestion> {
                                         children: [
                                           // friendOptions(context, state.recommendedUsers[2]),
 
-                                          // friendOptions(context),
+                                          friendOptions(context),
 
                                           Container(
                                             margin:
                                                 const EdgeInsets.only(top: 40),
                                             child: Column(children: [
                                               // for (int i = 0; i < 2; i++) ...{
-                                              if (state.recommendedUsers[0]
-                                                      ?.length !=
-                                                  0) ...{
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 18,
-                                                                top: 18.0,
-                                                                bottom: 15),
-                                                        child: Text(
-                                                          "Mostly same",
-                                                          style: TextStyle(
-                                                              fontSize: 22),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: state.recommendedUsers[
-                                                                        0] !=
-                                                                    null &&
-                                                                state.recommendedUsers[0]!
-                                                                        .length >=
-                                                                    2
-                                                            ? 200
-                                                            : 100,
-                                                        child: ListView.builder(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            physics:
-                                                                NeverScrollableScrollPhysics(),
-                                                            // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
-                                                            itemCount: state.recommendedUsers[
-                                                                            0] !=
-                                                                        null &&
-                                                                    state
-                                                                            .recommendedUsers[
-                                                                                0]!
-                                                                            .length >=
-                                                                        2
-                                                                ? 2
-                                                                : 1,
-                                                            // itemCount:null,
-                                                            itemBuilder:
-                                                                (context, i) {
-                                                              return Card(
-                                                                color: Colors
-                                                                    .black,
-                                                                child: Column(
-                                                                    children: [
-                                                                      InkWell(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(15),
-                                                                        onTap:
-                                                                            () async {},
-                                                                        child:
-                                                                            ListTile(
-                                                                          leading:
-                                                                              Column(children: [
-                                                                            ClipRRect(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(3),
-                                                                                bottomLeft: Radius.circular(3),
-                                                                              ),
-                                                                              child: state.recommendedUsers[0]?[i].image?.length == 0
-                                                                                  ? Container(
-                                                                                      width: 55,
-                                                                                      height: 55,
-                                                                                      child: const LoadingUserImage(),
-                                                                                    )
-                                                                                  : CachedNetworkImage(
-                                                                                      // imageUrl: user.avatar!,
 
-                                                                                      // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                                                                      imageUrl: state.recommendedUsers[0]?[i].image?.length != 0 ? "${state.recommendedUsers[0]?[i].image?[0]['url']}" : "",
-                                                                                      // imageUrl: "",
 
-                                                                                      width: 55,
-                                                                                      height: 55,
-                                                                                      memCacheHeight: (55 * devicePexelRatio).round(),
-                                                                                      memCacheWidth: (55 * devicePexelRatio).round(),
-                                                                                      maxHeightDiskCache: (55 * devicePexelRatio).round(),
-                                                                                      maxWidthDiskCache: (55 * devicePexelRatio).round(),
-                                                                                      progressIndicatorBuilder: (context, url, l) => LoadingImage(icon: Icon(LineIcons.user)),
-                                                                                      fit: BoxFit.cover,
-                                                                                    ),
-                                                                            ),
-                                                                          ]),
-                                                                          title:
-                                                                              Text(
-                                                                            // "${widget._albumTracks?[position].name}",
-                                                                            "${state.recommendedUsers[0]?[i].displayName}",
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(color: Colors.white),
-                                                                          ),
-                                                                          subtitle:
-                                                                              Text(
-                                                                            "${state.recommendedUsers[0]?[i].spotifyBasedGenre}",
-                                                                            style:
-                                                                                TextStyle(color: Colors.white70),
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                          ),
-                                                                          isThreeLine:
-                                                                              true,
-                                                                          trailing: Column(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                IconButton(
-                                                                                  onPressed: () async {
-                                                                                    print("friend request sent");
-                                                                                    // print(
-                                                                                    // "friend request sent");
-                                                                                    await storeFriendRequest(state.recommendedUsers[0]?[i].id);
-                                                                                    await _friends.friendStatusStore(state.recommendedUsers[0]?[i].id).then((value) {
-                                                                                      setState(() {
-                                                                                        state.recommendedUsers[0] != null ? StaticStore.requestStatusValue?[0]?[i] = state.recommendedUsers[0]![i].id.toString() : null;
-                                                                                        // widget
-                                                                                        //     .bestMatch![i]
-                                                                                        //     .id
-                                                                                        //     .toString();
-                                                                                        // StaticStore.requestStatusValue?[
-                                                                                        //             2]
-                                                                                        //         ?[i] =
-                                                                                        //     widget
-                                                                                        //         .bestMatch![i]
-                                                                                        //         .id
-                                                                                        //         .toString();
-                                                                                      });
-                                                                                      print("updated");
-                                                                                    });
-                                                                                    // print(StaticStore.requestStatusValue?[0][i]);
-                                                                                  },
-                                                                                  icon: StaticStore.requestStatusValue?[0]?[i] == "0" || StaticStore.requestStatusValue?[0]?[i] == ""
-                                                                                      ? Icon(Icons.send, color: Colors.white)
-                                                                                      : StaticStore.requestStatusValue?[0]?[i] == "1"
-                                                                                          ? Icon(
-                                                                                              Icons.done_outline,
-                                                                                              color: Colors.white,
-                                                                                            )
-                                                                                          : Icon(Icons.watch_later_outlined, color: Colors.white),
-                                                                                )
-                                                                              ]),
-                                                                        ),
-                                                                      ),
-                                                                    ]),
-                                                              );
-                                                            }),
-                                                      ),
-                                                      state.recommendedUsers[
-                                                                  0] !=
-                                                              null
-                                                          ? (state.recommendedUsers[0]!
-                                                                      .length >
-                                                                  2
-                                                              ? Padding(
-                                                                  padding: const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          18.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      InkWell(
-                                                                        child:
-                                                                            Text(
-                                                                          "show more",
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        ),
-                                                                        onTap:
-                                                                            () async {
-                                                                          print(
-                                                                              "show more tapped");
-                                                                          List<UserInfo>?
-                                                                              bestUsers =
-                                                                              await fetchBestMatchFriends(-1);
-                                                                          await getRequestStatus(
-                                                                              bestUsers,
-                                                                              0);
-                                                                          Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(builder: (context1) => ShowmoreSuggestion(bestUsers, "Mostly same")));
-                                                                        },
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                )
-                                                              : SizedBox())
-                                                          : SizedBox(),
-                                                    ])
-                                              },
+                                              // if (state.recommendedUsers[0]
+                                              //         ?.length !=
+                                              //     0) ...{
+                                              //   Column(
+                                              //       crossAxisAlignment:
+                                              //           CrossAxisAlignment
+                                              //               .start,
+                                              //       children: [
+                                              //         Padding(
+                                              //           padding:
+                                              //               const EdgeInsets
+                                              //                   .only(
+                                              //                   left: 18,
+                                              //                   top: 18.0,
+                                              //                   bottom: 15),
+                                              //           child: Text(
+                                              //             "Mostly same",
+                                              //             style: TextStyle(
+                                              //                 fontSize: 22),
+                                              //           ),
+                                              //         ),
+                                              //         Container(
+                                              //           height: state.recommendedUsers[
+                                              //                           0] !=
+                                              //                       null &&
+                                              //                   state.recommendedUsers[0]!
+                                              //                           .length >=
+                                              //                       2
+                                              //               ? 200
+                                              //               : 100,
+                                              //           child: ListView.builder(
+                                              //               scrollDirection:
+                                              //                   Axis.vertical,
+                                              //               physics:
+                                              //                   NeverScrollableScrollPhysics(),
+                                              //               // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
+                                              //               itemCount: state.recommendedUsers[
+                                              //                               0] !=
+                                              //                           null &&
+                                              //                       state
+                                              //                               .recommendedUsers[
+                                              //                                   0]!
+                                              //                               .length >=
+                                              //                           2
+                                              //                   ? 2
+                                              //                   : 1,
+                                              //               // itemCount:null,
+                                              //               itemBuilder:
+                                              //                   (context, i) {
+                                              //                 return Card(
+                                              //                   color: Colors
+                                              //                       .black,
+                                              //                   child: Column(
+                                              //                       children: [
+                                              //                         InkWell(
+                                              //                           borderRadius:
+                                              //                               BorderRadius.circular(15),
+                                              //                           onTap:
+                                              //                               () async {},
+                                              //                           child:
+                                              //                               ListTile(
+                                              //                             leading:
+                                              //                                 Column(children: [
+                                              //                               ClipRRect(
+                                              //                                 borderRadius: BorderRadius.only(
+                                              //                                   topLeft: Radius.circular(3),
+                                              //                                   bottomLeft: Radius.circular(3),
+                                              //                                 ),
+                                              //                                 child: state.recommendedUsers[0]?[i].imgUrl == null
+                                              //                                     ? Container(
+                                              //                                         width: 55,
+                                              //                                         height: 55,
+                                              //                                         child: const LoadingUserImage(),
+                                              //                                       )
+                                              //                                     : CachedNetworkImage(
+                                              //                                         // imageUrl: user.avatar!,
+
+                                              //                                         // imageUrl: "${widget._albumTracks?[position].imgUrl}",
+                                              //                                         imageUrl: "${state.recommendedUsers[0]?[i].imgUrl}",
+                                              //                                         // imageUrl: "",
+
+                                              //                                         width: 55,
+                                              //                                         height: 55,
+                                              //                                         memCacheHeight: (55 * devicePexelRatio).round(),
+                                              //                                         memCacheWidth: (55 * devicePexelRatio).round(),
+                                              //                                         maxHeightDiskCache: (55 * devicePexelRatio).round(),
+                                              //                                         maxWidthDiskCache: (55 * devicePexelRatio).round(),
+                                              //                                         progressIndicatorBuilder: (context, url, l) => LoadingImage(icon: Icon(LineIcons.user)),
+                                              //                                         fit: BoxFit.cover,
+                                              //                                       ),
+                                              //                               ),
+                                              //                             ]),
+                                              //                             title:
+                                              //                                 Text(
+                                              //                               // "${widget._albumTracks?[position].name}",
+                                              //                               "${state.recommendedUsers[0]?[i].displayName}",
+                                              //                               overflow:
+                                              //                                   TextOverflow.ellipsis,
+                                              //                               style:
+                                              //                                   TextStyle(color: Colors.white),
+                                              //                             ),
+                                              //                             subtitle:
+                                              //                                 Text(
+                                              //                               "${state.recommendedUsers[0]?[i].topArtists}",
+                                              //                               style:
+                                              //                                   TextStyle(color: Colors.white70),
+                                              //                               overflow:
+                                              //                                   TextOverflow.ellipsis,
+                                              //                             ),
+                                              //                             isThreeLine:
+                                              //                                 true,
+                                              //                             trailing: Column(
+                                              //                                 mainAxisAlignment: MainAxisAlignment.center,
+                                              //                                 children: [
+                                              //                                   IconButton(
+                                              //                                     onPressed: () async {
+                                              //                                       print("friend request sent");
+                                              //                                       // print(
+                                              //                                       // "friend request sent");
+                                              //                                       await storeFriendRequest(state.recommendedUsers[0]?[i].email);
+                                              //                                       await _friends.friendStatusStore(state.recommendedUsers[0]?[i].email).then((value) {
+                                              //                                         setState(() {
+                                              //                                           state.recommendedUsers[0] != null ? StaticStore.requestStatusValue?[0]?[i] = state.recommendedUsers[0]![i].email.toString() : null;
+                                              //                                           // widget
+                                              //                                           //     .bestMatch![i]
+                                              //                                           //     .id
+                                              //                                           //     .toString();
+                                              //                                           // StaticStore.requestStatusValue?[
+                                              //                                           //             2]
+                                              //                                           //         ?[i] =
+                                              //                                           //     widget
+                                              //                                           //         .bestMatch![i]
+                                              //                                           //         .id
+                                              //                                           //         .toString();
+                                              //                                         });
+                                              //                                         print("updated");
+                                              //                                       });
+                                              //                                       // print(StaticStore.requestStatusValue?[0][i]);
+                                              //                                     },
+                                              //                                     icon: StaticStore.requestStatusValue?[0]?[i] == "0" || StaticStore.requestStatusValue?[0]?[i] == ""
+                                              //                                         ? Icon(Icons.send, color: Colors.white)
+                                              //                                         : StaticStore.requestStatusValue?[0]?[i] == "1"
+                                              //                                             ? Icon(
+                                              //                                                 Icons.done_outline,
+                                              //                                                 color: Colors.white,
+                                              //                                               )
+                                              //                                             : Icon(Icons.watch_later_outlined, color: Colors.white),
+                                              //                                   )
+                                              //                                 ]),
+                                              //                           ),
+                                              //                         ),
+                                              //                       ]),
+                                              //                 );
+                                              //               }),
+                                              //         ),
+                                              //         state.recommendedUsers[
+                                              //                     0] !=
+                                              //                 null
+                                              //             ? (state.recommendedUsers[0]!
+                                              //                         .length >
+                                              //                     2
+                                              //                 ? Padding(
+                                              //                     padding: const EdgeInsets
+                                              //                         .only(
+                                              //                         bottom:
+                                              //                             18.0),
+                                              //                     child: Row(
+                                              //                       mainAxisAlignment:
+                                              //                           MainAxisAlignment
+                                              //                               .center,
+                                              //                       children: [
+                                              //                         InkWell(
+                                              //                           child:
+                                              //                               Text(
+                                              //                             "show more",
+                                              //                             style:
+                                              //                                 TextStyle(color: Colors.white),
+                                              //                           ),
+                                              //                           onTap:
+                                              //                               () async {
+                                              //                             print(
+                                              //                                 "show more tapped");
+                                              //                             List<UserInfoMine>?
+                                              //                                 bestUsers =
+                                              //                                 await fetchBestMatchFriends(-1);
+                                              //                             await getRequestStatus(
+                                              //                                 bestUsers,
+                                              //                                 0);
+                                              //                             Navigator.push(
+                                              //                                 context,
+                                              //                                 MaterialPageRoute(builder: (context1) => ShowmoreSuggestion(bestUsers, "Mostly same")));
+                                              //                           },
+                                              //                         )
+                                              //                       ],
+                                              //                     ),
+                                              //                   )
+                                              //                 : SizedBox())
+                                              //             : SizedBox(),
+                                              //       ])
+                                              // },
 
                                               if (state.recommendedUsers[1]
                                                       ?.length !=
@@ -413,7 +386,8 @@ class _SuggestionState extends State<Suggestion> {
                                                               return Card(
                                                                 color: Colors
                                                                     .black,
-                                                                child: Column(
+                                                                    child:
+                                                                    Column(
                                                                     children: [
                                                                       InkWell(
                                                                         borderRadius:
@@ -429,7 +403,7 @@ class _SuggestionState extends State<Suggestion> {
                                                                                 topLeft: Radius.circular(3),
                                                                                 bottomLeft: Radius.circular(3),
                                                                               ),
-                                                                              child: state.recommendedUsers[1]?[i].image?.length == 0
+                                                                              child: state.recommendedUsers[1]?[i].imgUrl == null
                                                                                   ? Container(
                                                                                       width: 55,
                                                                                       height: 55,
@@ -439,7 +413,7 @@ class _SuggestionState extends State<Suggestion> {
                                                                                       // imageUrl: user.avatar!,
 
                                                                                       // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                                                                      imageUrl: state.recommendedUsers[1]?[i].image?.length != 0 ? "${state.recommendedUsers[1]?[i].image?[0]['url']}" : "",
+                                                                                      imageUrl: "${state.recommendedUsers[1]?[i].imgUrl}",
                                                                                       // imageUrl: "",
 
                                                                                       width: 55,
@@ -455,8 +429,8 @@ class _SuggestionState extends State<Suggestion> {
                                                                           ]),
                                                                           title:
                                                                               Text(
-                                                                            // "${widget._albumTracks?[position].name}",
                                                                             "${state.recommendedUsers[1]?[i].displayName}",
+                                                                            // "ishu",
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -464,7 +438,8 @@ class _SuggestionState extends State<Suggestion> {
                                                                           ),
                                                                           subtitle:
                                                                               Text(
-                                                                            "${state.recommendedUsers[1]?[i].spotifyBasedGenre}",
+                                                                            "Good matcher",
+                                                                            // "prak",
                                                                             style:
                                                                                 TextStyle(color: Colors.white70),
                                                                             overflow:
@@ -480,8 +455,8 @@ class _SuggestionState extends State<Suggestion> {
                                                                                     print("friend request sent");
                                                                                     // print(
                                                                                     // "friend request sent");
-                                                                                    await storeFriendRequest(state.recommendedUsers[1]?[i].id);
-                                                                                    await _friends.friendStatusStore(state.recommendedUsers[1]?[i].id).then((value) {
+                                                                                    await storeFriendRequest(state.recommendedUsers[1]?[i].email);
+                                                                                    await _friends.friendStatusStore(state.recommendedUsers[1]?[i].email).then((value) {
                                                                                       setState(() {
                                                                                         state.recommendedUsers[1] != null ? StaticStore.requestStatusValue?[1]?[i] = state.recommendedUsers[1]![i].id.toString() : null;
                                                                                       });
@@ -489,7 +464,9 @@ class _SuggestionState extends State<Suggestion> {
                                                                                     });
                                                                                     // print(StaticStore.requestStatusValue?[0][i]);
                                                                                   },
-                                                                                  icon: StaticStore.requestStatusValue?[1]?[i] == "0" || StaticStore.requestStatusValue?[1]?[i] == ""
+                                                                                  icon: 
+                                                                                  // Icon(Icons.send),
+                                                                                  StaticStore.requestStatusValue?[1]?[i] == "0" || StaticStore.requestStatusValue?[1]?[i] == ""
                                                                                       ? Icon(Icons.send, color: Colors.white)
                                                                                       : StaticStore.requestStatusValue?[1]?[i] == "1"
                                                                                           ? Icon(
@@ -618,7 +595,7 @@ class _SuggestionState extends State<Suggestion> {
                                                                                 topLeft: Radius.circular(3),
                                                                                 bottomLeft: Radius.circular(3),
                                                                               ),
-                                                                              child: state.recommendedUsers[2]?[i].image?.length == 0
+                                                                              child: state.recommendedUsers[2]?[i].imgUrl == null
                                                                                   ? Container(
                                                                                       width: 55,
                                                                                       height: 55,
@@ -628,7 +605,7 @@ class _SuggestionState extends State<Suggestion> {
                                                                                       // imageUrl: user.avatar!,
 
                                                                                       // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                                                                      imageUrl: state.recommendedUsers[2]?[i].image?.length != 0 ? "${state.recommendedUsers[2]?[i].image?[0]['url']}" : "",
+                                                                                      imageUrl: "${state.recommendedUsers[2]?[i].imgUrl}",
                                                                                       // imageUrl: "",
 
                                                                                       width: 55,
@@ -653,7 +630,7 @@ class _SuggestionState extends State<Suggestion> {
                                                                           ),
                                                                           subtitle:
                                                                               Text(
-                                                                            "${state.recommendedUsers[2]?[i].spotifyBasedGenre}",
+                                                                            "User",
                                                                             style:
                                                                                 TextStyle(color: Colors.white70),
                                                                             overflow:
@@ -668,9 +645,9 @@ class _SuggestionState extends State<Suggestion> {
                                                                                   onPressed: () async {
                                                                                     print("friend request sent");
 
-                                                                                    await storeFriendRequest(state.recommendedUsers[2]?[i].id);
+                                                                                    await storeFriendRequest(state.recommendedUsers[2]?[i].email);
 
-                                                                                    await _friends.friendStatusStore(state.recommendedUsers[2]?[i].id).then((value) {
+                                                                                    await _friends.friendStatusStore(state.recommendedUsers[2]?[i].email).then((value) {
                                                                                       setState(() {
                                                                                         state.recommendedUsers[2] != null ? StaticStore.requestStatusValue?[2]?[i] = state.recommendedUsers[2]![i].id.toString() : null;
                                                                                       });
@@ -678,7 +655,10 @@ class _SuggestionState extends State<Suggestion> {
                                                                                     });
                                                                                     print(StaticStore.requestStatusValue?[2]?[i]);
                                                                                   },
-                                                                                  icon: StaticStore.requestStatusValue?[2]?[i] == "0" || StaticStore.requestStatusValue?[2]?[i] == ""
+                                                                                  icon: 
+                                                                                  // Icon(Icons.send)
+                                                                                  
+                                                                                  StaticStore.requestStatusValue?[2]?[i] == "0" || StaticStore.requestStatusValue?[2]?[i] == ""
                                                                                       ? Icon(Icons.send, color: Colors.white)
                                                                                       : StaticStore.requestStatusValue?[2]?[i] == "1"
                                                                                           ? Icon(
@@ -721,7 +701,7 @@ class _SuggestionState extends State<Suggestion> {
                                                                             () async {
                                                                           print(
                                                                               "allusers show more tapped");
-                                                                          List<UserInfo>?
+                                                                          List<UserInfoMine>?
                                                                               totalUsers =
                                                                               await fetchAllFriends(-1);
                                                                           await getRequestStatus(
@@ -773,7 +753,8 @@ class _SuggestionState extends State<Suggestion> {
                               ],
                             ),
                 ),
-              );
+              );}
+              return SizedBox();
             }));
     // }));
   }

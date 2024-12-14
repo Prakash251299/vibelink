@@ -11,13 +11,17 @@ import 'package:vibe_link/model/user_info.dart';
 class StoreUserInfo {
   Future<void> fetch_store_user_info() async {
     StoreUserInfo s = StoreUserInfo();
+    FirebaseCall _firebaseCall = FirebaseCall();
     // current user info can be fetched from here
     // UserInfo? _userInfo = await s.fetchCurrentUserInfo();
-    var topTrackGenres = await fetchTopTrackGenres(); // For storing it
+
+
+    /* This must not called everytime */
+    // var topTrackGenres = await _firebaseCall.getUserArtists(); // For storing it
     // await writeTofirestore(_userInfo);
   }
 
-  Future<UserInfo?> fetchCurrentUserInfo() async {
+  Future<UserInfoMine?> fetchCurrentUserInfo() async {
     print('current userinfo not avaialable');
     return null;
     FirebaseCall _firebaseCall = FirebaseCall();
@@ -37,13 +41,13 @@ class StoreUserInfo {
 
         // var topTrackGenres = await fetchTopTrackGenres();
 
-        UserInfo? _userInfo;
-        _userInfo = UserInfo.fromJson(data);
+        UserInfoMine? _userInfo;
+        _userInfo = UserInfoMine.fromJson(data);
         StaticStore.currentUserId = _userInfo.id;
         StaticStore.currentUserName = _userInfo.displayName;
         StaticStore.currentUserEmail = _userInfo.email;
         StaticStore.currentUserCountry = _userInfo.country;
-        StaticStore.currentUserImage = _userInfo.image;
+        StaticStore.currentUserImageUrl = _userInfo.imgUrl;
 
         print("user data fetched");
 
@@ -64,9 +68,9 @@ class StoreUserInfo {
     }
   }
 
-  Future<void> writeTofirestore(UserInfo? _userInfo) async {
+  Future<void> writeTofirestore(UserInfoMine? _userInfo) async {
     FirebaseCall _firebaseCall = FirebaseCall();
-    await _firebaseCall.writeUserData(_userInfo!, StaticStore.userGenre);
+    // await _firebaseCall.writeUserData(_userInfo!, StaticStore.userGenre);
     await _firebaseCall.writeSpotifyGenreData(StaticStore.userGenre);
   }
 }

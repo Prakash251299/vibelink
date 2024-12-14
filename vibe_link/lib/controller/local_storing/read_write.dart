@@ -57,6 +57,13 @@ class ReadWrite{
     return File('$path/email.txt');
   }
 
+  Future<File> get _localDate async {
+    final path = await _localPath;
+    print(path);
+
+    return File('$path/date.txt');
+  }
+
   Future<void> writeRefreshToken(String refreshToken) async {
     final file = await _localFileRefreshToken;
 
@@ -69,6 +76,12 @@ class ReadWrite{
 
     // Write the file
     file.writeAsString(email);
+  }
+  Future<void> writeDate(String date) async {
+    final file = await _localDate;
+
+    // Write the file
+    file.writeAsString(date);
   }
 
 
@@ -90,6 +103,17 @@ class ReadWrite{
       // Read the file
       final email = await file.readAsString();
       return email;
+    } catch (e) {
+      return "";
+    }
+  }
+  Future<String> getDate()async{
+    try {
+      final file = await _localDate;
+
+      // Read the file
+      final date = await file.readAsString();
+      return date;
     } catch (e) {
       return "";
     }

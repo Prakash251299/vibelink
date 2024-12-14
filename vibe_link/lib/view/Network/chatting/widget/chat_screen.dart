@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
+// import 'package:vibe_link/model/user_info.dart';
 import 'package:vibe_link/view/Network/chatting/controller/image_video_picker.dart';
 import 'package:vibe_link/view/Network/chatting/loading_user_img.dart';
 import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
@@ -22,7 +23,7 @@ import 'package:vibe_link/view/Network/chatting/widget/message_card.dart';
 // import 'message.dart';
 
 class ChatScreen extends StatefulWidget {
-  UserInfo receiverInfo;
+  UserInfoMine receiverInfo;
   String messageId;
   ChatScreen(this.receiverInfo,this.messageId,{super.key});
 
@@ -148,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 child:
                                                 // StaticStore.currentSongImg==""?
                                                     // CachedNetworkImage(imageUrl: ""),
-                                                    widget.receiverInfo.image?.length==0?
+                                                    widget.receiverInfo.imgUrl==null?
               
                                                     Container(
                                                       width: 55,
@@ -163,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     CachedNetworkImage(
                                                   // imageUrl: user.avatar!,
               
-                                                  imageUrl: widget.receiverInfo.image?.length==2?"${widget.receiverInfo.image?[1]['url']}":"${widget.receiverInfo.image?[0]['url']}",
+                                                  imageUrl: "${widget.receiverInfo.imgUrl}",
               
                                                   width: 55,
                                                   height: 55,
