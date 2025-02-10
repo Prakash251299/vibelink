@@ -69,8 +69,8 @@ class LoginPage{
   }
 
   Future<int> userExists(email)async{
-    var res = await con.collection('users').get(email);
-    print(res);
+    // var res = await con.collection('users').get(email);
+    // print(res);
     try {
     // Reference to Firestore
     var collection = FirebaseFirestore.instance.collection('users');
@@ -118,7 +118,12 @@ class LoginPage{
 
       }
     }
-    Navigator.pop(context); // For removing the previous login screen
-    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const App()));
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const App()), // Replace with your screen
+      (Route<dynamic> route) => false, // This removes all previous routes
+    );
+    // Navigator.pop(context); // For removing the previous login screen
+    // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const App()));
   }
 }

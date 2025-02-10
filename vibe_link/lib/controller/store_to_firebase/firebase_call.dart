@@ -14,13 +14,6 @@ import 'package:vibe_link/model/user_info.dart';
 class FirebaseCall {
   var db = FirebaseFirestore.instance;
   var user = FirebaseAuth.instance.currentUser;
-  Future<void> call() async {
-    // await KNN_recommender();
-    var a = await db.collection("friendStatus").doc('ishu').get();
-    print(a);
-    return;
-  }
-
   Future<void> storeUserWithGenrePercentage()async{
     DateTime now = DateTime.now();
     String date = '${now.day}/${now.month}/${now.year}';

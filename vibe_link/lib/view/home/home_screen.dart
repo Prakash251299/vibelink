@@ -152,9 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     onPressed: () async {
                                       // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PickArtistPage()));
 
-                                      FirebaseCall _firebaseCall = FirebaseCall();
-                                      await _firebaseCall.call();
-                                      return;
+                                      // FirebaseCall _firebaseCall = FirebaseCall();
+                                      // await _firebaseCall.call();
+                                      // return;
 
                                       print('Sign out called');
                                       if (menuWidth == 0) {
@@ -293,9 +293,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ))),
                                                 onTap: () async {
                                                   await callSignOutApi(context);
-                                                  Navigator.of(context).popUntil((route) => route.isFirst); // popped until route
-                                                  Navigator.pop(context); // popped the route widget too
-                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));
+                                                  Navigator.of(context)
+                                                      .popUntil((route) => route
+                                                          .isFirst); // popped until route
+                                                  Navigator.pop(
+                                                      context); // popped the route widget too
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginScreen()));
                                                 },
                                               ),
                                             )
@@ -331,51 +337,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      menuWidth == 200
-                                          ? Center(
-                                              child: InkWell(
-                                                child: Container(
-                                                  height: 40,
-                                                  // width:menuWidth==200?menuWidth:200,
-                                                  width: 200,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(5)),
-                                                    color: optionColor,
-                                                  ),
-                                                  child: Center(
-                                                      child: Text(
-                                                    "Local songs",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  )),
-                                                ),
-                                                onTap: () async {
-                                                  if (StaticStore.player.playing == true) {
-                    StaticStore.player.stop();
-                    StaticStore.playing = false;
-                    StaticStore.pause = false;
-                  }
-                  StaticStore.miniplayerMargin = 0;
-                  // if (SongDataController.loaded == true) {
-                    // localSongs = await readLocalSongs();
-                  //   Navigator.of(context).push(MaterialPageRoute(
-                  //       builder: (context) => HomeNav(localSongs)));
-                  // } else {
-                  //   if (await c.getLocalSongs() == 1) {
-                      // localSongs = await readLocalSongs();
-                    //   Navigator.of(context).push(MaterialPageRoute(
-                    //       builder: (context) => HomeNav(localSongs)));
-                    // }
-                  // }
-                                                },
-                                              ),
-                                            )
-                                          : SizedBox(),
+                                      //                     SizedBox(
+                                      //                       height: 5,
+                                      //                     ),
+                                      //                     menuWidth == 200
+                                      //                         ? Center(
+                                      //                             child: InkWell(
+                                      //                               child: Container(
+                                      //                                 height: 40,
+                                      //                                 // width:menuWidth==200?menuWidth:200,
+                                      //                                 width: 200,
+                                      //                                 decoration: BoxDecoration(
+                                      //                                   borderRadius:
+                                      //                                       BorderRadius.all(
+                                      //                                           Radius.circular(5)),
+                                      //                                   color: optionColor,
+                                      //                                 ),
+                                      //                                 child: Center(
+                                      //                                     child: Text(
+                                      //                                   "Local songs",
+                                      //                                   style: TextStyle(
+                                      //                                       color: Colors.white),
+                                      //                                 )),
+                                      //                               ),
+                                      //                               onTap: () async {
+                                      //                                 if (StaticStore.player.playing == true) {
+                                      //   StaticStore.player.stop();
+                                      //   StaticStore.playing = false;
+                                      //   StaticStore.pause = false;
+                                      // }
+                                      // StaticStore.miniplayerMargin = 0;
+                                      // // if (SongDataController.loaded == true) {
+                                      //   // localSongs = await readLocalSongs();
+                                      // //   Navigator.of(context).push(MaterialPageRoute(
+                                      // //       builder: (context) => HomeNav(localSongs)));
+                                      // // } else {
+                                      // //   if (await c.getLocalSongs() == 1) {
+                                      //     // localSongs = await readLocalSongs();
+                                      //   //   Navigator.of(context).push(MaterialPageRoute(
+                                      //   //       builder: (context) => HomeNav(localSongs)));
+                                      //   // }
+                                      // // }
+                                      //                               },
+                                      //                             ),
+                                      //                           )
+                                      //                         : SizedBox(),
                                     ],
                                   )),
                             ],
@@ -415,14 +421,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       // Container(
                       //   width: MediaQuery.of(context).size.width-20,
-                      //   child: 
-                        Flexible(
-                          child: Text(
-                            "No data found login with other account",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      //   child:
+                      Flexible(
+                        child: Text(
+                          "No data found login with other account",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.white),
                         ),
+                      ),
                       // ),
                     ],
                   ),
