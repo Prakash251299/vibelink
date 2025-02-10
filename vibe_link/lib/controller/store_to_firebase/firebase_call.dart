@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:vibe_link/controller/Network/recommend_knn.dart';
 import 'package:vibe_link/controller/Network/user_network_functions.dart';
 import 'package:vibe_link/controller/genre/user_genre.dart';
+import 'package:vibe_link/controller/local_storing/read_write.dart';
 import 'package:vibe_link/controller/store_to_firebase/user_info/get_user_info.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
@@ -209,11 +210,13 @@ class Friends extends StatefulWidget {
   const Friends({super.key});
 
   Future<String> friendStatusStore(requestReceiver) async {
+    ReadWrite _readWrite = ReadWrite();
+    String currentUserEmail = await _readWrite.getEmail();
     var requestId = requestIdGenerator(requestReceiver);
     var db = FirebaseFirestore.instance;
     try {
       await db.collection("friendStatus").doc(requestId).set(
-          {"requestStatus": "${StaticStore.currentUserEmail}"},
+          {"requestStatus": "${currentUserEmail}"},
           SetOptions(merge: true));
       print("friend status fetcher");
 
@@ -264,11 +267,13 @@ Future<void> storeFriendRequest(requestReceiverId) async {
   // if(requestReceiverId==StaticStore.currentUserId){
   //   return;
   // }
+  ReadWrite _readWrite = ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
   var db = FirebaseFirestore.instance;
   print("Storing friend request: $requestReceiverId");
   try {
     var a = await db.collection("friendRequest").doc(requestReceiverId).set({
-      "users": FieldValue.arrayUnion([StaticStore.currentUserId])
+      "users": FieldValue.arrayUnion([currentUserEmail])
     }, SetOptions(merge: true)).onError(
         (e, _) => print("Error Storing message info in firebase: $e"));
     return;
@@ -279,18 +284,20 @@ Future<void> storeFriendRequest(requestReceiverId) async {
 
 Future<List<dynamic>?> fetchFriendRequests() async {
   StoreUserInfo _storeUserInfo = StoreUserInfo();
-  StaticStore.currentUserId == ""
-      ? await _storeUserInfo.fetchCurrentUserInfo()
-      : null;
-  if (StaticStore.currentUserId == null ||
-      StaticStore.currentUserId?.length == 0) {
-    return [];
-  }
+  ReadWrite _readWrite = ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
+  // StaticStore.currentUserId == ""
+  //     ? await _storeUserInfo.fetchCurrentUserInfo()
+  //     : null;
+  // if (StaticStore.currentUserId == null ||
+  //     StaticStore.currentUserId?.length == 0) {
+  //   return [];
+  // }
   var db = FirebaseFirestore.instance;
   try {
     var a = await db
         .collection("friendRequest")
-        .doc(StaticStore.currentUserId)
+        .doc(currentUserEmail)
         .get();
     if (a.exists) {
       return a['users'];

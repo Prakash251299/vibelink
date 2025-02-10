@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:vibe_link/controller/local_storing/read_write.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
@@ -110,7 +111,13 @@ class _ShowmoreSuggestionState extends State<ShowmoreSuggestion> {
                         children: [
                           IconButton(
                             onPressed: () async {
+                              // ReadWrite _readWrite = ReadWrite();
+                              // String currentUserEmail = await _readWrite.getEmail();
                               print("friend request sent");
+                              // print(widget.totalUsers?[i].email);
+                              // print(StaticStore.c);
+                              // return;
+
 
                               await storeFriendRequest(
                                   widget.totalUsers?[i].email);
