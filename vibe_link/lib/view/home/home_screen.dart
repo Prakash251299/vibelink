@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+// import 'package:on_audio_query/on_audio_query.dart';
 import 'package:vibe_link/controller/home/get_greeting.dart';
-import 'package:vibe_link/controller/local_songs/get_local_songs/fetch_localsong.dart';
-import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
+// import 'package:vibe_link/controller/local_songs/get_local_songs/fetch_localsong.dart';
+// import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
 import 'package:vibe_link/controller/login/logout.dart';
 import 'package:vibe_link/controller/notification/notification_functions.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
+import 'package:vibe_link/model/search/song_model.dart';
 import 'package:vibe_link/view/Login/login_screen.dart';
 import 'package:vibe_link/view/Network/request_notification_screen.dart';
-import 'package:vibe_link/view/local_music/homeNav.dart';
+// import 'package:vibe_link/view/local_music/homeNav.dart';
 import 'package:vibe_link/view/pick_artists.dart';
 import 'package:vibe_link/view/sticky/sticky_widgets.dart';
 // import 'package:linkify/controller/home/get_greeting.dart';
@@ -36,7 +37,7 @@ int numberOfFrontPageCategories = 5;
 
 class _HomeScreenState extends State<HomeScreen> {
   double menuWidth = 0;
-  SongDataController c = SongDataController();
+  // SongDataController c = SongDataController();
   // LoginPage loginController = LoginPage();
   List<SongModel> localSongs = [];
 
@@ -360,17 +361,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     StaticStore.pause = false;
                   }
                   StaticStore.miniplayerMargin = 0;
-                  if (SongDataController.loaded == true) {
-                    localSongs = await readLocalSongs();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => HomeNav(localSongs)));
-                  } else {
-                    if (await c.getLocalSongs() == 1) {
-                      localSongs = await readLocalSongs();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => HomeNav(localSongs)));
-                    }
-                  }
+                  // if (SongDataController.loaded == true) {
+                    // localSongs = await readLocalSongs();
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) => HomeNav(localSongs)));
+                  // } else {
+                  //   if (await c.getLocalSongs() == 1) {
+                      // localSongs = await readLocalSongs();
+                    //   Navigator.of(context).push(MaterialPageRoute(
+                    //       builder: (context) => HomeNav(localSongs)));
+                    // }
+                  // }
                                                 },
                                               ),
                                             )

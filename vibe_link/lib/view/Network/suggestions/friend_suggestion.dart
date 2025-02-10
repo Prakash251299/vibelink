@@ -51,6 +51,205 @@ class _SuggestionState extends State<Suggestion> {
   // MyWidget _myWidget = MyWidget();
   Friends _friends = Friends();
 
+  Widget people_page(state,recommendationIndex,recommendationType) {
+    // return Text("Hello ishu");
+    final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 18, top: 18.0, bottom: 15),
+        child: Text(
+          "$recommendationType",
+          style: TextStyle(fontSize: 22),
+        ),
+      ),
+      Container(
+        height: state.recommendedUsers[recommendationIndex] != null &&
+                state.recommendedUsers[recommendationIndex]!.length >= 2
+            ? 200
+            : 100,
+        child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            physics: NeverScrollableScrollPhysics(),
+            // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
+            itemCount:
+                // state.recommendedUsers[2]!=null?state.recommendedUsers[2]!.length:0,
+
+                state.recommendedUsers[recommendationIndex] != null &&
+                        state.recommendedUsers[recommendationIndex]!.length >= 2
+                    ? 2
+                    : 1,
+            // itemCount:null,
+            itemBuilder: (context, i) {
+              return Card(
+                color: Colors.black,
+                child: Column(children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: () async {},
+                    child: ListTile(
+                      leading: Column(children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(3),
+                            bottomLeft: Radius.circular(3),
+                          ),
+                          child: state.recommendedUsers[recommendationIndex]?[i].imgUrl == null
+                              ? Container(
+                                  width: 55,
+                                  height: 55,
+                                  child: const LoadingUserImage(),
+                                )
+                              : CachedNetworkImage(
+                                  // imageUrl: user.avatar!,
+
+                                  // imageUrl: "${widget._albumTracks?[position].imgUrl}",
+                                  imageUrl:
+                                      "${state.recommendedUsers[recommendationIndex]?[i].imgUrl}",
+                                  // imageUrl: "",
+
+                                  width: 55,
+                                  height: 55,
+                                  memCacheHeight:
+                                      (55 * devicePexelRatio).round(),
+                                  memCacheWidth:
+                                      (55 * devicePexelRatio).round(),
+                                  maxHeightDiskCache:
+                                      (55 * devicePexelRatio).round(),
+                                  maxWidthDiskCache:
+                                      (55 * devicePexelRatio).round(),
+                                  progressIndicatorBuilder: (context, url, l) =>
+                                      LoadingImage(icon: Icon(LineIcons.user)),
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ]),
+                      title: Text(
+                        // "${widget._albumTracks?[position].name}",
+                        "${state.recommendedUsers[recommendationIndex]?[i].displayName}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        "User",
+                        style: TextStyle(color: Colors.white70),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      isThreeLine: true,
+                      trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                print("friend request sent");
+
+                                await storeFriendRequest(
+                                    state.recommendedUsers[recommendationIndex]?[i].email);
+
+                                await _friends
+                                    .friendStatusStore(
+                                        state.recommendedUsers[recommendationIndex]?[i].email)
+                                    .then((value) {
+                                  setState(() {
+                                    state.recommendedUsers[recommendationIndex] != null
+                                        ? StaticStore.requestStatusValue?[recommendationIndex]
+                                                ?[i] =
+                                            state.recommendedUsers[recommendationIndex]![i].id
+                                                .toString()
+                                        : null;
+                                  });
+                                  print("updated");
+                                });
+                                print(StaticStore.requestStatusValue?[recommendationIndex]?[i]);
+                              },
+                              icon:
+                                  // Icon(Icons.send)
+
+                                  StaticStore.requestStatusValue?[recommendationIndex]?[i] ==
+                                              "0" ||
+                                          StaticStore.requestStatusValue?[recommendationIndex]
+                                                  ?[i] ==
+                                              ""
+                                      ? Icon(Icons.send, color: Colors.white)
+                                      : StaticStore.requestStatusValue?[recommendationIndex]
+                                                  ?[i] ==
+                                              "1"
+                                          ? Icon(
+                                              Icons.done_outline,
+                                              color: Colors.white,
+                                            )
+                                          : Icon(Icons.watch_later_outlined,
+                                              color: Colors.white),
+                            )
+                          ]),
+                    ),
+                  ),
+                ]),
+              );
+            }),
+      ),
+      state.recommendedUsers[recommendationIndex] != null
+          ? (state.recommendedUsers[recommendationIndex]!.length > 2
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 18.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        child: Text(
+                          "show more",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onTap: () async {
+                          print("$recommendationType show more tapped");
+                          if(recommendationIndex==2){
+                            List<UserInfoMine> totalUsers =
+                            await fetchAllFriends(10);
+                            await getRequestStatus(totalUsers, recommendationIndex);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context1) => ShowmoreSuggestion(
+                                        totalUsers, "$recommendationType",recommendationIndex)));
+                            return;
+                          }
+                          if(recommendationIndex==1){
+                            List<UserInfoMine> totalUsers =
+                            await fetchGoodMatchFriends(10);
+                            await getRequestStatus(totalUsers, recommendationIndex);
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context1) => ShowmoreSuggestion(
+                                        state.recommendedUsers[recommendationIndex], "$recommendationType",recommendationIndex)));
+                            return;
+
+                          }
+                          if(recommendationIndex==0){
+                            List<UserInfoMine> totalUsers =
+                            await fetchBestMatchFriends(10);
+                            await getRequestStatus(totalUsers, recommendationIndex);
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context1) => ShowmoreSuggestion(
+                                        state.recommendedUsers[recommendationIndex], "$recommendationType",recommendationIndex)));
+                            return;
+
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                )
+              : SizedBox())
+          : SizedBox(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     // StaticStore.requestStatusValue=[List.filled(state.recommendedUsers[0]!.length, "0"),null,List.filled(state.recommendedUsers[2]!.length, "0")];
@@ -65,695 +264,127 @@ class _SuggestionState extends State<Suggestion> {
             child: BlocBuilder<SuggestionCubit, SuggestionState>(
                 // child: BlocBuilder(
                 builder: (context, state) {
+                  // return Text("hi");
               // print("recommendedUsers: ${state.recommendedUsers}");
               // return SizedBox();
               if (state.status == LoadPage.loading) {
                 return Center(child: CircularProgressIndicator());
               }
 
-              if(state.status==LoadPage.loaded){
-                print("getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
-              return SafeArea(
-                child: Scaffold(
-                  appBar: AppBar(
-                    leading: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        )),
-                    // title: Text("Networks",style: TextStyle(color: Colors.white),),
-                    backgroundColor: Colors.black,
+              if (state.status == LoadPage.loaded) {
+                // print(
+                    // "getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
+                return SafeArea(
+                  child: Scaffold(
+                    appBar: AppBar(
+                      leading: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          )),
+                      // title: Text("Networks",style: TextStyle(color: Colors.white),),
+                      backgroundColor: Colors.black,
+                    ),
+                    body:
+                        state.recommendedUsers[0]?.length == 0 &&
+                                state.recommendedUsers[1]?.length == 0 &&
+                                state.recommendedUsers[2]?.length == 0
+                            ? Center(
+                                child: Stack(
+                                alignment: Alignment.topCenter,
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  // friendOptions(context, state.recommendedUsers[2]),
+                                  friendOptions(context),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text("No users available"),
+                                    ],
+                                  ),
+                                  // footer(context),
+                                ],
+                              ))
+                            : Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  // friendOptions(context),
+                                  // Container(
+                                  //   color: Colors.red,
+                                  //   child: footer(context)
+                                  // ),
+                                  ListView.builder(
+                                      itemCount: 1,
+                                      itemBuilder: (context1, snapshot1) {
+                                        return Stack(
+                                          alignment: Alignment.topCenter,
+                                          children: [
+                                            // friendOptions(context, state.recommendedUsers[2]),
+
+                                            friendOptions(context),
+
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 40),
+                                              child: Column(children: [
+                                                
+
+                                                if (state.recommendedUsers[1]
+                                                        ?.length !=
+                                                    0) ...{
+                                                  people_page(state, 1, "Good match"),
+                                                },
+
+                                                if (state.recommendedUsers[2]
+                                                        ?.length !=
+                                                    0) ...{
+                                                      people_page(state,2,"All users"),
+                                                  // Column(
+                                                  //     crossAxisAlignment:
+                                                  //         CrossAxisAlignment
+                                                  //             .start,
+                                                  //     children: [])
+                                                }
+                                              ]),
+                                            ),
+
+                                            // }
+                                          ],
+                                        );
+                                      }
+                                      //       );
+                                      //   // }
+                                      // }
+                                      ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        bottom:
+                                            MediaQuery.of(context).size.height -
+                                                120),
+                                    // color: Colors.red,
+                                    child: friendOptions(context),
+                                  ),
+                                  StreamBuilder(
+                                      stream:
+                                          StaticStore.player.playerStateStream,
+                                      builder: (context, snapshot1) {
+                                        return StaticStore.playing == true ||
+                                                StaticStore.pause == true
+                                            ?
+                                            // Text("hi")
+                                            miniplayer(context)
+                                            : const SizedBox();
+                                      }),
+                                  footer(context),
+                                ],
+                              ),
                   ),
-                  body:
-                      state.recommendedUsers[0]?.length == 0 &&
-                              state.recommendedUsers[1]?.length == 0 &&
-                              state.recommendedUsers[2]?.length == 0
-                          ? Center(
-                              child: Stack(
-                              alignment: Alignment.topCenter,
-                              // mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                // friendOptions(context, state.recommendedUsers[2]),
-                                friendOptions(context),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  // crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text("No users available"),
-                                  ],
-                                ),
-                                // footer(context),
-                              ],
-                            ))
-                          : Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                // friendOptions(context),
-                                // Container(
-                                //   color: Colors.red,
-                                //   child: footer(context)
-                                // ),
-                                ListView.builder(
-                                    itemCount: 1,
-                                    itemBuilder: (context1, snapshot1) {
-                                      return Stack(
-                                        alignment: Alignment.topCenter,
-                                        children: [
-                                          // friendOptions(context, state.recommendedUsers[2]),
-
-                                          friendOptions(context),
-
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 40),
-                                            child: Column(children: [
-                                              // for (int i = 0; i < 2; i++) ...{
-
-
-                                              // if (state.recommendedUsers[0]
-                                              //         ?.length !=
-                                              //     0) ...{
-                                              //   Column(
-                                              //       crossAxisAlignment:
-                                              //           CrossAxisAlignment
-                                              //               .start,
-                                              //       children: [
-                                              //         Padding(
-                                              //           padding:
-                                              //               const EdgeInsets
-                                              //                   .only(
-                                              //                   left: 18,
-                                              //                   top: 18.0,
-                                              //                   bottom: 15),
-                                              //           child: Text(
-                                              //             "Mostly same",
-                                              //             style: TextStyle(
-                                              //                 fontSize: 22),
-                                              //           ),
-                                              //         ),
-                                              //         Container(
-                                              //           height: state.recommendedUsers[
-                                              //                           0] !=
-                                              //                       null &&
-                                              //                   state.recommendedUsers[0]!
-                                              //                           .length >=
-                                              //                       2
-                                              //               ? 200
-                                              //               : 100,
-                                              //           child: ListView.builder(
-                                              //               scrollDirection:
-                                              //                   Axis.vertical,
-                                              //               physics:
-                                              //                   NeverScrollableScrollPhysics(),
-                                              //               // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
-                                              //               itemCount: state.recommendedUsers[
-                                              //                               0] !=
-                                              //                           null &&
-                                              //                       state
-                                              //                               .recommendedUsers[
-                                              //                                   0]!
-                                              //                               .length >=
-                                              //                           2
-                                              //                   ? 2
-                                              //                   : 1,
-                                              //               // itemCount:null,
-                                              //               itemBuilder:
-                                              //                   (context, i) {
-                                              //                 return Card(
-                                              //                   color: Colors
-                                              //                       .black,
-                                              //                   child: Column(
-                                              //                       children: [
-                                              //                         InkWell(
-                                              //                           borderRadius:
-                                              //                               BorderRadius.circular(15),
-                                              //                           onTap:
-                                              //                               () async {},
-                                              //                           child:
-                                              //                               ListTile(
-                                              //                             leading:
-                                              //                                 Column(children: [
-                                              //                               ClipRRect(
-                                              //                                 borderRadius: BorderRadius.only(
-                                              //                                   topLeft: Radius.circular(3),
-                                              //                                   bottomLeft: Radius.circular(3),
-                                              //                                 ),
-                                              //                                 child: state.recommendedUsers[0]?[i].imgUrl == null
-                                              //                                     ? Container(
-                                              //                                         width: 55,
-                                              //                                         height: 55,
-                                              //                                         child: const LoadingUserImage(),
-                                              //                                       )
-                                              //                                     : CachedNetworkImage(
-                                              //                                         // imageUrl: user.avatar!,
-
-                                              //                                         // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                              //                                         imageUrl: "${state.recommendedUsers[0]?[i].imgUrl}",
-                                              //                                         // imageUrl: "",
-
-                                              //                                         width: 55,
-                                              //                                         height: 55,
-                                              //                                         memCacheHeight: (55 * devicePexelRatio).round(),
-                                              //                                         memCacheWidth: (55 * devicePexelRatio).round(),
-                                              //                                         maxHeightDiskCache: (55 * devicePexelRatio).round(),
-                                              //                                         maxWidthDiskCache: (55 * devicePexelRatio).round(),
-                                              //                                         progressIndicatorBuilder: (context, url, l) => LoadingImage(icon: Icon(LineIcons.user)),
-                                              //                                         fit: BoxFit.cover,
-                                              //                                       ),
-                                              //                               ),
-                                              //                             ]),
-                                              //                             title:
-                                              //                                 Text(
-                                              //                               // "${widget._albumTracks?[position].name}",
-                                              //                               "${state.recommendedUsers[0]?[i].displayName}",
-                                              //                               overflow:
-                                              //                                   TextOverflow.ellipsis,
-                                              //                               style:
-                                              //                                   TextStyle(color: Colors.white),
-                                              //                             ),
-                                              //                             subtitle:
-                                              //                                 Text(
-                                              //                               "${state.recommendedUsers[0]?[i].topArtists}",
-                                              //                               style:
-                                              //                                   TextStyle(color: Colors.white70),
-                                              //                               overflow:
-                                              //                                   TextOverflow.ellipsis,
-                                              //                             ),
-                                              //                             isThreeLine:
-                                              //                                 true,
-                                              //                             trailing: Column(
-                                              //                                 mainAxisAlignment: MainAxisAlignment.center,
-                                              //                                 children: [
-                                              //                                   IconButton(
-                                              //                                     onPressed: () async {
-                                              //                                       print("friend request sent");
-                                              //                                       // print(
-                                              //                                       // "friend request sent");
-                                              //                                       await storeFriendRequest(state.recommendedUsers[0]?[i].email);
-                                              //                                       await _friends.friendStatusStore(state.recommendedUsers[0]?[i].email).then((value) {
-                                              //                                         setState(() {
-                                              //                                           state.recommendedUsers[0] != null ? StaticStore.requestStatusValue?[0]?[i] = state.recommendedUsers[0]![i].email.toString() : null;
-                                              //                                           // widget
-                                              //                                           //     .bestMatch![i]
-                                              //                                           //     .id
-                                              //                                           //     .toString();
-                                              //                                           // StaticStore.requestStatusValue?[
-                                              //                                           //             2]
-                                              //                                           //         ?[i] =
-                                              //                                           //     widget
-                                              //                                           //         .bestMatch![i]
-                                              //                                           //         .id
-                                              //                                           //         .toString();
-                                              //                                         });
-                                              //                                         print("updated");
-                                              //                                       });
-                                              //                                       // print(StaticStore.requestStatusValue?[0][i]);
-                                              //                                     },
-                                              //                                     icon: StaticStore.requestStatusValue?[0]?[i] == "0" || StaticStore.requestStatusValue?[0]?[i] == ""
-                                              //                                         ? Icon(Icons.send, color: Colors.white)
-                                              //                                         : StaticStore.requestStatusValue?[0]?[i] == "1"
-                                              //                                             ? Icon(
-                                              //                                                 Icons.done_outline,
-                                              //                                                 color: Colors.white,
-                                              //                                               )
-                                              //                                             : Icon(Icons.watch_later_outlined, color: Colors.white),
-                                              //                                   )
-                                              //                                 ]),
-                                              //                           ),
-                                              //                         ),
-                                              //                       ]),
-                                              //                 );
-                                              //               }),
-                                              //         ),
-                                              //         state.recommendedUsers[
-                                              //                     0] !=
-                                              //                 null
-                                              //             ? (state.recommendedUsers[0]!
-                                              //                         .length >
-                                              //                     2
-                                              //                 ? Padding(
-                                              //                     padding: const EdgeInsets
-                                              //                         .only(
-                                              //                         bottom:
-                                              //                             18.0),
-                                              //                     child: Row(
-                                              //                       mainAxisAlignment:
-                                              //                           MainAxisAlignment
-                                              //                               .center,
-                                              //                       children: [
-                                              //                         InkWell(
-                                              //                           child:
-                                              //                               Text(
-                                              //                             "show more",
-                                              //                             style:
-                                              //                                 TextStyle(color: Colors.white),
-                                              //                           ),
-                                              //                           onTap:
-                                              //                               () async {
-                                              //                             print(
-                                              //                                 "show more tapped");
-                                              //                             List<UserInfoMine>?
-                                              //                                 bestUsers =
-                                              //                                 await fetchBestMatchFriends(-1);
-                                              //                             await getRequestStatus(
-                                              //                                 bestUsers,
-                                              //                                 0);
-                                              //                             Navigator.push(
-                                              //                                 context,
-                                              //                                 MaterialPageRoute(builder: (context1) => ShowmoreSuggestion(bestUsers, "Mostly same")));
-                                              //                           },
-                                              //                         )
-                                              //                       ],
-                                              //                     ),
-                                              //                   )
-                                              //                 : SizedBox())
-                                              //             : SizedBox(),
-                                              //       ])
-                                              // },
-
-                                              if (state.recommendedUsers[1]
-                                                      ?.length !=
-                                                  0) ...{
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 18,
-                                                                top: 18.0,
-                                                                bottom: 15),
-                                                        child: Text(
-                                                          "Good match",
-                                                          style: TextStyle(
-                                                              fontSize: 22),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: state.recommendedUsers[
-                                                                        1] !=
-                                                                    null &&
-                                                                state.recommendedUsers[1]!
-                                                                        .length >=
-                                                                    2
-                                                            ? 200
-                                                            : 100,
-                                                        child: ListView.builder(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            physics:
-                                                                NeverScrollableScrollPhysics(),
-                                                            // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
-                                                            itemCount: state.recommendedUsers[
-                                                                            1] !=
-                                                                        null &&
-                                                                    state
-                                                                            .recommendedUsers[
-                                                                                1]!
-                                                                            .length >=
-                                                                        2
-                                                                ? 2
-                                                                : 1,
-                                                            // itemCount:null,
-                                                            itemBuilder:
-                                                                (context, i) {
-                                                              return Card(
-                                                                color: Colors
-                                                                    .black,
-                                                                    child:
-                                                                    Column(
-                                                                    children: [
-                                                                      InkWell(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(15),
-                                                                        onTap:
-                                                                            () async {},
-                                                                        child:
-                                                                            ListTile(
-                                                                          leading:
-                                                                              Column(children: [
-                                                                            ClipRRect(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(3),
-                                                                                bottomLeft: Radius.circular(3),
-                                                                              ),
-                                                                              child: state.recommendedUsers[1]?[i].imgUrl == null
-                                                                                  ? Container(
-                                                                                      width: 55,
-                                                                                      height: 55,
-                                                                                      child: const LoadingUserImage(),
-                                                                                    )
-                                                                                  : CachedNetworkImage(
-                                                                                      // imageUrl: user.avatar!,
-
-                                                                                      // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                                                                      imageUrl: "${state.recommendedUsers[1]?[i].imgUrl}",
-                                                                                      // imageUrl: "",
-
-                                                                                      width: 55,
-                                                                                      height: 55,
-                                                                                      memCacheHeight: (55 * devicePexelRatio).round(),
-                                                                                      memCacheWidth: (55 * devicePexelRatio).round(),
-                                                                                      maxHeightDiskCache: (55 * devicePexelRatio).round(),
-                                                                                      maxWidthDiskCache: (55 * devicePexelRatio).round(),
-                                                                                      progressIndicatorBuilder: (context, url, l) => LoadingImage(icon: Icon(LineIcons.user)),
-                                                                                      fit: BoxFit.cover,
-                                                                                    ),
-                                                                            ),
-                                                                          ]),
-                                                                          title:
-                                                                              Text(
-                                                                            "${state.recommendedUsers[1]?[i].displayName}",
-                                                                            // "ishu",
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(color: Colors.white),
-                                                                          ),
-                                                                          subtitle:
-                                                                              Text(
-                                                                            "Good matcher",
-                                                                            // "prak",
-                                                                            style:
-                                                                                TextStyle(color: Colors.white70),
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                          ),
-                                                                          isThreeLine:
-                                                                              true,
-                                                                          trailing: Column(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                IconButton(
-                                                                                  onPressed: () async {
-                                                                                    print("friend request sent");
-                                                                                    // print(
-                                                                                    // "friend request sent");
-                                                                                    await storeFriendRequest(state.recommendedUsers[1]?[i].email);
-                                                                                    await _friends.friendStatusStore(state.recommendedUsers[1]?[i].email).then((value) {
-                                                                                      setState(() {
-                                                                                        state.recommendedUsers[1] != null ? StaticStore.requestStatusValue?[1]?[i] = state.recommendedUsers[1]![i].id.toString() : null;
-                                                                                      });
-                                                                                      print("updated");
-                                                                                    });
-                                                                                    // print(StaticStore.requestStatusValue?[0][i]);
-                                                                                  },
-                                                                                  icon: 
-                                                                                  // Icon(Icons.send),
-                                                                                  StaticStore.requestStatusValue?[1]?[i] == "0" || StaticStore.requestStatusValue?[1]?[i] == ""
-                                                                                      ? Icon(Icons.send, color: Colors.white)
-                                                                                      : StaticStore.requestStatusValue?[1]?[i] == "1"
-                                                                                          ? Icon(
-                                                                                              Icons.done_outline,
-                                                                                              color: Colors.white,
-                                                                                            )
-                                                                                          : Icon(Icons.watch_later_outlined, color: Colors.white),
-                                                                                )
-                                                                              ]),
-                                                                        ),
-                                                                      ),
-                                                                    ]),
-                                                              );
-                                                            }),
-                                                      ),
-                                                      state.recommendedUsers[
-                                                                  1] !=
-                                                              null
-                                                          ? (state.recommendedUsers[1]!
-                                                                      .length >
-                                                                  2
-                                                              ? Padding(
-                                                                  padding: const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          18.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      InkWell(
-                                                                        child:
-                                                                            Text(
-                                                                          "show more",
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        ),
-                                                                        onTap:
-                                                                            () async {
-                                                                          print(
-                                                                              "show more tapped");
-                                                                          // List<UserInfo>?
-                                                                          // totalUsers =
-                                                                          //     await fetchAllFriends(
-                                                                          //         -1);
-                                                                          // await getRequestStatus(
-                                                                          //     state.recommendedUsers[1], 1);
-                                                                          Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(builder: (context1) => ShowmoreSuggestion(state.recommendedUsers[1], "Good match")));
-                                                                        },
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                )
-                                                              : SizedBox())
-                                                          : SizedBox(),
-                                                    ])
-                                              },
-
-                                              if (state.recommendedUsers[2]
-                                                      ?.length !=
-                                                  0) ...{
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 18,
-                                                                top: 18.0,
-                                                                bottom: 15),
-                                                        child: Text(
-                                                          "All users",
-                                                          style: TextStyle(
-                                                              fontSize: 22),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: state.recommendedUsers[
-                                                                        2] !=
-                                                                    null &&
-                                                                state.recommendedUsers[2]!
-                                                                        .length >=
-                                                                    2
-                                                            ? 200
-                                                            : 100,
-                                                        child: ListView.builder(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            physics:
-                                                                NeverScrollableScrollPhysics(),
-                                                            // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
-                                                            itemCount:
-                                                                // state.recommendedUsers[2]!=null?state.recommendedUsers[2]!.length:0,
-
-                                                                state.recommendedUsers[2] !=
-                                                                            null &&
-                                                                        state.recommendedUsers[2]!.length >=
-                                                                            2
-                                                                    ? 2
-                                                                    : 1,
-                                                            // itemCount:null,
-                                                            itemBuilder:
-                                                                (context, i) {
-                                                              return Card(
-                                                                color: Colors
-                                                                    .black,
-                                                                child: Column(
-                                                                    children: [
-                                                                      InkWell(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(15),
-                                                                        onTap:
-                                                                            () async {},
-                                                                        child:
-                                                                            ListTile(
-                                                                          leading:
-                                                                              Column(children: [
-                                                                            ClipRRect(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(3),
-                                                                                bottomLeft: Radius.circular(3),
-                                                                              ),
-                                                                              child: state.recommendedUsers[2]?[i].imgUrl == null
-                                                                                  ? Container(
-                                                                                      width: 55,
-                                                                                      height: 55,
-                                                                                      child: const LoadingUserImage(),
-                                                                                    )
-                                                                                  : CachedNetworkImage(
-                                                                                      // imageUrl: user.avatar!,
-
-                                                                                      // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                                                                      imageUrl: "${state.recommendedUsers[2]?[i].imgUrl}",
-                                                                                      // imageUrl: "",
-
-                                                                                      width: 55,
-                                                                                      height: 55,
-                                                                                      memCacheHeight: (55 * devicePexelRatio).round(),
-                                                                                      memCacheWidth: (55 * devicePexelRatio).round(),
-                                                                                      maxHeightDiskCache: (55 * devicePexelRatio).round(),
-                                                                                      maxWidthDiskCache: (55 * devicePexelRatio).round(),
-                                                                                      progressIndicatorBuilder: (context, url, l) => LoadingImage(icon: Icon(LineIcons.user)),
-                                                                                      fit: BoxFit.cover,
-                                                                                    ),
-                                                                            ),
-                                                                          ]),
-                                                                          title:
-                                                                              Text(
-                                                                            // "${widget._albumTracks?[position].name}",
-                                                                            "${state.recommendedUsers[2]?[i].displayName}",
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(color: Colors.white),
-                                                                          ),
-                                                                          subtitle:
-                                                                              Text(
-                                                                            "User",
-                                                                            style:
-                                                                                TextStyle(color: Colors.white70),
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                          ),
-                                                                          isThreeLine:
-                                                                              true,
-                                                                          trailing: Column(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                IconButton(
-                                                                                  onPressed: () async {
-                                                                                    print("friend request sent");
-
-                                                                                    await storeFriendRequest(state.recommendedUsers[2]?[i].email);
-
-                                                                                    await _friends.friendStatusStore(state.recommendedUsers[2]?[i].email).then((value) {
-                                                                                      setState(() {
-                                                                                        state.recommendedUsers[2] != null ? StaticStore.requestStatusValue?[2]?[i] = state.recommendedUsers[2]![i].id.toString() : null;
-                                                                                      });
-                                                                                      print("updated");
-                                                                                    });
-                                                                                    print(StaticStore.requestStatusValue?[2]?[i]);
-                                                                                  },
-                                                                                  icon: 
-                                                                                  // Icon(Icons.send)
-                                                                                  
-                                                                                  StaticStore.requestStatusValue?[2]?[i] == "0" || StaticStore.requestStatusValue?[2]?[i] == ""
-                                                                                      ? Icon(Icons.send, color: Colors.white)
-                                                                                      : StaticStore.requestStatusValue?[2]?[i] == "1"
-                                                                                          ? Icon(
-                                                                                              Icons.done_outline,
-                                                                                              color: Colors.white,
-                                                                                            )
-                                                                                          : Icon(Icons.watch_later_outlined, color: Colors.white),
-                                                                                )
-                                                                              ]),
-                                                                        ),
-                                                                      ),
-                                                                    ]),
-                                                              );
-                                                            }),
-                                                      ),
-                                                      state.recommendedUsers[
-                                                                  2] !=
-                                                              null
-                                                          ? (state.recommendedUsers[2]!
-                                                                      .length >
-                                                                  2
-                                                              ? Padding(
-                                                                  padding: const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          18.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      InkWell(
-                                                                        child:
-                                                                            Text(
-                                                                          "show more",
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        ),
-                                                                        onTap:
-                                                                            () async {
-                                                                          print(
-                                                                              "allusers show more tapped");
-                                                                          List<UserInfoMine>?
-                                                                              totalUsers =
-                                                                              await fetchAllFriends(-1);
-                                                                          await getRequestStatus(
-                                                                              totalUsers,
-                                                                              2);
-                                                                          Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(builder: (context1) => ShowmoreSuggestion(totalUsers, "Allusers")));
-                                                                        },
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                )
-                                                              : SizedBox())
-                                                          : SizedBox(),
-                                                    ])
-                                              }
-                                            ]),
-                                          ),
-
-                                          // }
-                                        ],
-                                      );
-                                    }
-                                    //       );
-                                    //   // }
-                                    // }
-                                    ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      bottom:
-                                          MediaQuery.of(context).size.height -
-                                              120),
-                                  // color: Colors.red,
-                                  child: friendOptions(context),
-                                ),
-                                StreamBuilder(
-                                    stream:
-                                        StaticStore.player.playerStateStream,
-                                    builder: (context, snapshot1) {
-                                      return StaticStore.playing == true ||
-                                              StaticStore.pause == true
-                                          ?
-                                          // Text("hi")
-                                          miniplayer(context)
-                                          : const SizedBox();
-                                    }),
-                                footer(context),
-                              ],
-                            ),
-                ),
-              );}
+                );
+              }
               return SizedBox();
             }));
     // }));

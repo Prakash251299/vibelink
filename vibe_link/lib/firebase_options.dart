@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBbRn8YSWRW-cye5e2D7T8GlsJ2-BdPFrw',
-    appId: '1:625706484694:android:4bc5ce2397c0436f241a77',
+    appId: '1:625706484694:android:ee7c0b0b1a61f1d9241a77',
     messagingSenderId: '625706484694',
     projectId: 'vibelink-10a34',
     storageBucket: 'vibelink-10a34.firebasestorage.app',
@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '625706484694',
     projectId: 'vibelink-10a34',
     storageBucket: 'vibelink-10a34.firebasestorage.app',
-    androidClientId: '625706484694-ak0gmh0p95hdpcub1bfiau3isth29mvb.apps.googleusercontent.com',
+    androidClientId: '625706484694-5av174m5oevf6rn30goq32bmvakmoigr.apps.googleusercontent.com',
     iosClientId: '625706484694-kccp4o60uee1hfak89fphhr3ocua6gag.apps.googleusercontent.com',
     iosBundleId: 'com.example.vibeLink',
   );

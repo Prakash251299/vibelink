@@ -12,27 +12,44 @@ import 'package:vibe_link/model/user_info.dart';
 // import 'package:linkify/view/Network/suggestions/friend_suggestion.dart';
 // import 'package:linkify/view/Network/user_network.dart';
 
-Future<List<UserInfoMine>?> fetchAllFriends(int numberOfUsers) async {
+Future<List<UserInfoMine>> fetchAllFriends(int numberOfUsers) async {
   NetworkFunction _networkFunction = NetworkFunction();
-  List<UserInfoMine>? allUsers =
-      await _networkFunction.fetchAllUsersInfo(numberOfUsers);
+  List<UserInfoMine>? allUsers = await _networkFunction.fetchAllUsersInfo(numberOfUsers);
+  if(allUsers==null){
+    return [];
+  }
   return allUsers;
 }
 
-Future<List<UserInfoMine>?> fetchBestMatchFriends(int numberOfUsers) async {
+Future<List<UserInfoMine>> fetchBestMatchFriends(int numberOfUsers) async {
   NetworkFunction _networkFunction = NetworkFunction();
-  List<UserInfoMine>? bestMatch =
-      await _networkFunction.fetchRecommendedUsersInfo(numberOfUsers);
-  return bestMatch;
+  try{
+    List<UserInfoMine>? bestMatch =
+        await _networkFunction.fetchRecommendedUsersInfo(numberOfUsers);
+        if(bestMatch==null){
+          return [];
+        }
+    return bestMatch;
+  }catch(e){
+    print("error happened at finding bestmatch (the api does not provide genre of a song so it is happenning)");
+    return [];
+  }
 }
 
-Future<List<UserInfoMine>?> fetchGoodMatchFriends() async {
+Future<List<UserInfoMine>> fetchGoodMatchFriends(int numberOfUsers) async {
   NetworkFunction _networkFunction = NetworkFunction();
-  List<UserInfoMine>? goodMatch = await KNN_recommender();
+  List<UserInfoMine> goodMatch = await KNN_recommender(numberOfUsers);
+  // print("goodMatch length1");
+  // print(goodMatch.length);
+  // if(goodMatch==null){
+  //   return [];
+
+  // }
+    // return [];
   return goodMatch;
 }
 
-Future<void> getRequestStatus(List<UserInfoMine>? users, int recommendationIndex) async {
+Future<void> getRequestStatus(List<UserInfoMine> users, int recommendationIndex) async {
   // List<dynamic>Error happened at homecubit in getRecommendedUsers function
   List<String>? temp = [];
   temp = StaticStore.requestStatusValue?[recommendationIndex];
@@ -56,21 +73,22 @@ Future<List<List<UserInfoMine>?>?> connectionCaller()  async {
 
   /* The below array store requeststatus value which is '0' if nothing done, 'userEmailId' if request sent and '1' if request has been accepted */
   StaticStore.requestStatusValue = [[], [], []];
-  // List<UserInfoMine>? bestMatch = await fetchBestMatchFriends(3);
-  List<UserInfoMine>? goodMatch = await fetchGoodMatchFriends();
+  List<UserInfoMine> bestMatch = await fetchBestMatchFriends(3);
+  List<UserInfoMine> goodMatch = await fetchGoodMatchFriends(3);
   // print(goodMatch?.length);
 
   List<UserInfoMine>? allUsers = await fetchAllFriends(3);
 
-  // await getRequestStatus(bestMatch, 0);
-  print("goodmatch length");
-  print(goodMatch?[0].displayName);
-  print(goodMatch?[0].email);
+  await getRequestStatus(bestMatch, 0);
+  // print("goodmatch length");
+  // print(goodMatch?[0].displayName);
+  // print(goodMatch?[0].email);
   await getRequestStatus(goodMatch, 1);
+  // await getRequestStatus([], 1);
   await getRequestStatus(allUsers, 2);
 
   // return [bestMatch,goodMatch,allUsers];
-  return [[],goodMatch,allUsers];
+  return [bestMatch,goodMatch,allUsers];
 }
 
 // Future<List<List<UserInfo>?>> userButtonCaller() async {

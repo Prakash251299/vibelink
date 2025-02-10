@@ -2,10 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:vibe_link/controller/login/login.dart';
-import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
+// import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
+import 'package:vibe_link/model/search/song_model.dart';
 import 'package:vibe_link/view/Login/login_screen.dart';
 import 'package:vibe_link/view/home/bottom_nav_bar.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+// import 'package:on_audio_query/on_audio_query.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  SongDataController c = SongDataController();
+  // SongDataController c = SongDataController();
   LoginPage loginController = LoginPage();
   List<SongModel> localSongs = [];
 

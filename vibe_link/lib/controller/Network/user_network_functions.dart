@@ -104,19 +104,19 @@ class NetworkFunction {
           allUsersId.add(value.docs[i].id);
           print("fetching all users");
         }
-        // print(allUsersId);
+        print(allUsersId);
         if(allUsersId.length>2){
           allUsersId.remove(StaticStore.currentUserEmail);
         }
-        if(numberOfUsers<0){
-          for (int i = 0;i < allUsersId.length;i++) {
+        // if(numberOfUsers<0){
+        //   for (int i = 0;i < allUsersId.length;i++) {
+        //     allUsersInfo.add(await fetchUserInfo(allUsersId[i]));
+        //   }
+        // }else{
+          for (int i = 0;i < allUsersId.length-1 && i < numberOfUsers;i++) {
             allUsersInfo.add(await fetchUserInfo(allUsersId[i]));
           }
-        }else{
-          for (int i = 0;i < allUsersId.length && i < numberOfUsers;i++) {
-            allUsersInfo.add(await fetchUserInfo(allUsersId[i]));
-          }
-        }
+        // }
         return allUsersInfo;
       }catch(e){
         print("Error happened while callling for the alluserInfo");

@@ -14,7 +14,7 @@ import 'package:vibe_link/model/user_info.dart';
 // import 'package:linkify/controller/genre/user_genre.dart';
 // import 'package:linkify/model/user_info.dart';
 
-Future<List<UserInfoMine>> KNN_recommender() async {
+Future<List<UserInfoMine>> KNN_recommender(int numberOfUsers) async {
   // print(StaticStore.userGenreWithCount);
   // return;
   Map<dynamic,dynamic> mapOfRecommendedUserIds={};
@@ -27,7 +27,7 @@ Future<List<UserInfoMine>> KNN_recommender() async {
   // return [];
   // await fetchKNNUsers();
   List<UserInfoMine> recommendedUsers = [];
-  recommendedUsers = await fetchKNearestNeighbours();
+  recommendedUsers = await fetchKNearestNeighbours(numberOfUsers);
   // await fetchTopTrackGenresPercentage();
   // print("fetchTopTrackGenresPercentage called");
   // List<UserInfoMine> recommendedUsers = [];
@@ -95,7 +95,7 @@ Future<void> genreStoreWithPercentage() async {
 
 // Future<void> genreWiseUserWithPercentage() async {}
 
-Future<List<UserInfoMine>> fetchKNearestNeighbours() async {
+Future<List<UserInfoMine>> fetchKNearestNeighbours(int numberOfUsers) async {
   Map<dynamic,dynamic> mapOfRecommendedUserIds={};
   var db = FirebaseFirestore.instance;
   
@@ -103,7 +103,7 @@ Future<List<UserInfoMine>> fetchKNearestNeighbours() async {
   // List<String> allUSers=[];
   ReadWrite _readWrite = ReadWrite();
   String currentUserEmail = await _readWrite.getEmail();
-  for(int i=0;i<StaticStore.userGenre.length && i<3;i++){
+  for(int i=0;i<StaticStore.userGenre.length && i<numberOfUsers;i++){
     var fetchedUsers = await db
       .collection(StaticStore.userGenre[i]).get();
       for(int j=0;j<fetchedUsers.docs.length;j++){
