@@ -1,4 +1,6 @@
 // import 'package:linkify/controller/song_data_contoller.dart';
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +69,25 @@ class LoginPage{
   }
 
   Future<int> userExists(email)async{
-    // var res = await con.collection('users').get(email);
+    var res = await con.collection('users').get(email);
+    print(res);
+    try {
+    // Reference to Firestore
+    var collection = FirebaseFirestore.instance.collection('users');
+    
+    // Query to check if a document with email ID exists
+    var querySnapshot = await collection.where('email', isEqualTo: email).get();
+
+    // Return true if a document is found, otherwise false
+    if(querySnapshot.docs.isNotEmpty==true){
+      return 1;
+    }
     return 0;
+    } catch (e) {
+      print("Error checking user existence: $e");
+      return 0;
+    }
+    // return 0;
   }
   
   Future<void> login(context)async {

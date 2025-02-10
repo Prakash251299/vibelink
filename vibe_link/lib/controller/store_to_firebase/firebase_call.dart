@@ -358,8 +358,9 @@ Future<List<UserInfoMine>> fetchFriends() async {
   List<dynamic> friendIds = [];
   NetworkFunction _networkFunction = NetworkFunction();
   var db = FirebaseFirestore.instance;
-
-  var a = await db.collection("friends").doc(StaticStore.currentUserId).get();
+  ReadWrite _readWrite = ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
+  var a = await db.collection("friends").doc(currentUserEmail).get();
   if (a.exists) {
     friendIds = a['users'];
     // List<UserInfo> friends = [];
@@ -370,7 +371,7 @@ Future<List<UserInfoMine>> fetchFriends() async {
     }
 
     // print("friends");
-    // print(friends);
+    print(friends);
     return friends;
   }
   return [];

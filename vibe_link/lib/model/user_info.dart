@@ -5,7 +5,7 @@ class UserInfoMine {
   String? id;
   // List<dynamic>? image;
   String? imgUrl;
-  // String? image;
+  // String? image; // this is must for friends cause fireabase has image named field
 
   String? type;
   String? uri;

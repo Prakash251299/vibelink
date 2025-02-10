@@ -115,7 +115,7 @@ class _NetworkUserState extends State<NetworkUser> {
                                                       child:
                                                       // StaticStore.currentSongImg==""?
                                                           // CachedNetworkImage(imageUrl: ""),
-                                                          friends?[index].image?.length==0?
+                                                          friends?[index].imgUrl?.length==0?
                     
                                                           Container(
                                                             width: 55,
@@ -130,7 +130,8 @@ class _NetworkUserState extends State<NetworkUser> {
                                                           CachedNetworkImage(
                                                         // imageUrl: user.avatar!,
                     
-                                                        imageUrl: friends?[index].image?.length==2?"${friends?[index].image?[1]['url']}":"${friends?[index].image?[0]['url']}",
+                                                        // imageUrl: friends?[index].imgUrl?.length==2?"${friends?[index].imgUrl?[1]['url']}":"${friends?[index].imgUrl?[0]['url']}",
+                                                        imageUrl: friends?[index].imgUrl!="" || friends?[index].imgUrl!=null?(friends?[index].imgUrl):null,
                     
                                                         width: 55,
                                                         height: 55,
@@ -158,7 +159,7 @@ class _NetworkUserState extends State<NetworkUser> {
                                                 style: TextStyle(color: Colors.white),
                                               ),
                                               subtitle: Text(
-                                                "${friends?[index].spotifyBasedGenre}",
+                                                "user",
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(color: Colors.grey),
                                               ),
