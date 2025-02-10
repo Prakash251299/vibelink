@@ -310,8 +310,8 @@ Future<List<dynamic>?> fetchFriendRequests() async {
   }
 }
 
-Future<void> updateRequestStatus(requestStatus, userId) async {
-  var requestId = requestIdGenerator(userId);
+Future<void> updateRequestStatus(requestStatus, userEmail) async {
+  var requestId = requestIdGenerator(userEmail);
   var db = FirebaseFirestore.instance;
   var a = await db
       .collection("friendStatus")
@@ -319,18 +319,20 @@ Future<void> updateRequestStatus(requestStatus, userId) async {
       .set({'requestStatus': '$requestStatus'});
 }
 
-Future<void> deleteFriendRequest(String userId) async {
+Future<void> deleteFriendRequest(String userEmail) async {
   print("delete from firebase called");
+  ReadWrite _readWrite = ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
   var db = FirebaseFirestore.instance;
   var a =
-      await db.collection("friendRequest").doc(StaticStore.currentUserId).get();
+      await db.collection("friendRequest").doc(currentUserEmail).get();
   if (a.exists) {
     print(a['users']);
     List<dynamic> friendRequests = a['users'];
-    friendRequests.remove(userId);
+    friendRequests.remove(userEmail);
     await db
         .collection("friendRequest")
-        .doc(StaticStore.currentUserId)
+        .doc(currentUserEmail)
         .set({"users": friendRequests});
     // .delete();
     // .delete({"users":FieldValue.arrayRemove([])},SetOptions(merge: true));
@@ -339,13 +341,15 @@ Future<void> deleteFriendRequest(String userId) async {
   }
 }
 
-Future<void> addFriend(userId) async {
+Future<void> addFriend(userEmail) async {
   var db = FirebaseFirestore.instance;
-  await db.collection("friends").doc(StaticStore.currentUserId).set({
-    "users": FieldValue.arrayUnion([userId])
+  ReadWrite _readWrite = ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
+  await db.collection("friends").doc(currentUserEmail).set({
+    "users": FieldValue.arrayUnion([userEmail])
   }, SetOptions(merge: true));
-  await db.collection("friends").doc(userId).set({
-    "users": FieldValue.arrayUnion([StaticStore.currentUserId])
+  await db.collection("friends").doc(userEmail).set({
+    "users": FieldValue.arrayUnion([currentUserEmail])
   }, SetOptions(merge: true));
 }
 

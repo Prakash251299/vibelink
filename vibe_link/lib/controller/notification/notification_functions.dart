@@ -20,18 +20,18 @@ Future<List<UserInfoMine>?> FetchRequestNotifications()async{
   return _userInfo;
 }
 
-Future<void>acceptFriendRequest(userId)async{
+Future<void>acceptFriendRequest(userEmail)async{
   print("friend request accepted");
   // FirebaseCall _firebaseCaller = FirebaseCall();
-  await updateRequestStatus("1",userId);
-  await addFriend(userId);
-  await deleteFriendRequest(userId);
+  await updateRequestStatus("1",userEmail);
+  await addFriend(userEmail);
+  await deleteFriendRequest(userEmail);
 }
 
-Future<void>rejectFriendRequest(userId)async{
+Future<void>rejectFriendRequest(userEmail)async{
   print("friend request rejected");
   // FirebaseCall _firebaseCaller = FirebaseCall();
-  await deleteFriendRequest(userId);
-  await updateRequestStatus("0",userId);
+  await deleteFriendRequest(userEmail);
+  await updateRequestStatus("0",userEmail);
 
 }

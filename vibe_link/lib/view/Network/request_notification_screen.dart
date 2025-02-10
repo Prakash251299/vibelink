@@ -199,7 +199,7 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
 
 
 
-                                                      await rejectFriendRequest(friendRequests[index].id);
+                                                      await rejectFriendRequest(friendRequests[index].email);
                                                       StaticStore.notificationCounts--;
                                                       setState(() {});
 
@@ -214,7 +214,7 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
                                             ),
                                             IconButton(
                                               onPressed: () async {
-                                                await acceptFriendRequest(friendRequests[index].id);
+                                                await acceptFriendRequest(friendRequests[index].email);
                                                 StaticStore.notificationCounts--;
                                                 // friendRequests.remove(friendRequests[index]);
                                                 setState(() {});
