@@ -205,8 +205,8 @@ class _SuggestionState extends State<Suggestion> {
                           print("$recommendationType show more tapped");
                           if(recommendationIndex==2){
                             List<UserInfoMine> totalUsers =
-                            await fetchAllFriends(10);
-                            await getRequestStatus(totalUsers, recommendationIndex);
+                            await fetchAllFriends(50); // this value
+                            await getRequestStatus(totalUsers, recommendationIndex,50);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -217,7 +217,7 @@ class _SuggestionState extends State<Suggestion> {
                           if(recommendationIndex==1){
                             List<UserInfoMine> totalUsers =
                             await fetchGoodMatchFriends(10);
-                            await getRequestStatus(totalUsers, recommendationIndex);
+                            await getRequestStatus(totalUsers, recommendationIndex,50);
 
                             Navigator.push(
                                 context,
@@ -230,7 +230,7 @@ class _SuggestionState extends State<Suggestion> {
                           if(recommendationIndex==0){
                             List<UserInfoMine> totalUsers =
                             await fetchBestMatchFriends(10);
-                            await getRequestStatus(totalUsers, recommendationIndex);
+                            await getRequestStatus(totalUsers, recommendationIndex,50);
 
                             Navigator.push(
                                 context,

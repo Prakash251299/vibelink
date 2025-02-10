@@ -49,7 +49,7 @@ Future<List<UserInfoMine>> fetchGoodMatchFriends(int numberOfUsers) async {
   return goodMatch;
 }
 
-Future<void> getRequestStatus(List<UserInfoMine> users, int recommendationIndex) async {
+Future<void> getRequestStatus(List<UserInfoMine>? users, int recommendationIndex, int limit) async {
   // List<dynamic>Error happened at homecubit in getRecommendedUsers function
   List<String>? temp = [];
   temp = StaticStore.requestStatusValue?[recommendationIndex];
@@ -57,7 +57,7 @@ Future<void> getRequestStatus(List<UserInfoMine> users, int recommendationIndex)
     print("bestmatch has data");
     // print(users.length);
     // return ;
-    for (int i = 0; i < users.length && i<3; i++){
+    for (int i = 0; i < users.length-1 && i<limit; i++){
       temp?.add(await getFriendStatus(users[i].email));
     }
     print("bestmatch has stored data");
@@ -79,13 +79,13 @@ Future<List<List<UserInfoMine>?>?> connectionCaller()  async {
 
   List<UserInfoMine>? allUsers = await fetchAllFriends(3);
 
-  await getRequestStatus(bestMatch, 0);
+  await getRequestStatus(bestMatch, 0,2);
   // print("goodmatch length");
   // print(goodMatch?[0].displayName);
   // print(goodMatch?[0].email);
-  await getRequestStatus(goodMatch, 1);
+  await getRequestStatus(goodMatch, 1,2);
   // await getRequestStatus([], 1);
-  await getRequestStatus(allUsers, 2);
+  await getRequestStatus(allUsers, 2,2);
 
   // return [bestMatch,goodMatch,allUsers];
   return [bestMatch,goodMatch,allUsers];

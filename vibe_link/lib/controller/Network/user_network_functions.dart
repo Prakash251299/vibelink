@@ -95,6 +95,8 @@ class NetworkFunction {
   Future<List<UserInfoMine>?> fetchAllUsersInfo(numberOfUsers) async {
     List<dynamic>? allUsersId = []; // In firebase type is dynamic
     List<UserInfoMine>? allUsersInfo = [];
+
+    /* user must be fetched in chunks of 50 users and after scroll again nexts  */
     await FirebaseFirestore.instance
         .collection('users')
         .get()
