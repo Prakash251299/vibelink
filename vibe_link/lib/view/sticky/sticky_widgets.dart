@@ -241,8 +241,8 @@ Widget miniplayer(BuildContext context) {
               end: Alignment.topRight,
               colors: [
                 // Colors.brown,
-                Color(color2).withOpacity(1),
-                Color(color).withOpacity(1),
+                Color(color2).withValues(alpha: 1),
+                Color(color).withValues(alpha: 1),
               ],
             ),
             // ),
@@ -271,7 +271,7 @@ Widget miniplayer(BuildContext context) {
                     children: [
                       Container(
                         // padding: EdgeInsets.only(right:80),
-                        width: 45,
+                        width: 43,
                         height: 45,
                         // decoration: TextDecoration.none,
                         decoration: StaticStore.currentSongImg != ""

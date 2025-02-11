@@ -23,6 +23,9 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class YoutubeSongPlayer{
   Future<void> youtubePlay(String? songName,String artist) async {
+    print("youtube play song");
+    print(StaticStore.myQueueTrack);
+    // StaticStore.queueIndex
     if(songName==null){
       print("Song name is not given to youtube play function");
       return;

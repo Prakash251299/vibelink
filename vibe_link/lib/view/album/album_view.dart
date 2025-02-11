@@ -214,6 +214,9 @@ class AlbumViewState extends State<AlbumView> {
                                           icon: playPauseAlbumButtonTop(
                                               widget._albumTracks, 0),
                                           onPressed: () async {
+                                            print("number of songs");
+                                            print(widget._albumTracks!.length);
+
                                             if (StaticStore.playing == true) {
                                               _player
                                                   .youtubePause()
