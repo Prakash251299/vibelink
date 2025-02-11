@@ -21,53 +21,6 @@ class StoreUserInfo {
     // await writeTofirestore(_userInfo);
   }
 
-  Future<UserInfoMine?> fetchCurrentUserInfo() async {
-    print('current userinfo not avaialable');
-    return null;
-    FirebaseCall _firebaseCall = FirebaseCall();
-    var accessToken = "";
-    ReadWrite _readWrite = ReadWrite();
-    while (true) {
-      accessToken = await _readWrite.getAccessToken();
-      print("Hhhhh");
-
-      /* Fetching user info */
-      var res = await get(
-          Uri.parse('https://api.spotify.com/v1/me?access_token=$accessToken'));
-
-      print("userinfo: ${res.statusCode}");
-      if (res.statusCode == 200) {
-        var data = jsonDecode(res.body);
-
-        // var topTrackGenres = await fetchTopTrackGenres();
-
-        UserInfoMine? _userInfo;
-        _userInfo = UserInfoMine.fromJson(data);
-        StaticStore.currentUserId = _userInfo.id;
-        StaticStore.currentUserName = _userInfo.displayName;
-        StaticStore.currentUserEmail = _userInfo.email;
-        StaticStore.currentUserCountry = _userInfo.country;
-        StaticStore.currentUserImageUrl = _userInfo.imgUrl;
-
-        print("user data fetched");
-
-        return _userInfo;
-      } else {
-        AccessError e = AccessError();
-        var responseOfAccesstoken = await e.handleError(res);
-        if (responseOfAccesstoken == 2) {
-          print("null refresh token plaese go to login or restart the app");
-          return null;
-        }
-
-        if (responseOfAccesstoken != 1) {
-          print("Error is not resolved for getting accesstoken in userinfo");
-          return null;
-        }
-      }
-    }
-  }
-
   Future<void> writeTofirestore(UserInfoMine? _userInfo) async {
     FirebaseCall _firebaseCall = FirebaseCall();
     // await _firebaseCall.writeUserData(_userInfo!, StaticStore.userGenre);
