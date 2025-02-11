@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:permission_handler/permission_handler.dart';
 // import 'package:vibe_link/controller/Authorization/webview.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
 
@@ -89,6 +90,12 @@ class LoginPage{
     }
     // return 0;
   }
+
+  Future<void> requestNotificationPermission() async {
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
+  }
   
   Future<void> login(context)async {
     /* Storing accessToken */
@@ -112,6 +119,7 @@ class LoginPage{
       DateTime now = DateTime.now();
       String date = '${now.day}/${now.month}/${now.year}';
       await _readWrite.writeDate(date);
+      await requestNotificationPermission();
       if(await userExists(user.user?.email)==0){
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const PickArtistPage()));
         return;
