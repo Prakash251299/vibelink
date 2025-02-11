@@ -27,7 +27,7 @@ Future<void> playSong(songUrl) async {
         artUri: Uri.parse(StaticStore.currentSongImg),
       ),
       ));
-      await StaticStore.player.setLoopMode(LoopMode.all); // Enables auto-next
+      // await StaticStore.player.setLoopMode(LoopMode.all); // Enables auto-next
       // await StaticStore.player.; // Enables auto-next
       StaticStore.player.play();
     } catch (e, stackTrace) {

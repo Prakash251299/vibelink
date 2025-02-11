@@ -189,11 +189,12 @@ class AlbumViewState extends State<AlbumView> {
                           padding: EdgeInsets.only(left: 7, right: 20),
                           // color: Colors.red,
                           width: MediaQuery.of(context).size.width,
+                          // width:50,
                           height: 60,
                           child: Row(
                             children: [
                               Container(
-                                  width: 300 - _counter,
+                                  width: MediaQuery.of(context).size.width - _counter - 100,
                                   padding: EdgeInsets.only(left: 10 + _counter),
                                   child: Text(
                                     '${widget.albumName}',
