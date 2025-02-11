@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vibe_link/controller/local_storing/read_write.dart';
 import 'package:vibe_link/controller/store_to_firebase/user_info/get_user_info.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
@@ -95,6 +96,10 @@ class NetworkFunction {
   Future<List<UserInfoMine>?> fetchAllUsersInfo(numberOfUsers) async {
     List<dynamic>? allUsersId = []; // In firebase type is dynamic
     List<UserInfoMine>? allUsersInfo = [];
+    ReadWrite _readWrite = ReadWrite();
+    String currentUserEmail = await _readWrite.getEmail();
+
+    print("fetching all users email ids");
 
     /* user must be fetched in chunks of 50 users and after scroll again nexts  */
     await FirebaseFirestore.instance
@@ -108,14 +113,14 @@ class NetworkFunction {
         }
         print(allUsersId);
         if(allUsersId.length>2){
-          allUsersId.remove(StaticStore.currentUserEmail);
+          allUsersId.remove(currentUserEmail);
         }
         // if(numberOfUsers<0){
         //   for (int i = 0;i < allUsersId.length;i++) {
         //     allUsersInfo.add(await fetchUserInfo(allUsersId[i]));
         //   }
         // }else{
-          for (int i = 0;i < allUsersId.length-1 && i < numberOfUsers;i++) {
+          for (int i = 0;i < allUsersId.length && i < numberOfUsers;i++) {
             allUsersInfo.add(await fetchUserInfo(allUsersId[i]));
           }
         // }

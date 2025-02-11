@@ -212,7 +212,7 @@ Future<List<dynamic>>filter(List<dynamic> userids)async{
 }
 
 Future<String>getFriendStatus1(requestReceiver)async{
-  String requestId = requestIdGenerator(requestReceiver);
+  String requestId = await requestIdGenerator(requestReceiver);
   var db = FirebaseFirestore.instance;
   try{
     

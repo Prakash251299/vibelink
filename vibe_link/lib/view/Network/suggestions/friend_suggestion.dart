@@ -216,7 +216,7 @@ class _SuggestionState extends State<Suggestion> {
                           }
                           if(recommendationIndex==1){
                             List<UserInfoMine> totalUsers =
-                            await fetchGoodMatchFriends(10);
+                            await fetchGoodMatchFriends(50);
                             await getRequestStatus(totalUsers, recommendationIndex,50);
 
                             Navigator.push(
@@ -348,7 +348,8 @@ class _SuggestionState extends State<Suggestion> {
                                                   //         CrossAxisAlignment
                                                   //             .start,
                                                   //     children: [])
-                                                }
+                                                },
+                                                SizedBox(height: 100,),
                                               ]),
                                             ),
 

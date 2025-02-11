@@ -57,7 +57,7 @@ Future<void> getRequestStatus(List<UserInfoMine>? users, int recommendationIndex
     print("bestmatch has data");
     // print(users.length);
     // return ;
-    for (int i = 0; i < users.length-1 && i<limit; i++){
+    for (int i = 0; i < users.length && i<limit; i++){
       temp?.add(await getFriendStatus(users[i].email));
     }
     print("bestmatch has stored data");

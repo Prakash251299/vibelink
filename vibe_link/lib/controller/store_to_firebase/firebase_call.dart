@@ -191,9 +191,11 @@ class FirebaseCall {
   }
 }
 
-String requestIdGenerator(String otherUser) {
+Future<String> requestIdGenerator(String otherUser) async {
   print("generating id");
-  List<String?> s = [StaticStore.currentUserEmail, otherUser];
+  ReadWrite _readWrite =ReadWrite();
+  String currentUserEmail = await _readWrite.getEmail();
+  List<String?> s = [currentUserEmail, otherUser];
   s.sort();
   String requestId = "${s[0]}_${s[1]}";
   return requestId;
@@ -205,7 +207,7 @@ class Friends extends StatefulWidget {
   Future<String> friendStatusStore(requestReceiver) async {
     ReadWrite _readWrite = ReadWrite();
     String currentUserEmail = await _readWrite.getEmail();
-    var requestId = requestIdGenerator(requestReceiver);
+    var requestId = await requestIdGenerator(requestReceiver);
     var db = FirebaseFirestore.instance;
     try {
       await db.collection("friendStatus").doc(requestId).set(
@@ -238,7 +240,7 @@ class _FriendsState extends State<Friends> {
 
 Future<String> getFriendStatus(requestReceiver) async {
   print("fetching requestId");
-  var requestId = requestIdGenerator(requestReceiver);
+  var requestId = await requestIdGenerator(requestReceiver);
   print(requestId);
   // return "";
   var db = FirebaseFirestore.instance;
@@ -304,7 +306,7 @@ Future<List<dynamic>?> fetchFriendRequests() async {
 }
 
 Future<void> updateRequestStatus(requestStatus, userEmail) async {
-  var requestId = requestIdGenerator(userEmail);
+  var requestId = await requestIdGenerator(userEmail);
   var db = FirebaseFirestore.instance;
   var a = await db
       .collection("friendStatus")
