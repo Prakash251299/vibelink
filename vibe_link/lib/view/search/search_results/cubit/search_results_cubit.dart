@@ -27,7 +27,7 @@ class SearchResultsCubit extends Cubit<SearchResultsState> {
           songs: songs,
         ));
       } catch (e) {
-        print("error occurred");
+        print("error occurred at searchSongs");
         print("$e");
         emit(state.copyWith(status: LoadPage.error));
       }

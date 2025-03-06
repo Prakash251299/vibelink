@@ -14,11 +14,14 @@ class SearchRepository {
 
     while (true) {
       var accessToken = await _readWrite.getAccessToken();
+      // print(query);
+      // print("access token: $accessToken");
+      // return [];
       // print("Hhhhh");
 
       /* Fetching searched tracks */
       var res = await get(Uri.parse(
-          'https://api.spotify.com/v1/search?query=$query&type=track&limit=50&locale=en-GB%2Cen-US%3Bq%3D0.9%2Cen%3Bq%3D0.8&offset=0&limit=20&access_token=$accessToken'));
+          'https://api.spotify.com/v1/search?query=$query&type=track&locale=en-GB%2Cen-US%3Bq%3D0.9%2Cen%3Bq%3D0.8&offset=0&limit=20&access_token=$accessToken'));
 
       print(res.statusCode);
       // List<String>genres=[];
@@ -30,9 +33,23 @@ class SearchRepository {
 
         // SongModel s = SongModel();
         // print(data['tracks']['items'][0]['artists'][0]['name']);
-        return (data['tracks']['items'] as List)
-            .map((e) => SongModel.fromJson(e))
-            .toList();
+        
+        // List<SongModel> s = (data['tracks']['items'] as List)
+        //     .map((e) => SongModel.fromJson(e))
+        //     .toList();
+
+        List<SongModel> s=[];
+        print(data['tracks']['items'].length);
+        for(int i=0;i<data['tracks']['items'].length && i<20;i++){
+          if(data['tracks']['items'][i]['name']==null || data['tracks']['items'][i]['album']['images']==null || data['tracks']['items'][i]['album']['images'].length==0 || data['tracks']['items'][i]['id']=="" || data['tracks']['items'][i]['artists']==null){
+            continue;
+          }
+          s.add(SongModel.fromJson(data['tracks']['items'][i]));
+          print(i);
+        }
+
+        // return [];
+        return s;
 
         // print(s.name);
 

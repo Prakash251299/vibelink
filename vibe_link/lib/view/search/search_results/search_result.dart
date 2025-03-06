@@ -91,7 +91,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             //   BlocProvider.of<SearchResultsCubit>(context)
                             //       .isNullToggle();
                             // }
-
                             BlocProvider.of<SearchResultsCubit>(context)
                                 .searchSongs(s);
                             // sea
@@ -425,35 +424,39 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onChanged: onChanged,
                 ),
               ),
-              Container(
-                color: Colors.grey.shade800,
-                child: IconButton(
-                    splashRadius: 20,
-                    icon:
-                        // isSong ?
-                        const Icon(
-                      LineIcons.youtube,
-                      color: Colors.white,
-                    ),
-                    // : const Icon(
-                    //     LineIcons.user,
-                    //     color: Colors.white,
-                    //   ),
-                    onPressed: () {
-                      YoutubeSongPlayer _youtubePlayer = YoutubeSongPlayer();
-                      if(searchSong==""){
-                        return;
-                      }
-                      _youtubePlayer.youtubePlay(searchSong, "").then((value){
-                        StaticStore.currentSong = searchSong;
-                        StaticStore.currentArtists = [];
-                        StaticStore.currentSongImg = "";
-                        StaticStore.playing = true;
-                        StaticStore.myQueueTrack=[];
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CarouselSongScreen(searchSong, "", "unknown", "")));
-                      });
-                    }),
-              ),
+
+
+              // Container(
+              //   color: Colors.grey.shade800,
+              //   child: IconButton(
+              //       splashRadius: 20,
+              //       icon:
+              //           // isSong ?
+              //           const Icon(
+              //         LineIcons.youtube,
+              //         color: Colors.white,
+              //       ),
+              //       // : const Icon(
+              //       //     LineIcons.user,
+              //       //     color: Colors.white,
+              //       //   ),
+              //       onPressed: () {
+              //         YoutubeSongPlayer _youtubePlayer = YoutubeSongPlayer();
+              //         if(searchSong==""){
+              //           return;
+              //         }
+              //         _youtubePlayer.youtubePlay(searchSong, "").then((value){
+              //           StaticStore.currentSong = searchSong;
+              //           StaticStore.currentArtists = [];
+              //           StaticStore.currentSongImg = "";
+              //           StaticStore.playing = true;
+              //           StaticStore.myQueueTrack=[];
+              //           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CarouselSongScreen(searchSong, "", "unknown", "")));
+              //         });
+              //       }),
+              // ),
+
+
             ],
           ),
         ),
