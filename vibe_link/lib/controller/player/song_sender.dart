@@ -9,43 +9,55 @@ class SongSender{
 
 Future<void> send_to_play(List<AlbumTrack>songs, int index)async{
     print("youtube play song");
-    print(StaticStore.myQueueTrack);
+    // print(StaticStore.myQueueTrack);
     print("youtube songName");
     String? songName = songs[index].name;
     String artist=songs[index].trackArtists?[0];
     // print(songs[0].name);
     // StaticStore.queueIndex
-    String? nextUrl;
-    String? currentUrl;
+    Uri? nextUrl;
+    Uri? currentUrl;
     SongUrlGetter _songUrlGetter = SongUrlGetter();
 
-    // StaticStore.player.playerStateStream.listen((state) async {
-      // if(state.processingState == ProcessingState.) {
 
-      // }
-      // print("reached to play");
+     if (index < songs.length) {
+          // if (currentUrl == null) {
+            // If the next song is not ready, fetch it now
+            currentUrl = await _songUrlGetter.fetchSongUrl(songs[index].name.toString(),songs[index].trackArtists?[0]);
+          // }
+          if(index+1 < songs.length){
+            nextUrl = await _songUrlGetter.fetchSongUrl(songs[index+1].name.toString(),songs[index+1].trackArtists?[0]);
+          }
+        await playSong1(currentUrl,nextUrl,index);
+     }
+
+    // StaticStore.player.playerStateStream.listen((state) async {
+    //   // if(state.processingState == ProcessingState.) {
+
+    //   // }
+    //   print("reached to play");
       // if (state.processingState == ProcessingState.completed) {
       //   print("song completed");
-      //   StaticStore.songIndex++;
-      //   index++;
+    //     StaticStore.songIndex++;
+    //     index++;
 
-      //   if (index < songs.length) {
-      //     if (nextUrl == null) {
-      //       // If the next song is not ready, fetch it now
-      //       nextUrl = await _songUrlGetter.fetchSongUrl(songs[index].name.toString(),songs[index].trackArtists?[0]);
-      //     }
+        // if (index < songs.length) {
+        //   if (nextUrl == null) {
+        //     // If the next song is not ready, fetch it now
+        //     nextUrl = await _songUrlGetter.fetchSongUrl(songs[index].name.toString(),songs[index].trackArtists?[0]);
+        //   }
 
-      //     if (nextUrl != null) {
-      //       currentUrl = nextUrl;
-      //       await playSong(currentUrl);
+    //       if (nextUrl != null) {
+    //         currentUrl = nextUrl;
+            // await playSong(currentUrl);
 
-      //       // Prefetch the next song for smoother playback
-      //       nextUrl = (index + 1 < songs.length)
-      //           ? await _songUrlGetter.fetchSongUrl(songs[index + 1].name.toString(),songs[index+1].trackArtists?[0])
-      //           : null;
-      //     }
-      //   }
-      // }
+    //         // Prefetch the next song for smoother playback
+    //         nextUrl = (index + 1 < songs.length)
+    //             ? await _songUrlGetter.fetchSongUrl(songs[index + 1].name.toString(),songs[index+1].trackArtists?[0])
+    //             : null;
+    //       }
+    //     }
+    //   }
     // });
 
 

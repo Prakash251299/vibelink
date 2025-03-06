@@ -16,21 +16,76 @@ Future<void> playSong(songUrl) async {
     try {
       // await StaticStore.player.setUrl(songUrl);
 
+      // StaticStore.playlist = ConcatenatingAudioSource(
+      //   children: [],
+      // );
+      // final playlist = ConcatenatingAudioSource(
+      //   children: [],
+      // );
 
-      await StaticStore.player.setAudioSource(AudioSource.uri(
-        // Uri.parse(songUrl),
-        songUrl,
-        tag: MediaItem(
-          // Specify a unique ID for each media item:
-          id: '1',
-          artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
-          title: "${StaticStore.currentSong}",
-          artUri: Uri.parse(StaticStore.currentSongImg),
-        ),
-      ));
+      // StaticStore.playlist.add(AudioSource.uri(
+      //       // Uri.parse(songUrl),
+      //       songUrl,
+      //       tag: MediaItem(
+      //         // Specify a unique ID for each media item:
+      //         id: '1',
+      //         artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
+      //         title: "${StaticStore.currentSong}",
+      //         artUri: Uri.parse(StaticStore.currentSongImg),
+      //       ),
+      //     ),
+      //   );
+
+      await StaticStore.player.setAudioSource(StaticStore.playlist);
+
+      
+      StaticStore.player.play();
+      // StaticStore.player.playerStateStream.listen((state) async {
+      //   if (state.processingState == ProcessingState.completed) {
+      //     print("song completed");
+      //   }
+      // });
+    } catch (e, stackTrace) {
+      // Catch load errors: 404, invalid url ...
+      print("Error loading playlist: $e");
+      print(stackTrace);
+    }
+  }
+
+
+
+Future<void> playSong1(songUrl,nextSongUrl,index) async {
+    
+    try {
+      final playlist = ConcatenatingAudioSource(
+        children: [
+          AudioSource.uri(
+            // Uri.parse(songUrl),
+            songUrl,
+            tag: MediaItem(
+              // Specify a unique ID for each media item:
+              id: index,
+              artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
+              title: "${StaticStore.currentSong}",
+              artUri: Uri.parse(StaticStore.currentSongImg),
+            ),
+          ),
+          // AudioSource.uri(Uri.parse("https://www.example.com/song1.mp3")),
+          // AudioSource.uri(Uri.parse("https://www.example.com/song2.mp3")),
+          // AudioSource.uri(Uri.parse("https://www.example.com/song3.mp3")),
+        ],
+      );
+      await StaticStore.player.setAudioSource(
+        playlist
+      );
       // await StaticStore.player.setLoopMode(LoopMode.all); // Enables auto-next
       // await StaticStore.player.; // Enables auto-next
       StaticStore.player.play();
+      // StaticStore.player.playerStateStream.listen((state) async {
+      //   if (state.processingState == ProcessingState.completed) {
+      //     print("song completed");
+      //   }
+      // });
     } catch (e, stackTrace) {
       // Catch load errors: 404, invalid url ...
       print("Error loading playlist: $e");

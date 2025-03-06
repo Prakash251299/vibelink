@@ -3,11 +3,11 @@ import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class SongUrlGetter {
-  Future<String>fetchSongUrl(String songName,String artist)async{
-    String audioUrl="";
-    if(songName==null){
+  Future<Uri>fetchSongUrl(String songName,String artist)async{
+    Uri audioUrl=Uri();
+    if(songName==""){
       print("Song name is not given to youtube play function");
-      return "";
+      return audioUrl;
     }
     if(songName!=""){
       songName+=" $artist lyrical";
@@ -18,12 +18,15 @@ class SongUrlGetter {
           // print("1a");
           final videoId = video.id.value;
           print("2a videoid - $videoId");
-          var manifest = await yt.videos.streams.getManifest(videoId);
+          var manifest = await yt.videos.streams.getManifest(videoId,ytClients: [
+            YoutubeApiClient.safari,
+            YoutubeApiClient.androidVr  
+          ]);
           // var manifest = await yt.videos.streams.getManifest(videoId);
           print("3a");
           print(manifest.streams.first);
           var audio = await manifest.audioOnly.first;
-          audioUrl = await audio.url.toString();
+          audioUrl = await audio.url;
           print("audio url");
           print(audioUrl);
           return audioUrl;

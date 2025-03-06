@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:vibe_link/controller/player/play_song.dart';
+import 'package:vibe_link/controller/player/song_url_getter.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 // import 'package:linkify/controller/notification/background.dart';
 // import 'package:linkify/controller/player/play_song.dart';
@@ -22,9 +23,28 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 
 class YoutubeSongPlayer{
+  SongUrlGetter _songUrlGetter = SongUrlGetter();
   Future<void> youtubePlay(String? songName,String artist) async {
+    StaticStore.player.playerStateStream.listen((state) async {
+      if (state.processingState == ProcessingState.completed) {
+        print("song completed bro");
+        Uri nextUrl = await _songUrlGetter.fetchSongUrl("Heeriye", "Arijit");
+        StaticStore.playlist.add(AudioSource.uri(
+            // Uri.parse(songUrl),
+            nextUrl,
+            tag: MediaItem(
+              // Specify a unique ID for each media item:
+              id: '2',
+              artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
+              title: "${StaticStore.currentSong}",
+              artUri: Uri.parse(StaticStore.currentSongImg),
+            ),
+          ),);
+
+      }
+    });
     print("youtube play song");
-    print(StaticStore.myQueueTrack);
+    // print(StaticStore.myQueueTrack);
     print("youtube songName");
     print(songName);
     // StaticStore.queueIndex
@@ -52,6 +72,17 @@ class YoutubeSongPlayer{
           var audioUrl = await audio.url;
           print("audio url");
           print(audioUrl);
+          StaticStore.playlist.add(AudioSource.uri(
+            // Uri.parse(songUrl),
+            audioUrl,
+            tag: MediaItem(
+              // Specify a unique ID for each media item:
+              id: '1',
+              artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
+              title: "${StaticStore.currentSong}",
+              artUri: Uri.parse(StaticStore.currentSongImg),
+            ),
+          ),);
           playSong(audioUrl);
           StaticStore.nextPlay=1;
         }
