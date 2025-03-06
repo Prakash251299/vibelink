@@ -5,13 +5,14 @@ import 'package:vibe_link/controller/variables/static_store.dart';
 // import 'package:linkify/controller/variables/static_store.dart';
 
 Future<void> playSong(songUrl) async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
-    // Listen to errors during playback.
-    StaticStore.player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
-    });
+    // final session = await AudioSession.instance;
+    // await session.configure(const AudioSessionConfiguration.speech());
+    // // Listen to errors during playback.
+    // StaticStore.player.playbackEventStream.listen((event) {},
+    //     onError: (Object e, StackTrace stackTrace) {
+    //   print('A stream error occurred: $e');
+    // });
+    
     try {
       // await StaticStore.player.setUrl(songUrl);
 

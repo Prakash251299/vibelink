@@ -25,6 +25,8 @@ class YoutubeSongPlayer{
   Future<void> youtubePlay(String? songName,String artist) async {
     print("youtube play song");
     print(StaticStore.myQueueTrack);
+    print("youtube songName");
+    print(songName);
     // StaticStore.queueIndex
     if(songName==null){
       print("Song name is not given to youtube play function");
@@ -34,16 +36,24 @@ class YoutubeSongPlayer{
       songName+=" $artist lyrical";
         try{
           final yt = YoutubeExplode();
+          print("songName $songName");
           final video = (await yt.search.search(songName)).first;
+          // print("1a");
           final videoId = video.id.value;
+          print("2a videoid - $videoId");
           var manifest = await yt.videos.streams.getManifest(videoId);
+          // var manifest = await yt.videos.streams.getManifest(videoId);
+          print("3a");
+          print(manifest.streams.first);
           var audio = await manifest.audioOnly.first;
           var audioUrl = await audio.url;
+          print("audio url");
+          print(audioUrl);
           playSong(audioUrl);
           StaticStore.nextPlay=1;
         }
         catch(e){
-          print("Youtube player can't play songs");
+          print("Youtube player can't play songs $e");
         }
       }
   }
