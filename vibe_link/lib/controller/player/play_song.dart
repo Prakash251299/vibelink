@@ -21,12 +21,12 @@ Future<void> playSong(songUrl) async {
         // Uri.parse(songUrl),
         songUrl,
         tag: MediaItem(
-        // Specify a unique ID for each media item:
-        id: '1',
-        artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
-        title: "${StaticStore.currentSong}",
-        artUri: Uri.parse(StaticStore.currentSongImg),
-      ),
+          // Specify a unique ID for each media item:
+          id: '1',
+          artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
+          title: "${StaticStore.currentSong}",
+          artUri: Uri.parse(StaticStore.currentSongImg),
+        ),
       ));
       // await StaticStore.player.setLoopMode(LoopMode.all); // Enables auto-next
       // await StaticStore.player.; // Enables auto-next

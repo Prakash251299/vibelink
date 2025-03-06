@@ -41,8 +41,11 @@ class YoutubeSongPlayer{
           // print("1a");
           final videoId = video.id.value;
           print("2a videoid - $videoId");
-          var manifest = await yt.videos.streams.getManifest(videoId);
           // var manifest = await yt.videos.streams.getManifest(videoId);
+          var manifest = await yt.videos.streams.getManifest(videoId,ytClients: [
+            YoutubeApiClient.safari,
+            YoutubeApiClient.androidVr  
+          ]);
           print("3a");
           print(manifest.streams.first);
           var audio = await manifest.audioOnly.first;
@@ -57,6 +60,8 @@ class YoutubeSongPlayer{
         }
       }
   }
+
+
   Future<void> youtubePause() async {
     StaticStore.player.pause();
   }
