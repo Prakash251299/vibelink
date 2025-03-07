@@ -36,10 +36,14 @@ Future<void> playSong(songUrl) async {
       //     ),
       //   );
 
-      await StaticStore.player.setAudioSource(StaticStore.playlist);
-
+      print("playlists: ");
+      // print(StaticStore.playlist);
+      // await StaticStore.player.setAudioSource(StaticStore.playlist,initialIndex: 0);
+      if (StaticStore.player.audioSource == null) {
+        await StaticStore.player.setAudioSource(StaticStore.playlist, initialIndex: 0);
+      }
       
-      StaticStore.player.play();
+      await StaticStore.player.play();
       // StaticStore.player.playerStateStream.listen((state) async {
       //   if (state.processingState == ProcessingState.completed) {
       //     print("song completed");

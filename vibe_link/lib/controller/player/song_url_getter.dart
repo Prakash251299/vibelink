@@ -18,10 +18,12 @@ class SongUrlGetter {
           // print("1a");
           final videoId = video.id.value;
           print("2a videoid - $videoId");
-          var manifest = await yt.videos.streams.getManifest(videoId,ytClients: [
-            YoutubeApiClient.safari,
-            YoutubeApiClient.androidVr  
-          ]);
+          var manifest = await yt.videos.streams.getManifest(videoId,
+            // ytClients: [
+            //   YoutubeApiClient.safari,
+            //   YoutubeApiClient.androidVr  
+            // ]
+          );
           // var manifest = await yt.videos.streams.getManifest(videoId);
           print("3a");
           print(manifest.streams.first);

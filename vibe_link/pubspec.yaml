@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   audioplayers: ^5.2.1
-  just_audio: ^0.9.36
+  just_audio: ^0.9.46
   audio_video_progress_bar: ^2.0.1
   get: ^4.6.6
   permission_handler: ^11.1.0
@@ -48,8 +48,9 @@ dependencies:
 
   cryptography: ^2.7.0
   url_launcher: ^6.2.5
-  firebase_core: ^2.26.0
-  firebase_auth: ^4.17.7
+  firebase_core: ^3.12.1
+  # firebase_auth: ^4.17.7
+  firebase_auth: ^5.5.1
   oauth2_client: ^3.2.2
   webview_flutter: ^4.7.0
   # webview_flutter: ^4.0.0
@@ -71,13 +72,14 @@ dependencies:
   provider: ^6.0.2
   hive_flutter: ^1.1.0
   marquee: ^2.2.3
-  cloud_firestore: ^4.16.1
+  # cloud_firestore: ^4.16.1
+  cloud_firestore: ^5.6.5
   # For image and video picking
   image_picker: ^1.1.0
   video_player: ^2.8.6
-  firebase_storage: ^11.7.4
+  firebase_storage: ^12.4.4
   flutter_cache_manager: ^3.3.1
-  just_audio_background: ^0.0.1-beta.11
+  just_audio_background: ^0.0.1-beta.15
   audio_session: ^0.1.19
   flutter_background_service: ^5.0.5
   flutter_local_notifications: ^17.1.2
