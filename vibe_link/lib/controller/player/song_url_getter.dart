@@ -9,6 +9,7 @@ class SongUrlGetter {
       print("Song name is not given to youtube play function");
       return audioUrl;
     }
+    var videoId;
     if(songName!=""){
       songName+=" $artist lyrical";
         try{
@@ -16,7 +17,7 @@ class SongUrlGetter {
           print("songName $songName");
           final video = (await yt.search.search(songName)).first;
           // print("1a");
-          final videoId = video.id.value;
+          videoId = video.id.value;
           print("2a videoid - $videoId");
           var manifest = await yt.videos.streams.getManifest(videoId,
             // ytClients: [
@@ -34,7 +35,22 @@ class SongUrlGetter {
           return audioUrl;
         }
         catch(e){
-          print("Youtube player can't play songs $e");
+          print("SecondPlayer: Youtube player can't play songs $e");
+          final yt = YoutubeExplode();
+          var manifest = await yt.videos.streams.getManifest(videoId,
+            ytClients: [
+              YoutubeApiClient.safari,
+              YoutubeApiClient.androidVr  
+            ]
+          );
+          // var manifest = await yt.videos.streams.getManifest(videoId);
+          print("3a");
+          print(manifest.streams.first);
+          var audio = await manifest.audioOnly.first;
+          audioUrl = await audio.url;
+          print("audio url");
+          print(audioUrl);
+          return audioUrl;
         }
       }
     return audioUrl;

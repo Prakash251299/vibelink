@@ -41,21 +41,8 @@ class YoutubeSongPlayer{
           String? nextSongArtist1 = StaticStore.myQueueTrack[ind].trackArtists!=null?(StaticStore.myQueueTrack[ind].trackArtists?[0]):"";
           String? nextSongArtist2 = StaticStore.myQueueTrack[ind].trackArtists!=null &&StaticStore.myQueueTrack[ind].trackArtists!.length>=2?(StaticStore.myQueueTrack[ind].trackArtists?[1]):"";
           String? nextSongImage = StaticStore.myQueueTrack[ind].imgUrl;
-          Uri nextUrl = await _songUrlGetter.fetchSongUrl("$nextSong", "$nextSongArtist1");
-          // StaticStore.playlist.add(AudioSource.uri(
-          //     // Uri.parse(songUrl),
-          //     nextUrl,
-          //     tag: MediaItem(
-          //       // Specify a unique ID for each media item:
-          //       id: '$ind',
-          //       artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
-          //       title: "${StaticStore.currentSong}",
-          //       artUri: Uri.parse(StaticStore.currentSongImg),
-          //     ),
-          //   ),);
-
-
-
+          Uri nextUrl;
+            nextUrl = await _songUrlGetter.fetchSongUrl("$nextSong", "$nextSongArtist1");
         
 
           StaticStore.playlist.add(AudioSource.uri(
@@ -110,6 +97,7 @@ class YoutubeSongPlayer{
           // print("1a");
           videoId = video.id.value;
           print("2a videoid - $videoId");
+          print(StaticStore.myQueueTrack[0]);
           // var manifest = await yt.videos.streams.getManifest(videoId);
           var manifest = await yt.videos.streams.getManifest(videoId,
             // ytClients: [
@@ -165,7 +153,7 @@ class YoutubeSongPlayer{
         
         }
         catch(e){
-          print("Youtube player can't play songs error: $e");
+          print("FirstPlayer: Youtube player can't play songs error: $e");
 
           /* Trying again to play the song */
           try{
