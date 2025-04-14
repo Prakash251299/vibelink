@@ -26,7 +26,11 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 class YoutubeSongPlayer{
   SongUrlGetter _songUrlGetter = SongUrlGetter();
   Future<void> youtubePlay(String? songName,String artist,ind) async {
+    StaticStore.playlist.clear();
     // int ind = 0;
+    StaticStore.player = AudioPlayer();
+    StaticStore.queueIndex = ind;
+    StaticStore.songIndex = ind;
     StaticStore.player.playerStateStream.listen((state) async {
       if (state.processingState == ProcessingState.completed) {
         print("song completed bro");
@@ -36,6 +40,7 @@ class YoutubeSongPlayer{
         // int ind = StaticStore.songIndex;
         // ind = StaticStore.songIndex;
         ind++;
+        StaticStore.queueIndex = ind;
         if(ind<StaticStore.myQueueTrack.length){
           String? nextSong = StaticStore.myQueueTrack[ind].name??"";
           String? nextSongArtist1 = StaticStore.myQueueTrack[ind].trackArtists!=null?(StaticStore.myQueueTrack[ind].trackArtists?[0]):"";
@@ -48,6 +53,7 @@ class YoutubeSongPlayer{
           StaticStore.currentArtists = [nextSongArtist1,nextSongArtist2];
           StaticStore.currentSong = nextSong;
           StaticStore.currentSongImg = nextSongImage!=null?nextSongImage:"";
+          StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl = nextSongImage!=null?nextSongImage:"";
 
           StaticStore.playlist.add(AudioSource.uri(
               // Uri.parse(songUrl),
@@ -120,6 +126,13 @@ class YoutubeSongPlayer{
           Uri audioUrl = await audio.url;
           print("audio url");
           print(audioUrl);
+
+
+
+
+
+
+          /* Change the name, image and artists for current clicked song for playing */
 
           StaticStore.playlist.add(AudioSource.uri(
             // Uri.parse(songUrl),
