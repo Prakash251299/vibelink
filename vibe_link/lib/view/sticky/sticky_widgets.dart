@@ -381,7 +381,7 @@ Widget miniplayer(BuildContext context) {
                                 StaticStore.playing = false;
                               }
                             },
-                            icon: StaticStore.pause == true
+                            icon: StaticStore.player.playing == false
                                 ? Icon(
                                     CupertinoIcons.play,
                                     color: Colors.white,
