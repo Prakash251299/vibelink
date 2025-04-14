@@ -42,8 +42,12 @@ class YoutubeSongPlayer{
           String? nextSongArtist2 = StaticStore.myQueueTrack[ind].trackArtists!=null &&StaticStore.myQueueTrack[ind].trackArtists!.length>=2?(StaticStore.myQueueTrack[ind].trackArtists?[1]):"";
           String? nextSongImage = StaticStore.myQueueTrack[ind].imgUrl;
           Uri nextUrl;
-            nextUrl = await _songUrlGetter.fetchSongUrl("$nextSong", "$nextSongArtist1");
-        
+          nextUrl = await _songUrlGetter.fetchSongUrl("$nextSong", "$nextSongArtist1");
+
+
+          StaticStore.currentArtists = [nextSongArtist1,nextSongArtist2];
+          StaticStore.currentSong = nextSong;
+          StaticStore.currentSongImg = nextSongImage!=null?nextSongImage:"";
 
           StaticStore.playlist.add(AudioSource.uri(
               // Uri.parse(songUrl),

@@ -152,8 +152,10 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
                   await StaticStore.player.seek(const Duration(seconds: 0));
                 }
               },
-              iconSize: 75,
-              icon: StaticStore.playing == true
+              iconSize: 75,              
+              icon: 
+              // StaticStore.playing == true
+              StaticStore.player.playing==true
                   ? Icon(
                       Icons.pause,
                       color: Colors.white,
