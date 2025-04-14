@@ -81,7 +81,7 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
               // });
               await _youtubePlayer.youtubeStop().then((value) async {
 
-              await _youtubePlayer.youtubePlay(StaticStore.myQueueTrack[StaticStore.queueIndex].name,StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]).then((value) {
+              await _youtubePlayer.youtubePlay(StaticStore.myQueueTrack[StaticStore.queueIndex].name,StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0],StaticStore.queueIndex).then((value) {
                 StaticStore.currentSong = StaticStore.myQueueTrack[StaticStore.queueIndex].name!;
                 if(StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!=null){
                   StaticStore.currentArtists = StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!;
@@ -181,7 +181,7 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
                 //   return;
                 // }
 
-              await _youtubePlayer.youtubePlay(StaticStore.myQueueTrack[StaticStore.queueIndex].name,StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]).then((value) {
+              await _youtubePlayer.youtubePlay(StaticStore.myQueueTrack[StaticStore.queueIndex].name,StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0],StaticStore.queueIndex).then((value) {
                 StaticStore.currentSong = StaticStore.myQueueTrack[StaticStore.queueIndex].name!;
                 if(StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!=null){
                   StaticStore.currentArtists = StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!;

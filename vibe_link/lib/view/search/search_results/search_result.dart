@@ -146,7 +146,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                                     .youtubePlay(
                                                         state.songs[i].name,
                                                         state.songs[i]
-                                                            .artists[0]).then((value) {
+                                                            .artists[0],i).then((value) {
 
                                                     StaticStore.currentSong =
                                                         state.songs[i].name;
@@ -180,7 +180,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                                     .youtubePlay(
                                                         state.songs[i].name,
                                                         state.songs[i]
-                                                            .artists[0]).then((value) {
+                                                            .artists[0],i).then((value) {
 
                                                 StaticStore.currentSong =
                                                     state.songs[i].name;

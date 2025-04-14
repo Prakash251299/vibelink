@@ -99,6 +99,10 @@ dependencies:
   google_sign_in: ^6.2.2
   youtube_explode_dart: ^2.3.10
 
+  # For checking internet connection
+  connectivity_plus: ^5.0.1
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

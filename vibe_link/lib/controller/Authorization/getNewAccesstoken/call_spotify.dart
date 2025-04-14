@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:spotify/spotify.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
 
+
+// my jiosaavn api: https://saavn.dev/api/search/songs?query=<your_query>
+
 String clientId = "80c5fa373a4f4ef793721969b1e25fac";
 String clientSecret = "a58469d7127d4690ab1dcb4f706c0dbe";
 

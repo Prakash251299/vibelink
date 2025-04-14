@@ -239,7 +239,7 @@ class AlbumViewState extends State<AlbumView> {
                                                         widget._albumTracks![0]
                                                             .name,
                                                         widget._albumTracks![0]
-                                                            .trackArtists?[0])
+                                                            .trackArtists?[0],0)
                                                     .then((value) {
                                                   // });
                                                   // StaticStore.pause = false;
@@ -301,7 +301,7 @@ class AlbumViewState extends State<AlbumView> {
                                         .youtubePlay(
                                             widget._albumTracks![index].name,
                                             widget._albumTracks![index]
-                                                .trackArtists?[0])
+                                                .trackArtists?[0],index)
                                         .then((value) {
                                       // });
                                       // StaticStore.pause = false;
@@ -361,7 +361,7 @@ class AlbumViewState extends State<AlbumView> {
                                         .youtubePlay(
                                             widget._albumTracks![index].name,
                                             widget._albumTracks![index]
-                                                .trackArtists?[0])
+                                                .trackArtists?[0],index)
                                         .then((value) {
                                       // });
                                       StaticStore.myQueueTrack =

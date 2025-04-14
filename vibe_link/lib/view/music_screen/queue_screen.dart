@@ -98,7 +98,7 @@ class _QueueScreenState extends State<QueueScreen> {
                                         // print(_queueTracks?[position].name);
                                         await _player.youtubeStop();
                                         // Navigator.pop(context);
-                                        await _player.youtubePlay(_queueTracks[position].name,_queueTracks[position].trackArtists?[0]).then((value) {
+                                        await _player.youtubePlay(_queueTracks[position].name,_queueTracks[position].trackArtists?[0],position).then((value) {
 
                                         
                                           // StaticStore.pause = false;
@@ -134,7 +134,7 @@ class _QueueScreenState extends State<QueueScreen> {
                                       }else{
                                         await _player.youtubeStop();
       
-                                        await _player.youtubePlay(_queueTracks[position].name, _queueTracks[position].trackArtists?[0]).then((value) {
+                                        await _player.youtubePlay(_queueTracks[position].name, _queueTracks[position].trackArtists?[0],position).then((value) {
 
                                         
                                         StaticStore.queueIndex = position;
