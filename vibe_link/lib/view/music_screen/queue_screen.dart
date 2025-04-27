@@ -240,12 +240,19 @@ class _QueueScreenState extends State<QueueScreen> {
 
 
 
-                                            IconButton(
-                                              onPressed: (){
-                                                StaticStore.myQueueTrack.removeAt(position);
-
-                                              }, 
-                                              icon: const Icon(Icons.delete,color: Colors.grey,)
+                                            StreamBuilder<Object>(
+                                              stream: StaticStore.player.playerStateStream,
+                                              builder: (context, snapshot) {
+                                                return IconButton(
+                                                  onPressed: (){
+                                                    if(_queueTracks[position].name!=StaticStore.currentSong){
+                                                      StaticStore.myQueueTrack.removeAt(position);
+                                                    }
+                                                
+                                                  }, 
+                                                  icon: _queueTracks[position].name!=StaticStore.currentSong?const Icon(Icons.delete,color: Colors.grey,):SizedBox()
+                                                );
+                                              }
                                             ),
                                           ],)
 
