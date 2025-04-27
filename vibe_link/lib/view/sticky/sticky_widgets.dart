@@ -365,31 +365,38 @@ Widget miniplayer(BuildContext context) {
                       // Spacer(),
 
                       // Icon(Icons.menu),
-                      Container(
-                        // height: 20,
-                        width: 20,
-                        // color: Colors.grey,
-                        child: IconButton(
-                            onPressed: () async {
-                              if (StaticStore.pause == true) {
-                                await _player.youtubeResume();
-                                StaticStore.pause = false;
-                                StaticStore.playing = true;
-                              } else {
-                                await _player.youtubePause();
-                                StaticStore.pause = true;
-                                StaticStore.playing = false;
-                              }
-                            },
-                            icon: StaticStore.player.playing == false
-                                ? Icon(
-                                    CupertinoIcons.play,
-                                    color: Colors.white,
-                                  )
-                                : Icon(
-                                    CupertinoIcons.pause,
-                                    color: Colors.white,
-                                  )),
+                      StreamBuilder<Object>(
+                        stream: StaticStore.player.playerStateStream,
+                        builder: (context, snapshot) {
+                          return Container(
+                            // height: 20,
+                            width: 20,
+                            // color: Colors.grey,
+                            child: IconButton(
+                                onPressed: () async {
+                                  if (StaticStore.pause == true) {
+                                    await _player.youtubeResume();
+                                    StaticStore.pause = false;
+                                    StaticStore.playing = true;
+                                  } else {
+                                    await _player.youtubePause();
+                                    StaticStore.pause = true;
+                                    StaticStore.playing = false;
+                                  }
+                                },
+                                icon: 
+                                StaticStore.player.playing == false
+                                    ? Icon(
+                                        CupertinoIcons.play,
+                                        color: Colors.white,
+                                      )
+                                    : Icon(
+                                        CupertinoIcons.pause,
+                                        color: Colors.white,
+                                      )
+                            ),
+                          );
+                        }
                       ),
                       // SizedBox(width:13),
                       Container(

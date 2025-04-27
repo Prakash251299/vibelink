@@ -27,27 +27,6 @@ class LoginPage{
     if(await _readWrite.getEmail()==""){
       return 0;
     }
-    // FirebaseCall _firebaseCall = FirebaseCall();
-
-    // // if date more than 2 then
-    // DateTime now = DateTime.now();
-    // String date = '${now.day}/${now.month}/${now.year}';
-    // // fetching stored date
-    // String dateStored = await  _readWrite.getDate();
-
-    // DateTime date1 = DateTime.parse(date);
-    // DateTime date2 = DateTime.parse(dateStored);
-    
-    // // Calculate the difference
-    // Duration difference = date2.difference(date1);
-    
-
-
-    // if(difference.inDays>2){
-    //  _readWrite.writeDate(date);
-    //   await _firebaseCall.getUserArtistsWithGenrePercentage();
-    //   await _firebaseCall.storeUserWithGenrePercentage();
-    // }
     print('checking');
     return 1;
   }

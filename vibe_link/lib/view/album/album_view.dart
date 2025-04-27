@@ -6,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:vibe_link/controller/player/youtube_player.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/album_track.dart';
@@ -14,39 +13,12 @@ import 'package:vibe_link/view/album/album_play_pause_button/button_album_play_p
 import 'package:vibe_link/view/home/loading.dart';
 import 'package:vibe_link/view/music_screen/carousel_song_screen.dart';
 import 'package:vibe_link/view/sticky/sticky_widgets.dart';
-// import 'package:http/http.dart';
-// import 'package:linkify/controller/accesstoken_error.dart';
-// import 'package:linkify/controller/read_write.dart';
-// import 'package:linkify/controller/variables/static_store.dart';
-// import 'package:linkify/controller/player/youtube_player.dart';
-// import 'package:linkify/model/album_track.dart';
-// import 'package:linkify/view/album/album_play_pause_button/button_album_play_pause.dart';
-// import 'package:linkify/view/home/loading.dart';
-// import 'package:linkify/view/music_screen/carousel_song_screen.dart';
-// import 'package:linkify/view/sticky/sticky_widgets.dart';
-// import 'package:linkify/widgets/music_screen.dart';
-// import 'package:linkify/widgets/uis/models/song_model.dart';
 
 class AlbumView extends StatefulWidget {
   String? albumImg = "";
   String? albumName = "";
   List<AlbumTrack>? _albumTracks = [];
-  // List<String> name=[];
-  // List<String> id=[];
-  // List<List<String>> trackArtists=[];
-  // List<String> trackImg=[];
   AlbumView(this.albumImg, this.albumName, this._albumTracks);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  // final String title;
 
   @override
   State<AlbumView> createState() => AlbumViewState();
@@ -57,66 +29,17 @@ class AlbumViewState extends State<AlbumView> {
   var ind = -10;
   YoutubeSongPlayer _player = YoutubeSongPlayer();
 
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // This call to setState tells the Flutter framework that something has
-  //     // changed in this State, which causes it to rerun the build method below
-  //     // so that the display can reflect the updated values. If we changed
-  //     // _counter without calling setState(), then the build method would not be
-  //     // called again, and so nothing would appear to happen.
-  //     _counter++;
-  //   });
-  // }
-
-  // ScrollViewTest({Key? key}) : super()
-  // {
-
-  // }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    // fetchAlbumSongs(widget.id);
-    // super.initState();
-  }
-
-  // SongModel getSongModel(var name, var albumImg, var id, var trackArtists){
-  //   return SongModel.fromJson({
-  //                                       // 'id':widget.id[index],
-  //                                       'name':name,
-  //                                       'imgUrl':albumImg,
-  //                                       'id':id,
-  //                                       'artists':trackArtists,
-  //                                       });
-  //                                       // return;
-
-  // }
-
   double _counter = 0;
   @override
   Widget build(BuildContext context) {
     // var _extraScrollSpeed = 0;
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
     ScrollController _scrollController = ScrollController();
-    var mq = MediaQuery.of(context).size;
-    // var playing = false;
-
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    // print(widget.trackArtists[0]);
-    // return SizedBox();
+    // var mq = MediaQuery.of(context).size;
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          // leading: IconButton(icon: Icon(Icons.arrow_back,color: Colors.white,),onPressed: (){
-          //   Navigator.pop(context);
-          // },),
-          // backgroundColor: Colors.black,
           toolbarHeight: 0,
         ),
         body: Stack(
@@ -129,31 +52,17 @@ class AlbumViewState extends State<AlbumView> {
                     backgroundColor: Colors.black,
                     toolbarHeight: 0,
                     leading: SizedBox(),
-                    // leadingWidth: 1000,
-                    // leading: Container(color: Colors.red,width:1000),
                     floating: false,
                     pinned: true,
                     expandedHeight: 250,
                     flexibleSpace: FlexibleSpaceBar(
-                      // collapseMode: CollapseMode.parallax,
-                      // titlePadding: EdgeInsets.only(left: 20),
                       stretchModes: const <StretchMode>[
                         StretchMode.blurBackground
                       ],
                       expandedTitleScale: 1,
                       title: Container(
                         padding: EdgeInsets.only(left: 7, right: 20),
-                        // color: Colors.red,
                         width: MediaQuery.of(context).size.width,
-                        // height: 60,
-                        // child:
-                        // Row(
-                        //   children: [
-                        //     Text('${widget._albumTracks?[0].name}',style: TextStyle(color: Colors.black),),
-                        //     Spacer(),
-                        //     Icon(Icons.play_arrow)
-                        //   ],
-                        // )
                       ),
                       background: Container(
                         margin: EdgeInsets.only(top: 10),
@@ -161,22 +70,13 @@ class AlbumViewState extends State<AlbumView> {
                           '${widget.albumImg}', // Replace with your image URL
                           fit: BoxFit
                               .fitHeight, // Ensure the image covers the entire space
-                          // height: 300,
-                          // width: 300,
                         ),
                       ),
                     )),
                 SliverAppBar(
-
-                    // collapsedHeight:0,
-                    // backgroundColor: Colors.black,
-                    // toolbarHeight: 0,
                     expandedHeight: 90,
                     backgroundColor: Colors.black,
                     leading: SizedBox(),
-                    // toolbarHeight: 40,
-                    // leadingWidth: 1000,
-                    // leading: Container(color: Colors.red,width:1000),
                     floating: false,
                     pinned: true,
                     // expandedHeight: 200,
@@ -273,18 +173,13 @@ class AlbumViewState extends State<AlbumView> {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       return Column(children: [
-                        // Container(
-                        //   padding: EdgeInsets.only(top:_counter),
-                        //   child:
                         Card(
                           color: Colors.black,
                           child: Column(children: [
-                            // Text("skjhdfkjds"),
-
                             InkWell(
                               borderRadius: BorderRadius.circular(15),
                               onTap: () async {
-                                if (StaticStore.playing == true) {
+                                if (StaticStore.player.playing == true) {
                                   if (StaticStore.currentSong ==
                                       widget._albumTracks![index].name) {
                                     await _player.youtubePause();
@@ -305,6 +200,7 @@ class AlbumViewState extends State<AlbumView> {
                                         .then((value) {
                                       // });
                                       // StaticStore.pause = false;
+                                      
                                       StaticStore.myQueueTrack =
                                           widget._albumTracks!;
                                       StaticStore.queueLoaded = 1;
@@ -317,6 +213,7 @@ class AlbumViewState extends State<AlbumView> {
                                           widget._albumTracks![index]
                                               .trackArtists??[]);
                                       // setState(() {
+
                                       StaticStore.playing = true;
                                       StaticStore.pause = false;
                                       // });
@@ -458,8 +355,14 @@ class AlbumViewState extends State<AlbumView> {
                                 trailing: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      playPauseAlbumButton(
-                                          widget._albumTracks, index),
+                                      
+                                      StreamBuilder<Object>( // for updating the button
+                                        stream: StaticStore.player.playerStateStream,
+                                        builder: (context, snapshot) {
+                                          return playPauseAlbumButton(
+                                              widget._albumTracks, index);
+                                        }
+                                      ),
                                     ]),
                               ),
                             ),

@@ -55,7 +55,7 @@ Widget playPauseAlbumButton(List<AlbumTrack>? _albumTracks,int position){
         playMine();
         return Icon(Icons.play_arrow,color: Colors.grey,);
       }
-      return _albumTracks?[position].name!=StaticStore.currentSong?Icon(Icons.play_arrow,color: Colors.grey,):StaticStore.playing == true?Icon(Icons.pause,color: Colors.white,):Icon(Icons.play_arrow,color: Colors.yellow,);
+      return _albumTracks?[position].name!=StaticStore.currentSong?Icon(Icons.play_arrow,color: Colors.grey,):StaticStore.player.playing == true?Icon(Icons.pause,color: Colors.white,):Icon(Icons.play_arrow,color: Colors.yellow,);
     }
   );
 }
@@ -83,7 +83,7 @@ Widget playPauseAlbumButtonTop(List<AlbumTrack>? _albumTracks,int position){
       }
       // print("Contains: $condition");
       // return condition==true?Icon(Icons.pause,size:49,color: Colors.green,):Icon(Icons.play_circle,size:49,color: Colors.white,);
-      return condition==true?(StaticStore.playing==true?Icon(Icons.pause,size:49,color: Colors.green,):Icon(Icons.play_circle,size:49,color: Colors.green,)):Icon(Icons.play_circle,size:49,color: Colors.white,);
+      return condition==true?(StaticStore.player.playing==true?Icon(Icons.pause,size:49,color: Colors.green,):Icon(Icons.play_circle,size:49,color: Colors.green,)):Icon(Icons.play_circle,size:49,color: Colors.white,);
 
 
 

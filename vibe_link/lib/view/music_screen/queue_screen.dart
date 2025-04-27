@@ -86,7 +86,7 @@ class _QueueScreenState extends State<QueueScreen> {
                                 InkWell(
                                   borderRadius: BorderRadius.circular(15),
                                   onTap: () async {
-                                    if (StaticStore.playing == true) {
+                                    if (StaticStore.player.playing == true) {
                                       if(StaticStore.currentSong==_queueTracks[position].name){
                                         await _player.youtubePause();
                                         // setState(() {
