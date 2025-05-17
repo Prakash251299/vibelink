@@ -1,5 +1,7 @@
 // import 'package:linkify/controller/song_data_contoller.dart';
-import 'dart:convert';
+// import 'dart:convert';
+import 'dart:async';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,11 +24,29 @@ import 'package:vibe_link/view/pick_artists.dart';
 class LoginPage{
   FirebaseFirestore con = FirebaseFirestore.instance;
   ReadWrite _readWrite = ReadWrite();
+  // void storeLoginTime(){
+  //   FirebaseFirestore.instance
+  //     .collection('users')
+  //     .doc(userId)
+  //     .update({'lastActive': FieldValue.serverTimestamp()});
+  // }
+  void uploadToFirestore(userId) {
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .update({'lastActive': FieldValue.serverTimestamp()})
+        .catchError((error) {
+          print('Upload login time failed: $error');
+        });
+  }
   Future<int> getLoginStatus() async {
     // print('came in getLoginStatus');
     if(await _readWrite.getEmail()==""){
       return 0;
     }
+    String email = await _readWrite.getEmail();
+    uploadToFirestore(email);
     print('checking');
     return 1;
   }
@@ -62,6 +82,7 @@ class LoginPage{
     if(querySnapshot.docs.isNotEmpty==true){
       return 1;
     }
+
     return 0;
     } catch (e) {
       print("Error checking user existence: $e");
@@ -102,7 +123,7 @@ class LoginPage{
       if(await userExists(user.user?.email)==0){
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const PickArtistPage()));
         return;
-
+        
       }
     }
     Navigator.pushAndRemoveUntil(

@@ -13,7 +13,8 @@ import 'package:vibe_link/model/user_info.dart';
 
 class FirebaseCall {
   var db = FirebaseFirestore.instance;
-  var user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
+  
   Future<void> storeUserWithGenrePercentage()async{
     DateTime now = DateTime.now();
     String date = '${now.day}/${now.month}/${now.year}';
@@ -100,6 +101,8 @@ class FirebaseCall {
       "email": user?.email,
       // "country":user?.,
       "images": user?.photoURL,
+      // "age":user?.age,
+      // "country":user?.country,
       // "topArtists":artistIds,
       'topArtists': FieldValue.arrayUnion(artistIds),
     }, SetOptions(merge: true)).onError((e, _) {
@@ -126,19 +129,19 @@ class FirebaseCall {
   }
 
   /* Write data */
-  Future<void> writeUserData(UserInfoMine _userInfo, var topGenre) async {
-    var db = FirebaseFirestore.instance;
-    List<dynamic> topThreeGenres = getTopThreeGenres(topGenre);
-    await db.collection("users").doc(StaticStore.currentUserId).set({
-      "name": _userInfo.displayName,
-      "id": _userInfo.id,
-      "email": _userInfo.email,
-      "country": _userInfo.country,
-      "images": _userInfo.imgUrl,
-      "spotifyGenre": topThreeGenres,
-    }).onError((e, _) => print("Error writing user info in firebase: $e"));
-    return;
-  }
+  // Future<void> writeUserData(UserInfoMine _userInfo, var topGenre) async {
+  //   var db = FirebaseFirestore.instance;
+  //   List<dynamic> topThreeGenres = getTopThreeGenres(topGenre);
+  //   await db.collection("users").doc(StaticStore.currentUserId).set({
+  //     "name": _userInfo.displayName,
+  //     "id": _userInfo.id,
+  //     "email": _userInfo.email,
+  //     "country": _userInfo.country,
+  //     "images": _userInfo.imgUrl,
+  //     "spotifyGenre": topThreeGenres,
+  //   }).onError((e, _) => print("Error writing user info in firebase: $e"));
+  //   return;
+  // }
 
   Future<void> writeSpotifyGenreData(var topGenre) async {
     List<dynamic> topThreeGenres = getTopThreeGenres(topGenre);

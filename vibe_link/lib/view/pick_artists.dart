@@ -168,7 +168,7 @@ class _PickArtistPageState extends State<PickArtistPage> {
                     for(int i=0;i<selected.length;i++){
                       selected[i]==1&&artists[i].id!=null?artistIds.add(artists[i].id):null;
                     }
-                    await _firebaseCall.storeUserData(artistIds);
+                    await _firebaseCall.storeUserData(artistIds); // it stores user's info
                     await _firebaseCall.getUserArtistsWithGenrePercentage();
                     await _firebaseCall.storeUserWithGenrePercentage();
                     // controller.dispose();

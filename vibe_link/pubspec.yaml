@@ -102,6 +102,10 @@ dependencies:
   # For checking internet connection
   connectivity_plus: ^5.0.1
 
+  # For analytics
+  firebase_analytics: ^11.4.5
+  shimmer: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:

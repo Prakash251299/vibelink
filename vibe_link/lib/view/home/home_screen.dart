@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 // import 'package:on_audio_query/on_audio_query.dart';
 import 'package:vibe_link/controller/home/get_greeting.dart';
 // import 'package:vibe_link/controller/local_songs/get_local_songs/fetch_localsong.dart';
@@ -47,6 +48,55 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  Widget shimmerCard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top:8.0,left:8.0),
+          child: Container(height: 50, width: 250, color: Colors.grey[800]),
+        ),
+        const SizedBox(height: 7),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for(int i=0;i<6;i++)...{
+              Shimmer.fromColors(
+                baseColor: Colors.grey[850]!,
+                highlightColor: Colors.grey[700]!,
+                child: 
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 150,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(height: 150, color: Colors.grey[800]),
+                            const SizedBox(height: 7),
+                            Container(height: 25, width: 150, color: Colors.grey[800]),
+                            const SizedBox(height: 13),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              }
+            ],
+          ),
+        ),
+      ],
+    );
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     var optionColor = Color.fromARGB(255, 50, 76, 79);
@@ -61,31 +111,35 @@ class _HomeScreenState extends State<HomeScreen> {
           create: (context) => HomeCubit()..getAlbums(),
           child: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
             print("homescreen");
-            if (state.status == LoadPage.loading) {
-              // return SizedBox();
-              return Scaffold(
-                body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 10),
-                      Text("Loading front page data"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "If it is taking too long check your internet",
-                            maxLines: 3,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+            if (state.status == LoadPage.loading || state.categories == null) {
+              return SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Shimmer.fromColors(
+                        baseColor: Colors.grey[850]!,
+                        highlightColor: Colors.grey[700]!,
+                        child: Container(
+                          margin: EdgeInsets.only(left:8.0),
+                          height: 42, 
+                          width: 250, 
+                          color: Colors.grey[800]
+                        )),
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: 6,
+                        itemBuilder: (context, index) {
+                          return shimmerCard();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
+
             if (state.status == LoadPage.loaded) {
               var greet = greeting();
               return SafeArea(
@@ -150,12 +204,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }),
                                   IconButton(
                                     onPressed: () async {
-                                      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PickArtistPage()));
-
-                                      // FirebaseCall _firebaseCall = FirebaseCall();
-                                      // await _firebaseCall.call();
-                                      // return;
-
                                       print('Sign out called');
                                       if (menuWidth == 0) {
                                         setState(() {
@@ -337,51 +385,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      //                     SizedBox(
-                                      //                       height: 5,
-                                      //                     ),
-                                      //                     menuWidth == 200
-                                      //                         ? Center(
-                                      //                             child: InkWell(
-                                      //                               child: Container(
-                                      //                                 height: 40,
-                                      //                                 // width:menuWidth==200?menuWidth:200,
-                                      //                                 width: 200,
-                                      //                                 decoration: BoxDecoration(
-                                      //                                   borderRadius:
-                                      //                                       BorderRadius.all(
-                                      //                                           Radius.circular(5)),
-                                      //                                   color: optionColor,
-                                      //                                 ),
-                                      //                                 child: Center(
-                                      //                                     child: Text(
-                                      //                                   "Local songs",
-                                      //                                   style: TextStyle(
-                                      //                                       color: Colors.white),
-                                      //                                 )),
-                                      //                               ),
-                                      //                               onTap: () async {
-                                      //                                 if (StaticStore.player.playing == true) {
-                                      //   StaticStore.player.stop();
-                                      //   StaticStore.playing = false;
-                                      //   StaticStore.pause = false;
-                                      // }
-                                      // StaticStore.miniplayerMargin = 0;
-                                      // // if (SongDataController.loaded == true) {
-                                      //   // localSongs = await readLocalSongs();
-                                      // //   Navigator.of(context).push(MaterialPageRoute(
-                                      // //       builder: (context) => HomeNav(localSongs)));
-                                      // // } else {
-                                      // //   if (await c.getLocalSongs() == 1) {
-                                      //     // localSongs = await readLocalSongs();
-                                      //   //   Navigator.of(context).push(MaterialPageRoute(
-                                      //   //       builder: (context) => HomeNav(localSongs)));
-                                      //   // }
-                                      // // }
-                                      //                               },
-                                      //                             ),
-                                      //                           )
-                                      //                         : SizedBox(),
                                     ],
                                   )),
                             ],
@@ -399,43 +402,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }
-            return Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            callSignOutApi(context);
-                          },
-                          icon: Icon(
-                            Icons.logout,
-                            color: Colors.white,
-                          ))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width-20,
-                      //   child:
-                      Flexible(
-                        child: Text(
-                          "No data found login with other account",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white),
+            if (state.status == LoadPage.error) {
+              return Scaffold(
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              callSignOutApi(context);
+                            },
+                            icon: Icon(
+                              Icons.logout,
+                              color: Colors.white,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Container(
+                        //   width: MediaQuery.of(context).size.width-20,
+                        //   child:
+                        Flexible(
+                          child: Text(
+                            "No data found login with other account",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                      // ),
-                    ],
-                  ),
-                ],
-              ),
-            );
+                        // ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }
+            return SizedBox();
           })),
     );
   }
 }
+
+
+/* 
+...List.generate(numberOfFrontPageCategories, (k) => Column(
+  children: [
+    Padding(...),
+    HorizontalSongList(state.categories?[k]),
+    const SizedBox(height: 12),
+  ],
+)),
+ */

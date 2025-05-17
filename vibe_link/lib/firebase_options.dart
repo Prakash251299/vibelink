@@ -53,6 +53,7 @@ class DefaultFirebaseOptions {
     projectId: 'vibelink-10a34',
     authDomain: 'vibelink-10a34.firebaseapp.com',
     storageBucket: 'vibelink-10a34.firebasestorage.app',
+    measurementId: 'G-B7FS377YKH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
