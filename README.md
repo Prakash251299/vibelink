@@ -37,14 +37,6 @@ Install my-project
   </table>
 </div>
 
-## Deployment
-
-To run this project run the command in the directory
-
-```bash
-  flutter run
-```
-
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/Prakash251299)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](linkedin.com/in/prakash-pratap-singh-3238101bb)
