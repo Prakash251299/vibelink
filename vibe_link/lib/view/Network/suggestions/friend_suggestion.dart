@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:vibe_link/controller/Network/fetch_friends.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/loading_enum.dart';
@@ -89,6 +90,8 @@ class _SuggestionState extends State<Suggestion> {
                     borderRadius: BorderRadius.circular(15),
                     onTap: () async {},
                     child: ListTile(
+                      // dense: false,
+                      // contentPadding: EdgeInsets.only(bottom:10),
                       leading: Column(children: [
                         ClipRRect(
                           borderRadius: BorderRadius.only(
@@ -250,6 +253,69 @@ class _SuggestionState extends State<Suggestion> {
     ]);
   }
 
+  Widget networkShimmer() {
+    return 
+    // Column(
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: [
+        SingleChildScrollView(
+          // scrollDirection: Axis.horizontal,
+          scrollDirection: Axis.vertical,
+          // child: 
+          //     SizedBox(
+          //       height: MediaQuery.of(context).size.height,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[850]!,
+                  highlightColor: Colors.grey[700]!,
+                  child: 
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left:0.0),
+                        child: Container(height: 50, width:MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                      ),
+                      const SizedBox(height: 3),
+                      Padding(
+                        padding: const EdgeInsets.only(top:8,left:15.0,right:15.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for(int i=0;i<4;i++)...{
+                                Container(height: 50, color: Colors.grey[800]),
+                                const SizedBox(height:9),
+                                Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                                const SizedBox(height: 10),
+                                Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                                const SizedBox(height: 50),
+                              },
+                
+                              // const SizedBox(height: 7),
+                              // Container(height: 50, color: Colors.grey[800]),
+                              // const SizedBox(height: 7),
+                              // Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                              // const SizedBox(height: 7),
+                              // Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                // ),
+              ),
+              // }
+          //   ],
+          // ),
+        );
+    //   ],
+    // );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // StaticStore.requestStatusValue=[List.filled(state.recommendedUsers[0]!.length, "0"),null,List.filled(state.recommendedUsers[2]!.length, "0")];
@@ -258,136 +324,158 @@ class _SuggestionState extends State<Suggestion> {
     return
         // SizedBox();
 
-        BlocProvider(
-            create: (context) => SuggestionCubit()..getRecommendedUsers(),
-            // create:(_){},
-            child: BlocBuilder<SuggestionCubit, SuggestionState>(
-                // child: BlocBuilder(
-                builder: (context, state) {
-                  // return Text("hi");
-              // print("recommendedUsers: ${state.recommendedUsers}");
-              // return SizedBox();
-              if (state.status == LoadPage.loading) {
-                return Center(child: CircularProgressIndicator());
-              }
+        SafeArea(
+          child: Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            )),
+                        // title: Text("Networks",style: TextStyle(color: Colors.white),),
+                        backgroundColor: Colors.black,
+                      ),
+                      body:
 
-              if (state.status == LoadPage.loaded) {
-                // print(
-                    // "getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
-                return SafeArea(
-                  child: Scaffold(
-                    appBar: AppBar(
-                      leading: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          )),
-                      // title: Text("Networks",style: TextStyle(color: Colors.white),),
-                      backgroundColor: Colors.black,
-                    ),
-                    body:
-                        state.recommendedUsers[0]?.length == 0 &&
-                                state.recommendedUsers[1]?.length == 0 &&
-                                state.recommendedUsers[2]?.length == 0
-                            ? Center(
-                                child: Stack(
-                                alignment: Alignment.topCenter,
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  // friendOptions(context, state.recommendedUsers[2]),
-                                  friendOptions(context),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    // crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text("No users available"),
-                                    ],
-                                  ),
-                                  // footer(context),
-                                ],
-                              ))
-                            : Stack(
-                                alignment: Alignment.bottomCenter,
-                                children: [
-                                  // friendOptions(context),
-                                  // Container(
-                                  //   color: Colors.red,
-                                  //   child: footer(context)
-                                  // ),
-                                  ListView.builder(
-                                      itemCount: 1,
-                                      itemBuilder: (context1, snapshot1) {
-                                        return Stack(
-                                          alignment: Alignment.topCenter,
-                                          children: [
-                                            // friendOptions(context, state.recommendedUsers[2]),
 
-                                            friendOptions(context),
-
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 40),
-                                              child: Column(children: [
-                                                
-
-                                                if (state.recommendedUsers[1]
-                                                        ?.length !=
-                                                    0) ...{
-                                                  people_page(state, 1, "Good match"),
-                                                },
-
-                                                if (state.recommendedUsers[2]
-                                                        ?.length !=
-                                                    0) ...{
-                                                      people_page(state,2,"All users"),
-                                                  // Column(
-                                                  //     crossAxisAlignment:
-                                                  //         CrossAxisAlignment
-                                                  //             .start,
-                                                  //     children: [])
-                                                },
-                                                SizedBox(height: 100,),
-                                              ]),
-                                            ),
-
-                                            // }
-                                          ],
-                                        );
-                                      }
-                                      //       );
-                                      //   // }
-                                      // }
-                                      ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        bottom:
-                                            MediaQuery.of(context).size.height -
-                                                120),
-                                    // color: Colors.red,
-                                    child: friendOptions(context),
-                                  ),
-                                  StreamBuilder(
-                                      stream:
-                                          StaticStore.player.playerStateStream,
-                                      builder: (context, snapshot1) {
-                                        return StaticStore.playing == true ||
-                                                StaticStore.pause == true
-                                            ?
-                                            // Text("hi")
-                                            miniplayer(context)
-                                            : const SizedBox();
-                                      }),
-                                  footer(context),
-                                ],
-                              ),
-                  ),
-                );
-              }
-              return SizedBox();
-            }));
+          // child: 
+          BlocProvider(
+              create: (context) => SuggestionCubit()..getRecommendedUsers(),
+              // create:(_){},
+              child: BlocBuilder<SuggestionCubit, SuggestionState>(
+                  // child: BlocBuilder(
+                  builder: (context, state) {
+                    // return Text("hi");
+                // print("recommendedUsers: ${state.recommendedUsers}");
+                // return SizedBox();
+                if (state.status == LoadPage.loading) {
+                  // return Center(child: CircularProgressIndicator());
+                  return networkShimmer();
+                }
+          
+                if (state.status == LoadPage.loaded) {
+                  // print(
+                      // "getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
+                  return 
+                  // SafeArea(
+                  //   child: Scaffold(
+                  //     appBar: AppBar(
+                  //       leading: IconButton(
+                  //           onPressed: () {
+                  //             Navigator.pop(context);
+                  //           },
+                  //           icon: Icon(
+                  //             Icons.arrow_back,
+                  //             color: Colors.white,
+                  //           )),
+                  //       // title: Text("Networks",style: TextStyle(color: Colors.white),),
+                  //       backgroundColor: Colors.black,
+                  //     ),
+                  //     body:
+                          state.recommendedUsers[0]?.length == 0 &&
+                                  state.recommendedUsers[1]?.length == 0 &&
+                                  state.recommendedUsers[2]?.length == 0
+                              ? Center(
+                                  child: Stack(
+                                  alignment: Alignment.topCenter,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    // friendOptions(context, state.recommendedUsers[2]),
+                                    friendOptions(context),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      // crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text("No users available"),
+                                      ],
+                                    ),
+                                    // footer(context),
+                                  ],
+                                ))
+                              : Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    // friendOptions(context),
+                                    // Container(
+                                    //   color: Colors.red,
+                                    //   child: footer(context)
+                                    // ),
+                                    ListView.builder(
+                                        itemCount: 1,
+                                        itemBuilder: (context1, snapshot1) {
+                                          return Stack(
+                                            alignment: Alignment.topCenter,
+                                            children: [
+                                              // friendOptions(context, state.recommendedUsers[2]),
+          
+                                              friendOptions(context),
+          
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 40),
+                                                child: Column(children: [
+                                                  
+          
+                                                  if (state.recommendedUsers[1]
+                                                          ?.length !=
+                                                      0) ...{
+                                                    people_page(state, 1, "Good match"),
+                                                  },
+          
+                                                  if (state.recommendedUsers[2]
+                                                          ?.length !=
+                                                      0) ...{
+                                                        people_page(state,2,"All users"),
+                                                    // Column(
+                                                    //     crossAxisAlignment:
+                                                    //         CrossAxisAlignment
+                                                    //             .start,
+                                                    //     children: [])
+                                                  },
+                                                  SizedBox(height: 100,),
+                                                ]),
+                                              ),
+          
+                                              // }
+                                            ],
+                                          );
+                                        }
+                                        //       );
+                                        //   // }
+                                        // }
+                                        ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          bottom:
+                                              MediaQuery.of(context).size.height -
+                                                  120),
+                                      // color: Colors.red,
+                                      child: friendOptions(context),
+                                    ),
+                                    StreamBuilder(
+                                        stream:
+                                            StaticStore.player.playerStateStream,
+                                        builder: (context, snapshot1) {
+                                          return StaticStore.playing == true ||
+                                                  StaticStore.pause == true
+                                              ?
+                                              // Text("hi")
+                                              miniplayer(context)
+                                              : const SizedBox();
+                                        }),
+                                    footer(context),
+                                  ],
+                                // ),
+                    // ),
+                  );
+                }
+                return SizedBox();
+              })),
+          )
+        );
     // }));
   }
 }
