@@ -26,7 +26,8 @@ class SearchCubit extends Cubit<SearchState> {
       emit(state.copyWith(status: LoadPage.loading));
 
       emit(state.copyWith(
-        userGenre: await fetchTopTrackGenres(),
+        // userGenre: await fetchTopTrackGenres(), // this is useful if user's spotify is linked
+        // userGenre: await fetchTopArtistsGenres(), // this is not useful
         status: LoadPage.loaded,
       ));
     } catch (e) {

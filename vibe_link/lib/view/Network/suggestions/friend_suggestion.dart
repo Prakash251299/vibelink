@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:vibe_link/controller/Network/fetch_friends.dart';
-import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/loading_enum.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';

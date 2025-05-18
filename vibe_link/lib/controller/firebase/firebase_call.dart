@@ -7,14 +7,23 @@ import 'package:vibe_link/controller/Network/recommend_knn.dart';
 import 'package:vibe_link/controller/Network/user_network_functions.dart';
 import 'package:vibe_link/controller/genre/user_genre.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
-import 'package:vibe_link/controller/store_to_firebase/user_info/get_user_info.dart';
+import 'package:vibe_link/controller/firebase/user_info/get_user_info.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
 
 class FirebaseCall {
   var db = FirebaseFirestore.instance;
   User? user = FirebaseAuth.instance.currentUser;
-  
+
+  /* Fetch current user's genres */
+  Future<List<String>> fetchCurrentUserArtists()async{
+    DocumentSnapshot<Map<String, dynamic>> t =
+    await db.collection("users").doc(user?.email).get();
+    List<String>artistIds = t['topGenres'];
+    return artistIds;
+  }
+
+
   Future<void> storeUserWithGenrePercentage()async{
     DateTime now = DateTime.now();
     String date = '${now.day}/${now.month}/${now.year}';

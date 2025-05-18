@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/model/user_info.dart';
 import 'package:vibe_link/view/Network/chatting/controller/important_functions.dart';
 import 'package:vibe_link/view/Network/chatting/widget/picked_image_screen.dart';

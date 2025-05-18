@@ -8,7 +8,7 @@ import 'package:vibe_link/controller/home/get_greeting.dart';
 // import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
 import 'package:vibe_link/controller/login/logout.dart';
 import 'package:vibe_link/controller/notification/notification_functions.dart';
-import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/search/song_model.dart';
 import 'package:vibe_link/view/Login/login_screen.dart';

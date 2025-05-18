@@ -1,7 +1,9 @@
 import 'dart:convert';
 // import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart';
 import 'package:vibe_link/controller/error/accesstoken_error.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 // import 'package:linkify/controller/error/accesstoken_error.dart';
 // import 'package:linkify/controller/local_storing/read_write.dart';
 import 'dart:collection';
@@ -15,6 +17,8 @@ import 'package:vibe_link/controller/variables/static_store.dart';
 
 Future<List<String>> fetchTopTrackGenres() async {
   print('replace this function with fetchTopArtistsGenre');
+  // var db = FirebaseFirestore.instance.collection('users').doc(StaticStore.currentUserEmail).get();
+  // var data = json.decode(db.data);
   return [];
   print("fetching user's genre");
     // print("$songId");
@@ -104,6 +108,19 @@ Future<List<String>> fetchTopTrackGenres() async {
       }
     }
   }
+
+  // Future<List<String>> fetchTopArtistsGenres()async{
+  //   List<String>userGenre=[];
+  //   FirebaseCall _firebaseCall = FirebaseCall();
+  //   List<String> artistIds = await _firebaseCall.fetchCurrentUserArtists();
+  //   for(var i in artistIds){
+  //     List<String>genres = await getArtistsGenres(i);
+  //     for(var a in genres){
+  //       userGenre.add(a);
+  //     }
+  //   }
+  //   return userGenre;
+  // }
 
   Future<List<String>> getArtistsGenres(String artistId)async{
     List<String> genres=[];

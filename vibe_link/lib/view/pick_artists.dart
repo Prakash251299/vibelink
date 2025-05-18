@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:spotify/spotify.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
-import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/model/artist.dart';
 import 'package:vibe_link/view/home/bottom_nav_bar.dart';
 

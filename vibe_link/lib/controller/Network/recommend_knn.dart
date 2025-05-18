@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vibe_link/controller/Network/user_network_functions.dart';
 import 'package:vibe_link/controller/genre/user_genre.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
-import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
 // import 'package:linkify/controller/Network/user_network_functions.dart';

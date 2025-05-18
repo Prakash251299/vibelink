@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
-import 'package:vibe_link/controller/store_to_firebase/user_info/get_user_info.dart';
+import 'package:vibe_link/controller/firebase/user_info/get_user_info.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
 // import 'package:linkify/controller/store_to_firebase/user_info/get_user_info.dart';

@@ -13,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
 
 import 'package:spotify/spotify.dart';
-import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
+import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/view/home/bottom_nav_bar.dart';
 import 'package:vibe_link/view/pick_artists.dart';

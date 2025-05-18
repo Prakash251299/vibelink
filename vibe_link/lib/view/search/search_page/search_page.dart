@@ -120,47 +120,47 @@ class _SearchPageState extends State<SearchPage> {
                             },
                             body: ListView(
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 18.0),
-                                  child: Text(
-                                    "Your Top genre",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                          fontSize: 18,
-                                        ),
-                                  ),
-                                ),
-                                GridView.builder(
-                                  // itemCount: allTags.sublist(0, 4).length,
-                                  // itemCount: StaticStore.userGenre[0].length,
-                                  itemCount: 4,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 14,
-                                    crossAxisSpacing: 14,
-                                    childAspectRatio: 16 / 8,
-                                  ),
-                                  itemBuilder: (context, i) {
-                                    return TagWidget(
-                                        tag: allTags.sublist(0, 4)[i],
-                                        // genreName: StaticStore.userGenre!.length<4?"none":StaticStore.userGenre![i]
-                                        genreName: StaticStore.userGenre==null || StaticStore.userGenre!.length<4?"N/A":StaticStore.userGenre![i],
-                                        // StaticStore.userGenre[i]
-                                        );
-                                    // return SizedBox();
-                                  },
-                                ),
+                                // Padding(
+                                //   padding:
+                                //       const EdgeInsets.symmetric(vertical: 18.0),
+                                //   child: Text(
+                                //     "Your Top genre",
+                                //     style: Theme.of(context)
+                                //         .textTheme
+                                //         .headlineMedium!
+                                //         .copyWith(
+                                //           fontSize: 18,
+                                //         ),
+                                //   ),
+                                // ),
+                                // GridView.builder(
+                                //   // itemCount: allTags.sublist(0, 4).length,
+                                //   // itemCount: StaticStore.userGenre[0].length,
+                                //   itemCount: 4,
+                                //   physics: const NeverScrollableScrollPhysics(),
+                                //   shrinkWrap: true,
+                                //   gridDelegate:
+                                //       const SliverGridDelegateWithFixedCrossAxisCount(
+                                //     crossAxisCount: 2,
+                                //     mainAxisSpacing: 14,
+                                //     crossAxisSpacing: 14,
+                                //     childAspectRatio: 16 / 8,
+                                //   ),
+                                //   itemBuilder: (context, i) {
+                                //     return TagWidget(
+                                //         tag: allTags.sublist(0, 4)[i],
+                                //         // genreName: StaticStore.userGenre!.length<4?"none":StaticStore.userGenre![i]
+                                //         genreName: StaticStore.userGenre==null || StaticStore.userGenre!.length<4?"N/A":StaticStore.userGenre![i],
+                                //         // StaticStore.userGenre[i]
+                                //         );
+                                //     // return SizedBox();
+                                //   },
+                                // ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 24.0),
                                   child: Text(
-                                    "Browse all",
+                                    "Browse all genres",
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium!
