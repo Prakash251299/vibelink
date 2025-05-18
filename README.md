@@ -7,14 +7,6 @@ Firebase
 Machine Learning (Recommendation system using threshold matching and clustering)
 Spotify API
 
-## Deployment
-
-To run this project run the command in the directory
-
-```bash
-  flutter run
-```
-
 ## Acknowledgements
 
  - [Firebase sign in](https://firebase.google.com/docs/auth/flutter/email-link-auth)
@@ -45,6 +37,13 @@ Install my-project
   </table>
 </div>
 
+## Deployment
+
+To run this project run the command in the directory
+
+```bash
+  flutter run
+```
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/Prakash251299)
