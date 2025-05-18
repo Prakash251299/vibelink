@@ -381,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 onTap: () async {
                                                   await launchUrl(Uri.parse(
-                                                      'https://github.com/Prakash251299/Linkify/issues'));
+                                                      'https://github.com/Prakash251299/vibelink/issues'));
                                                 },
                                               ),
                                             )
