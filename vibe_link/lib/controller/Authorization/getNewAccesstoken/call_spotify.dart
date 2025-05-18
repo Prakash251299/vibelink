@@ -1,5 +1,6 @@
 import 'dart:convert';
 // import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotify/spotify.dart';
 import 'package:vibe_link/controller/local_storing/read_write.dart';
@@ -7,8 +8,11 @@ import 'package:vibe_link/controller/local_storing/read_write.dart';
 
 // my jiosaavn api: https://saavn.dev/api/search/songs?query=<your_query>
 
-String clientId = "80c5fa373a4f4ef793721969b1e25fac";
-String clientSecret = "a58469d7127d4690ab1dcb4f706c0dbe";
+// String clientId = "80c5fa373a4f4ef793721969b1e25fac";
+// String clientSecret = "a58469d7127d4690ab1dcb4f706c0dbe";
+final clientId = dotenv.env['client_id'];
+final clientSecret = dotenv.env['client_secret'];
+// String clientSecret = "a58469d7127d4690ab1dcb4f706c0dbe";
 
 class CallSpotify {
   ReadWrite _readWrite = ReadWrite();
@@ -23,17 +27,17 @@ class CallSpotify {
         await _readWrite.writeAccessToken(accessToken);
       }
       return 0;
-    refreshToken = await _readWrite.getRefreshToken();
-    if (refreshToken == "") {
-      print("null refresh token");
-      return 2;
-    }
-    String body = 'grant_type=refresh_token';
-    body += '&refresh_token=$refreshToken';
-    body += '&client_id=$clientId';
+    // refreshToken = await _readWrite.getRefreshToken();
+    // if (refreshToken == "") {
+    //   print("null refresh token");
+    //   return 2;
+    // }
+    // String body = 'grant_type=refresh_token';
+    // body += '&refresh_token=$refreshToken';
+    // body += '&client_id=$clientId';
 
-    await callAuthorizationApi(body, clientId, clientSecret);
-    return 1;
+    // await callAuthorizationApi(body, clientId, clientSecret);
+    // return 1;
   }
 
   Future<void> callAuthorizationApi(

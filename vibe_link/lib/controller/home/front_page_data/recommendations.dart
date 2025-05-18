@@ -156,7 +156,7 @@ Future<List<FrontPageCategories>> fetchCategory() async {
   List<FrontPageCategories> _categories = [];
 
   StaticStore.categoryInfo = _categories;
-  int c=0;
+  // int c=0;
   while (true) {
     var accessToken = await _readWrite.getAccessToken();
     /* Fetching category playlsts */

@@ -105,6 +105,7 @@ dependencies:
   # For analytics
   firebase_analytics: ^11.4.5
   shimmer: ^3.0.0
+  flutter_dotenv: ^5.2.1
 
 
 dev_dependencies:
@@ -133,6 +134,7 @@ flutter:
     - icon/vibe_link.jpeg
     - assets/google.svg
     - assets/signin.png
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
