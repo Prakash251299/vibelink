@@ -25,13 +25,15 @@ import 'package:vibe_link/view/Network/chatting/widget/message_card.dart';
 class ChatScreen extends StatefulWidget {
   UserInfoMine receiverInfo;
   String messageId;
-  ChatScreen(this.receiverInfo,this.messageId,{super.key});
+  ChatScreen(this.receiverInfo, this.messageId, {super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   TextEditingController _textController = TextEditingController();
   FirebaseCall _firebaseCall = FirebaseCall();
 
@@ -44,241 +46,249 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    SafeArea(
-      child: Scaffold(
-        // backgroundColor: Colors.black,
-        appBar:AppBar(
-          
-          backgroundColor: Colors.black,
-          automaticallyImplyLeading: false,
-          flexibleSpace: _appBar(),
-        ),
-        body:
-        Column(children: [
-          Expanded(
-            child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('chats').doc(widget.messageId).snapshots(),
-          // stream: null,
-          builder: (context, AsyncSnapshot snapshot){
-            switch(snapshot.connectionState){
-              case ConnectionState.waiting:
-              case ConnectionState.none:
-                return const SizedBox();
-                // return const Center(
-                //   child:CircularProgressIndicator());
-              case ConnectionState.active:
-              case ConnectionState.done:
-              // print(snapshot.data.exists);
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 12, left: 5, right: 5, bottom: 5),
+        child: Scaffold(
+            // backgroundColor: Colors.black,
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              automaticallyImplyLeading: false,
+              flexibleSpace: _appBar(),
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('chats')
+                          .doc(widget.messageId)
+                          .snapshots(),
+                      // stream: null,
+                      builder: (context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                          case ConnectionState.none:
+                            return const SizedBox();
+                          // return const Center(
+                          //   child:CircularProgressIndicator());
+                          case ConnectionState.active:
+                          case ConnectionState.done:
+                            // print(snapshot.data.exists);
+                            // _scrollController.animateTo(
+                            //   _scrollController.position.maxScrollExtent,
+                            //   duration: Duration(milliseconds: 300),
+                            //   curve: Curves.easeOut,
+                            // );
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _scrollToBottom();
+                            });
 
-              var data = snapshot.data;
+                            var data = snapshot.data;
 
+                            if (data.exists) {
+                              // print(data.data());
+                              List<dynamic> currentMessageList =
+                                  data.data()?['messageInfo'];
+                              if (currentMessageList.isNotEmpty) {
+                                return ListView.builder(
+                                  // reverse: true,
+                                  // shrinkWrap: true,
+                                  controller: _scrollController,
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: currentMessageList.length,
+                                    physics: BouncingScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      // print(currentMessageList[index].runtimeType);
+                                      return MessageCard(
+                                          MesInfo.fromJson(
+                                              currentMessageList[index]),
+                                          widget.receiverInfo);
+                                    });
+                              } else {
+                                return Center(
+                                  child: Text("Say Hello!",
+                                      style: TextStyle(fontSize: 20)),
+                                );
+                              }
+                            } else {}
 
-              // print("StreamState: ${snapshot.data.data()['messageInfo'][0]}");
-              // List<dynamic> data = snapshot.data.data()['messageInfo'];
-              // print(data);
-              // FirebaseFirestore.instance.collection('chats').doc("dummy").get().then((value) {
-              // FirebaseFirestore.instance.collection('chats').doc("${widget.messageId}").get().then((value) {
-                // print(value.exists);
-
-                if(data.exists){
-                  // print(data.data());
-                  List<dynamic> currentMessageList=data.data()?['messageInfo'];
-                  // List currentMessageList=[];
-                  // print(currentMessageList);
-                  // currentMessageList = data?.map((e)=>MesInfo.fromJson(e.data())).toList()??[];
-                  // currentMessageList = data.data()?['messageInfo'];
-                  // print(currentMessageList[0]);
-
-                  if(currentMessageList.isNotEmpty){
-                    return
-                    ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: currentMessageList.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context,index){
-                        // print(currentMessageList[index].runtimeType);
-                        return 
-                        // SizedBox();
-                        // currentMessageList[index]['type']=="image"?MessageCard(MesInfo.fromJson({"message":"image data"}),widget.receiverInfo):currentMessageList[index]['type']=="video"?MessageCard(MesInfo.fromJson({"message":"video data"}),widget.receiverInfo):
-                        MessageCard(MesInfo.fromJson(currentMessageList[index]),widget.receiverInfo);
-                      }
-                    );
-                  }else{
-                    return Center(child: Text("Say Hello!",style: TextStyle(fontSize: 20)),);
-                  }
-                }else{
-
-                }
-              // });
-              
-              return Center(child: Text("Hello there!",style: TextStyle(fontSize: 20)),);
-      
-      
-            }
-          }
-        ),
-          ),
-      
-          _chatInp(),
-        ],)
+                            return Center(
+                              child: Text("Hello there!",
+                                  style: TextStyle(fontSize: 20)),
+                            );
+                        }
+                      }),
+                ),
+                _chatInp(),
+              ],
+            )),
       ),
     );
   }
 
-  
-  Widget _appBar(){
+  Widget _appBar() {
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
-    return 
-    Row(children: [
+    return Row(
+      children: [
         IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
-          }, 
-          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
         ClipRRect(
-                                                borderRadius: 
-                                                BorderRadius.all(
-                                                  Radius.circular(30),
-                                                ),
-                                                // BorderRadius.only(
-                                                //   topLeft: Radius.circular(3),
-                                                //   bottomLeft: Radius.circular(3),
-                                                // ),
-                                                child:
-                                                // StaticStore.currentSongImg==""?
-                                                    // CachedNetworkImage(imageUrl: ""),
-                                                    widget.receiverInfo.imgUrl==null?
-              
-                                                    Container(
-                                                      width: 55,
-                                                      height: 55,
-                                                      child:
-                                                      const LoadingUserImage(),
-                                                    )
-              
-              
-                                                /* For user's friends image */
-                                                :
-                                                    CachedNetworkImage(
-                                                  // imageUrl: user.avatar!,
-              
-                                                  imageUrl: "${widget.receiverInfo.imgUrl}",
-              
-                                                  width: 55,
-                                                  height: 55,
-                                                  memCacheHeight:
-                                                      (55 * devicePexelRatio).round(),
-                                                  memCacheWidth:
-                                                      (55 * devicePexelRatio).round(),
-                                                  maxHeightDiskCache:
-                                                      (55 * devicePexelRatio).round(),
-                                                  maxWidthDiskCache:
-                                                      (55 * devicePexelRatio).round(),
-                                                  // progressIndicatorBuilder:
-                                                  //     (context, url, l) {
-                                                  //           return const LoadingImage();
-                                                  //     },
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-        // IconButton(
-        //   onPressed: (){
-        //     // Navigator.pop(context);
-        //   }, 
-        //   icon: Icon(Icons.person, color: Colors.white,),
-        // ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
+          // BorderRadius.only(
+          //   topLeft: Radius.circular(3),
+          //   bottomLeft: Radius.circular(3),
+          // ),
+          child:
+              // StaticStore.currentSongImg==""?
+              // CachedNetworkImage(imageUrl: ""),
+              widget.receiverInfo.imgUrl == null
+                  ? Container(
+                      width: 55,
+                      height: 55,
+                      child: const LoadingUserImage(),
+                    )
+
+                  /* For user's friends image */
+                  : CachedNetworkImage(
+                      // imageUrl: user.avatar!,
+
+                      imageUrl: "${widget.receiverInfo.imgUrl}",
+
+                      width: 55,
+                      height: 55,
+                      memCacheHeight: (55 * devicePexelRatio).round(),
+                      memCacheWidth: (55 * devicePexelRatio).round(),
+                      maxHeightDiskCache: (55 * devicePexelRatio).round(),
+                      maxWidthDiskCache: (55 * devicePexelRatio).round(),
+                      // progressIndicatorBuilder:
+                      //     (context, url, l) {
+                      //           return const LoadingImage();
+                      //     },
+                      fit: BoxFit.cover,
+                    ),
+        ),
         Padding(
-          padding: const EdgeInsets.only(left:8.0),
+          padding: const EdgeInsets.only(left: 8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            Text("${widget.receiverInfo.displayName}",style: TextStyle(fontSize:16,fontWeight: FontWeight.w500),),
-            Text("Last seen",style: TextStyle(fontSize:13,fontWeight: FontWeight.w100),),
-          ],),
+              Text(
+                "${widget.receiverInfo.displayName}",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "Last seen",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w100),
+              ),
+            ],
+          ),
         ),
-        
-      ],);
+      ],
+    );
   }
-  Widget _chatInp(){
-    return 
-    Padding(
-      padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.01),
-      child: 
-      // Column(children: [
-      Row(
-        children: [
 
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  Widget _chatInp() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.01),
+      child:
+          // Column(children: [
+          Row(
+        children: [
           Expanded(
             child: Card(
-              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(15)),
-              child: Row(children: [
-                IconButton(onPressed: (){},
-                  icon: Icon(Icons.emoji_emotions,color:Colors.blueAccent),
-                ),
-          
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    controller: _textController,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      hintText: "Input...",
-                      hintStyle: TextStyle(color:Colors.blueAccent),
-                      border: InputBorder.none,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.emoji_emotions, color: Colors.blueAccent),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      controller: _textController,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        hintText: "Input...",
+                        hintStyle: TextStyle(color: Colors.blueAccent),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
-                ),
-                IconButton(onPressed: () async {
-                  await imageVideoPicker(context,widget.receiverInfo,widget.messageId);
-                }, 
-                  icon: Icon(Icons.image,color:Colors.blueAccent),
-                ),
-                IconButton(onPressed: (){}, 
-                  icon: Icon(Icons.camera_alt_rounded, color:Colors.blueAccent),
-                ),
-          
-                MaterialButton(
-                  onPressed: () async {
-                    // print("message send option clicked");
-                    if(_textController.text.isNotEmpty){
-                      // print(_textController.text);
-                      // Timestamp t;
-                      // var t = DateTime.fromMillisecondsSinceEpoch(1713196304253);
-                      int t = DateTime.now().millisecondsSinceEpoch;
-                      var mes = {
-                        "message":_textController.text,
-                        "timestamp":t,
-                        "sender":StaticStore.currentUserId,
-                        "receiver":widget.receiverInfo.id,
-                        "status":"sent",
-                        "type":"text"
-                      };
-                      // var k = MesInfo.fromJson(mes);
-                      // print(k.timestamp);
-                      // List<String?> s = [StaticStore.currentUserId,widget.receiverInfo.id];
-                      // s.sort();
-                      // String messageId = "${s[0]}_${s[1]}";
-                      // print(messageId);
-                      await _firebaseCall.storeChats(widget.messageId,mes);
-
-
-                      _textController.text = '';
-                    }
-                  },
-                  padding:EdgeInsets.only(top:10,left:10,right:5,bottom:10),
-                  shape:const CircleBorder(),
-                  color:Colors.green,
-                  child:Icon(Icons.send,color:Colors.white,size:15),
-                )
-              ],),
+                  IconButton(
+                    onPressed: () async {
+                      await imageVideoPicker(
+                          context, widget.receiverInfo, widget.messageId);
+                    },
+                    icon: Icon(Icons.image, color: Colors.blueAccent),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.camera_alt_rounded,
+                        color: Colors.blueAccent),
+                  ),
+                  MaterialButton(
+                    onPressed: () async {
+                      // print("message send option clicked");
+                      if (_textController.text.isNotEmpty) {
+                        // print(_textController.text);
+                        // Timestamp t;
+                        // var t = DateTime.fromMillisecondsSinceEpoch(1713196304253);
+                        int t = DateTime.now().millisecondsSinceEpoch;
+                        var mes = {
+                          "message": _textController.text,
+                          "timestamp": t,
+                          "sender": StaticStore.currentUserEmail,
+                          "receiver": widget.receiverInfo.email,
+                          "status": "sent",
+                          "type": "text"
+                        };
+                        // var k = MesInfo.fromJson(mes);
+                        // print(k.timestamp);
+                        // List<String?> s = [StaticStore.currentUserId,widget.receiverInfo.id];
+                        // s.sort();
+                        // String messageId = "${s[0]}_${s[1]}";
+                        // print(messageId);
+                        await _firebaseCall.storeChats(widget.messageId, mes);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _scrollToBottom();
+                        });
+                        _textController.text = '';
+                      }
+                    },
+                    padding: EdgeInsets.only(
+                        top: 10, left: 10, right: 5, bottom: 10),
+                    shape: const CircleBorder(),
+                    color: Colors.green,
+                    child: Icon(Icons.send, color: Colors.white, size: 15),
+                  )
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
-
 }

@@ -32,7 +32,7 @@ class _MessageCardState extends State<MessageCard> {
     // print("MessageState: ${widget._mesInfo.message}");
 
     return 
-    widget._mesInfo.sender==widget._mesInfo.receiver?greenMess():widget._mesInfo.sender==StaticStore.currentUserId?greenMess():blueMess();
+    widget._mesInfo.sender==widget._mesInfo.receiver?greenMess():widget._mesInfo.sender==StaticStore.currentUserEmail?greenMess():blueMess();
   }
 
   Widget greenMess(){
