@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:vibe_link/controller/store_to_firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/view/Network/chatting/loading_user_img.dart';
@@ -31,189 +32,197 @@ class _NetworkUserState extends State<NetworkUser> {
     super.initState();
   }
 
+  Widget connectionListShimmer(){
+    return SingleChildScrollView(
+          // scrollDirection: Axis.horizontal,
+          scrollDirection: Axis.vertical,
+          // child: 
+          //     SizedBox(
+          //       height: MediaQuery.of(context).size.height,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[850]!,
+                  highlightColor: Colors.grey[700]!,
+                  child: 
+                  Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top:8,left:8,right:8),
+                        child: Container(height: 50, width:MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                      ),
+                      const SizedBox(height: 3),
+                      Padding(
+                        padding: const EdgeInsets.only(top:8,left:8,right:8),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              for(int i=0;i<MediaQuery.of(context).size.height/55+2;i++)...{
+                                Container(height: 55, color: Colors.grey[800]),
+                                const SizedBox(height:10),
+                              },
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                // ),
+              ),
+              // }
+          //   ],
+          // ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
     List<dynamic>?friends;
     return 
-    StreamBuilder<List<dynamic>>(
-      stream: fetchFriends().asStream(),
-      builder: (context, snapshot) {
-        if(snapshot.connectionState==ConnectionState.waiting){
+    SafeArea(
+      child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(icon:Icon(Icons.arrow_back),color: Colors.white,onPressed: (){
+                  Navigator.pop(context);
+                },),
+                title: Text("${widget.title}",style:TextStyle(color:Colors.white)),
+                backgroundColor: Colors.black,
+          
+              ),
+              body:
+      StreamBuilder<List<dynamic>>(
+        stream: fetchFriends().asStream(),
+        builder: (context, snapshot) {
+          if(snapshot.connectionState==ConnectionState.waiting){
+            return connectionListShimmer();
+            // Center(child:CircularProgressIndicator());
+          }
+          // print(friends?[0].displayName);
+          if(snapshot.hasData){
+            friends = snapshot.data;
+          }else{
+            return 
+                Center(child: Text('No friends available',overflow: TextOverflow.ellipsis,),);
+          }
+          //   print("no data");
+          // return SizedBox();
           return 
-          Center(child:CircularProgressIndicator());
-        }
-        // print(friends?[0].displayName);
-        if(snapshot.hasData){
-          friends = snapshot.data;
-        }else{
-          return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(icon:Icon(Icons.arrow_back),color: Colors.white,onPressed: (){
-                Navigator.pop(context);
-              },),
-              title: Text("${widget.title}",style:TextStyle(color:Colors.white)),
-              backgroundColor: Colors.black,
-        
-            ),
-            body:
-              Center(child: Text('No friends available',overflow: TextOverflow.ellipsis,),),
+          
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance.collection('spotifyBasedGenreUsers').snapshots(),
+                    builder: (context, snapshot) {
+                      return 
+                      friends?.length!=0?
+                      ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    itemCount: friends?.length,
+                      
+                                    itemBuilder: (context, index) {
+                                      return Column(children: [
+                                        Card(
+                                          color: Colors.black,
+                                          child: Column(children: [
+                      
+                                            InkWell(
+                                              borderRadius: BorderRadius.circular(15),
+                                              onTap: () async {
+                                                List<String?> s = [StaticStore.currentUserId,friends?[index].id];
+                                                s.sort();
+                                                String messageId = "${s[0]}_${s[1]}";
+                                                
+                                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ChatScreen(friends![index],messageId)));
+                                              },
+                                              child: ListTile(
+                                                leading: Column(
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(3),
+                                                          bottomLeft: Radius.circular(3),
+                                                        ),
+                                                        child:
+                                                        // StaticStore.currentSongImg==""?
+                                                            // CachedNetworkImage(imageUrl: ""),
+                                                            friends?[index].imgUrl?.length==0?
+                      
+                                                            Container(
+                                                              width: 55,
+                                                              height: 55,
+                                                              child:
+                                                              const LoadingUserImage(),
+                                                            )
+                      
+                      
+                                                        /* For user's friends image */
+                                                        :
+                                                            CachedNetworkImage(
+                                                          // imageUrl: user.avatar!,
+                      
+                                                          // imageUrl: friends?[index].imgUrl?.length==2?"${friends?[index].imgUrl?[1]['url']}":"${friends?[index].imgUrl?[0]['url']}",
+                                                          imageUrl: friends?[index].imgUrl!="" || friends?[index].imgUrl!=null?(friends?[index].imgUrl):null,
+                      
+                                                          width: 55,
+                                                          height: 55,
+                                                          memCacheHeight:
+                                                              (55 * devicePexelRatio).round(),
+                                                          memCacheWidth:
+                                                              (55 * devicePexelRatio).round(),
+                                                          maxHeightDiskCache:
+                                                              (55 * devicePexelRatio).round(),
+                                                          maxWidthDiskCache:
+                                                              (55 * devicePexelRatio).round(),
+                                                          // progressIndicatorBuilder:
+                                                          //     (context, url, l) {
+                                                          //           return const LoadingImage();
+                                                          //     },
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ]),
+                                                title: Text(
+                                                  
+                                                  "${friends?[index].displayName}",
+                                                  // "${friends[index]?.id}",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(color: Colors.white),
+                                                ),
+                                                subtitle: Text(
+                                                  "user",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(color: Colors.grey),
+                                                ),
+                                                isThreeLine: true,
+                                                trailing: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                              ]),
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                      ]);
+                                    },
+                                  ):
+                                  Center(child:Text("No friends available"));
+                    }
+                  ),
+                  footer(context),
+                ],
+            //   ),
+                          
+            // )
           );
         }
-        //   print("no data");
-        // return SizedBox();
-        return SafeArea(child: 
-          Scaffold(
-            backgroundColor: Colors.black,
-            appBar: 
-            AppBar(
-              leading: IconButton(icon:Icon(Icons.arrow_back),color: Colors.white,onPressed: (){
-                Navigator.pop(context);
-              },),
-              title: Text("${widget.title}",style:TextStyle(color:Colors.white)),
-              backgroundColor: Colors.black,
-        
-            ),
-            body: 
-        
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection('spotifyBasedGenreUsers').snapshots(),
-                  builder: (context, snapshot) {
-                    return 
-                    friends?.length!=0?
-                    ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  itemCount: friends?.length,
-                    
-                                  itemBuilder: (context, index) {
-                                    return Column(children: [
-                                      Card(
-                                        color: Colors.black,
-                                        child: Column(children: [
-                    
-                                          InkWell(
-                                            borderRadius: BorderRadius.circular(15),
-                                            onTap: () async {
-                                              List<String?> s = [StaticStore.currentUserId,friends?[index].id];
-                                              s.sort();
-                                              String messageId = "${s[0]}_${s[1]}";
-                                              
-                                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ChatScreen(friends![index],messageId)));
-                                            },
-                                            child: ListTile(
-                                              leading: Column(
-                                                  children: [
-                                                    ClipRRect(
-                                                      borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(3),
-                                                        bottomLeft: Radius.circular(3),
-                                                      ),
-                                                      child:
-                                                      // StaticStore.currentSongImg==""?
-                                                          // CachedNetworkImage(imageUrl: ""),
-                                                          friends?[index].imgUrl?.length==0?
-                    
-                                                          Container(
-                                                            width: 55,
-                                                            height: 55,
-                                                            child:
-                                                            const LoadingUserImage(),
-                                                          )
-                    
-                    
-                                                      /* For user's friends image */
-                                                      :
-                                                          CachedNetworkImage(
-                                                        // imageUrl: user.avatar!,
-                    
-                                                        // imageUrl: friends?[index].imgUrl?.length==2?"${friends?[index].imgUrl?[1]['url']}":"${friends?[index].imgUrl?[0]['url']}",
-                                                        imageUrl: friends?[index].imgUrl!="" || friends?[index].imgUrl!=null?(friends?[index].imgUrl):null,
-                    
-                                                        width: 55,
-                                                        height: 55,
-                                                        memCacheHeight:
-                                                            (55 * devicePexelRatio).round(),
-                                                        memCacheWidth:
-                                                            (55 * devicePexelRatio).round(),
-                                                        maxHeightDiskCache:
-                                                            (55 * devicePexelRatio).round(),
-                                                        maxWidthDiskCache:
-                                                            (55 * devicePexelRatio).round(),
-                                                        // progressIndicatorBuilder:
-                                                        //     (context, url, l) {
-                                                        //           return const LoadingImage();
-                                                        //     },
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ]),
-                                              title: Text(
-                                                
-                                                "${friends?[index].displayName}",
-                                                // "${friends[index]?.id}",
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(color: Colors.white),
-                                              ),
-                                              subtitle: Text(
-                                                "user",
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(color: Colors.grey),
-                                              ),
-                                              isThreeLine: true,
-                                              trailing: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              // widget.title=="Requests"?
-                                              // Row(
-                                              //   mainAxisSize: MainAxisSize.min,
-                                              //   children: [
-        
-        
-        
-                                              //   Container(
-                                              //     // width: 30,
-                                              //     child: IconButton(
-                                              //       onPressed: () async {
-                                              //         await rejectFriendRequest(friends?[index].id);
-                                              //         friends?.remove(friends?[index]);
-                                              //       }, 
-                                              //       icon: const Icon(Icons.delete,color: Colors.grey,)
-                                              //     ),
-                                              //   ),
-                                              //   IconButton(
-                                              //     onPressed: () async {
-                                              //       await acceptFriendRequest(friends?[index].id);
-                                              //       friends?.remove(friends?[index]);
-        
-                                              //     }, 
-                                              //     icon: const Icon(Icons.add,color: Colors.grey,)
-                                              //   ),
-                                              // ],)
-                                              // :SizedBox(),
-        
-                                            ]),
-                                            ),
-                                          ),
-                                        ]),
-                                      ),
-                                    ]);
-                                  },
-                                ):
-                                Center(child:Text("No friends available"));
-                  }
-                ),
-                footer(context),
-              ],
-            ),
-                        
-          )
-        );
-      }
+      ),
+      ),
     );
   }
 }
