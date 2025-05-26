@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:get/get.dart';
 import 'package:vibe_link/controller/firebase/firebase_call.dart';
+import 'package:vibe_link/controller/variables/loading_enum.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
 // import 'package:vibe_link/model/user_info.dart';
 import 'package:vibe_link/view/Network/chatting/controller/image_video_picker.dart';
 import 'package:vibe_link/view/Network/chatting/loading_user_img.dart';
 import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
+import 'package:vibe_link/view/Network/chatting/widget/cubit_state/chat_cubit.dart';
 import 'package:vibe_link/view/Network/chatting/widget/message_card.dart';
 // import 'package:linkify/view/Network/chatting/controller/image_video_picker.dart';
 // import 'package:linkify/view/Network/chatting/modal/mes_info.dart';
@@ -44,6 +47,117 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
+  Widget chatScreenWidget() {
+    return BlocProvider(
+          create: (context) => ChatCubit()..getMessages(widget.messageId),
+          child: BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
+            print("homescreen");
+            if (state.status == LoadPage.loading) {
+              // return SafeArea(child:Text("hiihi"));
+              return CircularProgressIndicator();
+            }
+            if(state.status==LoadPage.loaded){
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _scrollToBottom();
+              });
+            //   return Text("hgjk");
+            // }
+
+
+                // print(data.data());
+            List<dynamic> currentMessageList = state.message;
+                if (currentMessageList.isNotEmpty) {
+                  return ListView.builder(
+                      // reverse: true,
+                      // shrinkWrap: true,
+                      controller: _scrollController,
+                      scrollDirection: Axis.vertical,
+                      itemCount: currentMessageList.length,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        // print(currentMessageList[index].runtimeType);
+                        return MessageCard(
+                            MesInfo.fromJson(currentMessageList[index]),
+                            widget.receiverInfo);
+                      });
+                } else {
+                  return Center(
+                    child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
+                  );
+                }
+              } else {}
+
+              return Center(
+                child: Text("Hello there!", style: TextStyle(fontSize: 20)),
+              );
+
+
+            // return Text("Something went wrong please report in the issue box at home screen");
+          }
+      )
+    );
+
+
+
+
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('chats')
+            .doc(widget.messageId)
+            .snapshots(),
+        // stream: null,
+        builder: (context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return const SizedBox();
+            // return const Center(
+            //   child:CircularProgressIndicator());
+            case ConnectionState.active:
+            case ConnectionState.done:
+              // print(snapshot.data.exists);
+              // _scrollController.animateTo(
+              //   _scrollController.position.maxScrollExtent,
+              //   duration: Duration(milliseconds: 300),
+              //   curve: Curves.easeOut,
+              // );
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _scrollToBottom();
+              });
+
+              var data = snapshot.data;
+
+              if (data.exists) {
+                // print(data.data());
+                List<dynamic> currentMessageList = data.data()?['messageInfo'];
+                if (currentMessageList.isNotEmpty) {
+                  return ListView.builder(
+                      // reverse: true,
+                      // shrinkWrap: true,
+                      controller: _scrollController,
+                      scrollDirection: Axis.vertical,
+                      itemCount: currentMessageList.length,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        // print(currentMessageList[index].runtimeType);
+                        return MessageCard(
+                            MesInfo.fromJson(currentMessageList[index]),
+                            widget.receiverInfo);
+                      });
+                } else {
+                  return Center(
+                    child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
+                  );
+                }
+              } else {}
+
+              return Center(
+                child: Text("Hello there!", style: TextStyle(fontSize: 20)),
+              );
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -58,68 +172,69 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             body: Column(
               children: [
-                Expanded(
-                  child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('chats')
-                          .doc(widget.messageId)
-                          .snapshots(),
-                      // stream: null,
-                      builder: (context, AsyncSnapshot snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                          case ConnectionState.none:
-                            return const SizedBox();
-                          // return const Center(
-                          //   child:CircularProgressIndicator());
-                          case ConnectionState.active:
-                          case ConnectionState.done:
-                            // print(snapshot.data.exists);
-                            // _scrollController.animateTo(
-                            //   _scrollController.position.maxScrollExtent,
-                            //   duration: Duration(milliseconds: 300),
-                            //   curve: Curves.easeOut,
-                            // );
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              _scrollToBottom();
-                            });
+                Expanded(child: chatScreenWidget()
 
-                            var data = snapshot.data;
+                    // child: StreamBuilder(
+                    //     stream: FirebaseFirestore.instance
+                    //         .collection('chats')
+                    //         .doc(widget.messageId)
+                    //         .snapshots(),
+                    //     // stream: null,
+                    //     builder: (context, AsyncSnapshot snapshot) {
+                    //       switch (snapshot.connectionState) {
+                    //         case ConnectionState.waiting:
+                    //         case ConnectionState.none:
+                    //           return const SizedBox();
+                    //         // return const Center(
+                    //         //   child:CircularProgressIndicator());
+                    //         case ConnectionState.active:
+                    //         case ConnectionState.done:
+                    //           // print(snapshot.data.exists);
+                    //           // _scrollController.animateTo(
+                    //           //   _scrollController.position.maxScrollExtent,
+                    //           //   duration: Duration(milliseconds: 300),
+                    //           //   curve: Curves.easeOut,
+                    //           // );
+                    //           WidgetsBinding.instance.addPostFrameCallback((_) {
+                    //             _scrollToBottom();
+                    //           });
 
-                            if (data.exists) {
-                              // print(data.data());
-                              List<dynamic> currentMessageList =
-                                  data.data()?['messageInfo'];
-                              if (currentMessageList.isNotEmpty) {
-                                return ListView.builder(
-                                  // reverse: true,
-                                  // shrinkWrap: true,
-                                  controller: _scrollController,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: currentMessageList.length,
-                                    physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      // print(currentMessageList[index].runtimeType);
-                                      return MessageCard(
-                                          MesInfo.fromJson(
-                                              currentMessageList[index]),
-                                          widget.receiverInfo);
-                                    });
-                              } else {
-                                return Center(
-                                  child: Text("Say Hello!",
-                                      style: TextStyle(fontSize: 20)),
-                                );
-                              }
-                            } else {}
+                    //           var data = snapshot.data;
 
-                            return Center(
-                              child: Text("Hello there!",
-                                  style: TextStyle(fontSize: 20)),
-                            );
-                        }
-                      }),
-                ),
+                    //           if (data.exists) {
+                    //             // print(data.data());
+                    //             List<dynamic> currentMessageList =
+                    //                 data.data()?['messageInfo'];
+                    //             if (currentMessageList.isNotEmpty) {
+                    //               return ListView.builder(
+                    //                 // reverse: true,
+                    //                 // shrinkWrap: true,
+                    //                 controller: _scrollController,
+                    //                   scrollDirection: Axis.vertical,
+                    //                   itemCount: currentMessageList.length,
+                    //                   physics: BouncingScrollPhysics(),
+                    //                   itemBuilder: (context, index) {
+                    //                     // print(currentMessageList[index].runtimeType);
+                    //                     return MessageCard(
+                    //                         MesInfo.fromJson(
+                    //                             currentMessageList[index]),
+                    //                         widget.receiverInfo);
+                    //                   });
+                    //             } else {
+                    //               return Center(
+                    //                 child: Text("Say Hello!",
+                    //                     style: TextStyle(fontSize: 20)),
+                    //               );
+                    //             }
+                    //           } else {}
+
+                    //           return Center(
+                    //             child: Text("Hello there!",
+                    //                 style: TextStyle(fontSize: 20)),
+                    //           );
+                    //       }
+                    //     }),
+                    ),
                 _chatInp(),
               ],
             )),
