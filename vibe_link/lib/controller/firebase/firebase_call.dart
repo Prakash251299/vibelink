@@ -195,11 +195,21 @@ class FirebaseCall {
   }
 
   Future<void> storeChats(var mesId, Map<String, Object?> mes) async {
+    // var db = FirebaseFirestore.instance;
+    // await db.collection("chats").doc(mesId).set({
+    //   "messageInfo": FieldValue.arrayUnion([mes])
+    // }, SetOptions(merge: true)).onError(
+    //     (e, _) => print("Error Storing message info in firebase: $e"));
     var db = FirebaseFirestore.instance;
-    await db.collection("chats").doc(mesId).set({
-      "messageInfo": FieldValue.arrayUnion([mes])
-    }, SetOptions(merge: true)).onError(
-        (e, _) => print("Error Storing message info in firebase: $e"));
+    final messageRef = db
+    .collection("chats")
+    .doc(mesId)
+    .collection("messages")
+    .doc(); // Auto-generated ID
+
+    await messageRef.set(mes).onError(
+      (e, _) => print("Error storing message: $e"),
+    );
   }
 }
 

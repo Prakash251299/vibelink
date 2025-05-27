@@ -107,6 +107,9 @@ dependencies:
   shimmer: ^3.0.0
   flutter_dotenv: ^5.2.1
 
+  # Messaging
+  intl: ^0.20.2
+
 
 dev_dependencies:
   flutter_test:

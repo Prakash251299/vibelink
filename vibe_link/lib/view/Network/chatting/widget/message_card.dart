@@ -1,6 +1,7 @@
 // import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
 import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
@@ -29,13 +30,22 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    // print("MessageState: ${widget._mesInfo.message}");
+    print("MessageState: ${widget._mesInfo.timestamp.runtimeType}");
+    // DateTime dateTime = widget._mesInfo.timestamp;
+    var date = DateTime.fromMillisecondsSinceEpoch(widget._mesInfo.timestamp!);
+    String time = DateFormat('hh:mm a').format(date);
+    if(time[0]=='0'){
+      time = time.substring(1);
+    }
+    // print("Date: ${DateFormat('hh:mm a').format(date)}");
+    // print("Date: ${DateFormat('dd MMM yyyy').format(date)}");
+
 
     return 
-    widget._mesInfo.sender==widget._mesInfo.receiver?greenMess():widget._mesInfo.sender==StaticStore.currentUserEmail?greenMess():blueMess();
+    widget._mesInfo.sender==widget._mesInfo.receiver?greenMess(time):widget._mesInfo.sender==StaticStore.currentUserEmail?greenMess(time):blueMess(time);
   }
 
-  Widget greenMess(){
+  Widget greenMess(time){
     var mq = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment:MainAxisAlignment.spaceBetween,
@@ -47,56 +57,70 @@ class _MessageCardState extends State<MessageCard> {
           // widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
         ]),
       Flexible(
-        child: Container(
-          padding:EdgeInsets.all(mq.width*.04),
-          margin:EdgeInsets.symmetric(horizontal: mq.width*.04,vertical: mq.height*0.01),
-          decoration:BoxDecoration(
-            color: Color.fromARGB(255, 221, 245, 255),
-            border: Border.all(color:Colors.lightBlue),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-            )
-            // borderRadius: BorderRadius.only(
-            //   topRight: Radius.circular(30),
-            //   topLeft: Radius.circular(30),
-            //   bottomLeft: Radius.circular(30),
-            // )
-          ),
-
-          child:widget._mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):widget._mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
-
-          // child: widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
-
-          
-          // child: Text("${widget._mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
+        child: Column(
+          children: [
+            Container(
+              padding:EdgeInsets.all(mq.width*.04),
+              margin:EdgeInsets.symmetric(horizontal: mq.width*.04,vertical: mq.height*0.01),
+              decoration:BoxDecoration(
+                color: Color.fromARGB(255, 221, 245, 255),
+                border: Border.all(color:Colors.lightBlue),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                )
+                // borderRadius: BorderRadius.only(
+                //   topRight: Radius.circular(30),
+                //   topLeft: Radius.circular(30),
+                //   bottomLeft: Radius.circular(30),
+                // )
+              ),
+            
+              child:widget._mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):widget._mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
+            
+              // child: widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
+            
+              
+              // child: Text("${widget._mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
+            ),
+            Text("${time}",style: TextStyle(fontSize: 10),),
+            SizedBox(height: 20,)
+          ],
         ),
       ),
       // Text(widget.message.sent,style: TextStyle(fontSize: 13,color:Colors.black54),),
+      // SizedBox(height: 5,width:2)
     ]);
   }
-  Widget blueMess(){
+  Widget blueMess(time){
     var mq = MediaQuery.of(context).size;
     return Row(children:[
       Flexible(
-        child: Container(
-          padding:EdgeInsets.all(mq.width*.04),
-          margin:EdgeInsets.symmetric(horizontal: mq.width*.04,vertical: mq.height*0.01),
-          decoration:BoxDecoration(
-            color: Color.fromARGB(255, 221, 245, 255),
-            border: Border.all(color:Colors.lightBlue),
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30),
-              topLeft: Radius.circular(30),
-              bottomLeft: Radius.circular(30),
-            )
-          ),
-          // child: Text("${widget._mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
-          // child: widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
-          child:widget._mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):widget._mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
+        child: Column(
+          children: [
+            Container(
+              padding:EdgeInsets.all(mq.width*.04),
+              margin:EdgeInsets.symmetric(horizontal: mq.width*.04,vertical: mq.height*0.01),
+              decoration:BoxDecoration(
+                color: Color.fromARGB(255, 221, 245, 255),
+                border: Border.all(color:Colors.lightBlue),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                )
+              ),
+              // child: Text("${widget._mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
+              // child: widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
+              child:widget._mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):widget._mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
+            ),
+            Text("${time}",style: TextStyle(fontSize: 10),),
+          ],
         ),
       ),
+      SizedBox(height: 20,)
     ]);
+    
   }
 }

@@ -9,26 +9,67 @@ import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
 // import 'package:linkify/controller/home/front_page_data/recommendations.dart';
 // import '../../../controller/variables/loading_enum.dart';
 
-
 part 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatState.initial());
+  void fun(messageId) {
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc(messageId)
+        .collection("messages")
+        .orderBy("timestamp", descending: true)
+        .limit(50)
+        .snapshots()
+        .listen((snapshot) {
+      for (var change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.added) {
+          final newMsg = MesInfo.fromJson(change.doc.data()!);
+          emit(state.copyWith(
+            message: [newMsg, ...state.message], // add on top
+            status: LoadPage.loaded,
+          ));
+        }
+      }
+    });
+  }
 
   Future<void> getMessages(messageId) async {
     try {
       emit(state.copyWith(status: LoadPage.loading));
+      // FirebaseFirestore.instance
+      //     .collection('chats')
+      //     .doc(messageId)
+      //     .snapshots()
+      //     .listen((snapshot) {
+      //   if (snapshot.exists) {
+      //     final messages = snapshot.data()?['messageInfo'];
+      //     emit(state.copyWith(
+      //       status: LoadPage.loaded,
+      //       message: messages ?? [],
+      //     ));
+      //   }
+      // });
       FirebaseFirestore.instance
         .collection('chats')
         .doc(messageId)
+        .collection("messages")
+        .orderBy("timestamp", descending: false)
+        .limit(30)
         .snapshots()
         .listen((snapshot) {
-      if (snapshot.exists) {
-        final messages = snapshot.data()?['messageInfo'];
-        emit(state.copyWith(
-          status: LoadPage.loaded,
-          message: messages ?? [],
-        ));
+      for (var change in snapshot.docChanges) {
+        if (change.type == DocumentChangeType.added) {
+          print("new messages");
+          // print(change.doc.data().runtimeType);
+          // Map<String,dynamic> newMsg = MesInfo.fromJson(change.doc.data()!);
+          var newMsg = change.doc.data();
+          // Map<String,dynamic> newMsg = MesInfo.fromJson(messageData?["message"],messageData?["timestamp"],messageData?[""],messageData?[""],messageData?[""]);
+          emit(state.copyWith(
+            message: [...state.message,newMsg], // add on top
+            status: LoadPage.loaded,
+          ));
+        }
       }
     });
     } catch (e) {

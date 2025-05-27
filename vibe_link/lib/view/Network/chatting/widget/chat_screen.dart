@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
             print("homescreen");
             if (state.status == LoadPage.loading) {
               // return SafeArea(child:Text("hiihi"));
-              return CircularProgressIndicator();
+              return Container(height:50,child: Center(child:CircularProgressIndicator()));
             }
             if(state.status==LoadPage.loaded){
               WidgetsBinding.instance.addPostFrameCallback((_) {
