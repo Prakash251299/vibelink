@@ -96,10 +96,9 @@ class _ChatScreenState extends State<ChatScreen> {
           }
       )
     );
+  }
 
-
-
-
+  Widget messagingUsingStreamBuilder(){
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('chats')
@@ -149,10 +148,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
                   );
                 }
-              } else {}
+              }
 
               return Center(
-                child: Text("Hello there!", style: TextStyle(fontSize: 20)),
+                child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
               );
           }
         });
@@ -172,69 +171,9 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             body: Column(
               children: [
-                Expanded(child: chatScreenWidget()
-
-                    // child: StreamBuilder(
-                    //     stream: FirebaseFirestore.instance
-                    //         .collection('chats')
-                    //         .doc(widget.messageId)
-                    //         .snapshots(),
-                    //     // stream: null,
-                    //     builder: (context, AsyncSnapshot snapshot) {
-                    //       switch (snapshot.connectionState) {
-                    //         case ConnectionState.waiting:
-                    //         case ConnectionState.none:
-                    //           return const SizedBox();
-                    //         // return const Center(
-                    //         //   child:CircularProgressIndicator());
-                    //         case ConnectionState.active:
-                    //         case ConnectionState.done:
-                    //           // print(snapshot.data.exists);
-                    //           // _scrollController.animateTo(
-                    //           //   _scrollController.position.maxScrollExtent,
-                    //           //   duration: Duration(milliseconds: 300),
-                    //           //   curve: Curves.easeOut,
-                    //           // );
-                    //           WidgetsBinding.instance.addPostFrameCallback((_) {
-                    //             _scrollToBottom();
-                    //           });
-
-                    //           var data = snapshot.data;
-
-                    //           if (data.exists) {
-                    //             // print(data.data());
-                    //             List<dynamic> currentMessageList =
-                    //                 data.data()?['messageInfo'];
-                    //             if (currentMessageList.isNotEmpty) {
-                    //               return ListView.builder(
-                    //                 // reverse: true,
-                    //                 // shrinkWrap: true,
-                    //                 controller: _scrollController,
-                    //                   scrollDirection: Axis.vertical,
-                    //                   itemCount: currentMessageList.length,
-                    //                   physics: BouncingScrollPhysics(),
-                    //                   itemBuilder: (context, index) {
-                    //                     // print(currentMessageList[index].runtimeType);
-                    //                     return MessageCard(
-                    //                         MesInfo.fromJson(
-                    //                             currentMessageList[index]),
-                    //                         widget.receiverInfo);
-                    //                   });
-                    //             } else {
-                    //               return Center(
-                    //                 child: Text("Say Hello!",
-                    //                     style: TextStyle(fontSize: 20)),
-                    //               );
-                    //             }
-                    //           } else {}
-
-                    //           return Center(
-                    //             child: Text("Hello there!",
-                    //                 style: TextStyle(fontSize: 20)),
-                    //           );
-                    //       }
-                    //     }),
-                    ),
+                Expanded(
+                  child: chatScreenWidget(),
+                ),
                 _chatInp(),
               ],
             )),
@@ -386,9 +325,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         // String messageId = "${s[0]}_${s[1]}";
                         // print(messageId);
                         await _firebaseCall.storeChats(widget.messageId, mes);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _scrollToBottom();
-                        });
+                        // WidgetsBinding.instance.addPostFrameCallback((_) {
+                        //   _scrollToBottom();
+                        // });
                         _textController.text = '';
                       }
                     },

@@ -15,22 +15,22 @@ part 'chat_state.dart';
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatState.initial());
 
-  Future<List<dynamic>> getAllMessages(messageId)async{
-    DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore.instance
-            .collection('chats')
-            .doc(messageId).get();
-    List<dynamic> currentMessageList = data.data()?['messageInfo'];
-    return currentMessageList;
-  }
-
   Future<void> getMessages(messageId) async {
     try {
       emit(state.copyWith(status: LoadPage.loading));
-
-      emit(state.copyWith(
-        message: await getAllMessages(messageId),
-        status: LoadPage.loaded,
-      ));
+      FirebaseFirestore.instance
+        .collection('chats')
+        .doc(messageId)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        final messages = snapshot.data()?['messageInfo'];
+        emit(state.copyWith(
+          status: LoadPage.loaded,
+          message: messages ?? [],
+        ));
+      }
+    });
     } catch (e) {
       print(e.toString());
       print("Error happened at homecubit getalbums function");
