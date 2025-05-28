@@ -20,7 +20,8 @@ class MessageCard extends StatefulWidget {
   // final String message;
   MesInfo _mesInfo;
   UserInfoMine _receiverInfo;
-  MessageCard(this._mesInfo,this._receiverInfo, {super.key});
+  String time;
+  MessageCard(this._mesInfo,this._receiverInfo, this.time, {super.key});
   // const MessageCard({super.key,required this.message,required this.user,});
   @override
   State<MessageCard> createState() => _MessageCardState();
@@ -30,19 +31,23 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    print("MessageState: ${widget._mesInfo.timestamp.runtimeType}");
+    // print("MessageState: ${widget._mesInfo.timestamp.runtimeType}");
     // DateTime dateTime = widget._mesInfo.timestamp;
-    var date = DateTime.fromMillisecondsSinceEpoch(widget._mesInfo.timestamp!);
-    String time = DateFormat('hh:mm a').format(date);
-    if(time[0]=='0'){
-      time = time.substring(1);
-    }
+    // var date = DateTime.fromMillisecondsSinceEpoch(widget._mesInfo.timestamp!);
+    String time = widget.time;
+    // if(time[0]=='0'){
+    //   time = time.substring(1);
+    // }
     // print("Date: ${DateFormat('hh:mm a').format(date)}");
     // print("Date: ${DateFormat('dd MMM yyyy').format(date)}");
 
 
     return 
-    widget._mesInfo.sender==widget._mesInfo.receiver?greenMess(time):widget._mesInfo.sender==StaticStore.currentUserEmail?greenMess(time):blueMess(time);
+    Column(
+      children: [
+        widget._mesInfo.sender==widget._mesInfo.receiver?greenMess(time):widget._mesInfo.sender==StaticStore.currentUserEmail?greenMess(time):blueMess(time),
+      ],
+    );
   }
 
   Widget greenMess(time){

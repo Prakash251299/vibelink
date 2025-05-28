@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 // import 'package:get/get.dart';
 import 'package:vibe_link/controller/firebase/firebase_call.dart';
 import 'package:vibe_link/controller/variables/loading_enum.dart';
@@ -39,122 +41,126 @@ class _ChatScreenState extends State<ChatScreen> {
 
   TextEditingController _textController = TextEditingController();
   FirebaseCall _firebaseCall = FirebaseCall();
+  
+  void _scrollToBottom1() {
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 3),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   void initState() {
     // TODO: implement initState
-
-    super.initState();
-  }
+    }
 
   Widget chatScreenWidget() {
+    String prevDate = "1 Jan 1999";
     return BlocProvider(
-          create: (context) => ChatCubit()..getMessages(widget.messageId),
-          child: BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
-            print("homescreen");
-            if (state.status == LoadPage.loading) {
-              // return SafeArea(child:Text("hiihi"));
-              return Container(height:50,child: Center(child:CircularProgressIndicator()));
-            }
-            if(state.status==LoadPage.loaded){
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _scrollToBottom();
-              });
+        create: (context) => ChatCubit()..getMessages(widget.messageId),
+        child: BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
+          print("chat homescreen");
+          
+          if (state.status == LoadPage.loading) {
+            // return SafeArea(child:Text("hiihi"));
+            // if (state.message.isEmpty) {
+            //   return Center(
+            //     child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
+            //   );
+            // }
+            
+            return Container(
+                height: 50, child: Center(child: CircularProgressIndicator()));
+          }
+          if (state.status == LoadPage.loaded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToBottom();
+            });
             //   return Text("hgjk");
             // }
 
-
-                // print(data.data());
+            // print(data.data());
             List<dynamic> currentMessageList = state.message;
-                if (currentMessageList.isNotEmpty) {
-                  return ListView.builder(
-                      // reverse: true,
-                      // shrinkWrap: true,
-                      controller: _scrollController,
-                      scrollDirection: Axis.vertical,
-                      itemCount: currentMessageList.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        // print(currentMessageList[index].runtimeType);
-                        return MessageCard(
-                            MesInfo.fromJson(currentMessageList[index]),
-                            widget.receiverInfo);
-                      });
-                } else {
-                  return Center(
-                    child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
-                  );
-                }
-              } else {}
+            print(
+                "Latest messages: ${currentMessageList[currentMessageList.length - 1]}");
+            // if(_scrollController.position!=_scrollController.position.maxScrollExtent){}
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              // if (_scrollController.hasClients) {
+              double maxScroll = _scrollController.position.maxScrollExtent;
+              double currentScroll = _scrollController.position.pixels;
+              // const threshold = 0.0; // You can adjust this
+              print("currScroll: $currentScroll");
+              print("Max scroll: $maxScroll");
 
-              return Center(
-                child: Text("Hello there!", style: TextStyle(fontSize: 20)),
-              );
-
-
-            // return Text("Something went wrong please report in the issue box at home screen");
-          }
-      )
-    );
-  }
-
-  Widget messagingUsingStreamBuilder(){
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats')
-            .doc(widget.messageId)
-            .snapshots(),
-        // stream: null,
-        builder: (context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-            case ConnectionState.none:
-              return const SizedBox();
-            // return const Center(
-            //   child:CircularProgressIndicator());
-            case ConnectionState.active:
-            case ConnectionState.done:
-              // print(snapshot.data.exists);
-              // _scrollController.animateTo(
-              //   _scrollController.position.maxScrollExtent,
-              //   duration: Duration(milliseconds: 300),
-              //   curve: Curves.easeOut,
-              // );
-              WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (currentScroll+150 >= maxScroll) {
                 _scrollToBottom();
-              });
-
-              var data = snapshot.data;
-
-              if (data.exists) {
-                // print(data.data());
-                List<dynamic> currentMessageList = data.data()?['messageInfo'];
-                if (currentMessageList.isNotEmpty) {
-                  return ListView.builder(
-                      // reverse: true,
-                      // shrinkWrap: true,
-                      controller: _scrollController,
-                      scrollDirection: Axis.vertical,
-                      itemCount: currentMessageList.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        // print(currentMessageList[index].runtimeType);
-                        return MessageCard(
-                            MesInfo.fromJson(currentMessageList[index]),
-                            widget.receiverInfo);
-                      });
-                } else {
-                  return Center(
-                    child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
-                  );
-                }
               }
+              // if ((maxScroll - currentScroll).abs() < threshold) {
+              //   _scrollToBottom();
+              // }
+              // }
+              // _scrollToBottom();
+            });
+            if (currentMessageList.isNotEmpty) {
+              return ListView.builder(
+                  // reverse: true,
+                  // shrinkWrap: true,
+                  controller: _scrollController,
+                  scrollDirection: Axis.vertical,
+                  itemCount: currentMessageList.length + 1,
+                  // physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    int addDate=0;
+                    if (index == currentMessageList.length) {
+                      return SizedBox(
+                        height: 0,
+                      );
+                    }
+                    var dateTime = DateTime.fromMillisecondsSinceEpoch(
+                        currentMessageList[index]["timestamp"]);
+                    String time = DateFormat('hh:mm a').format(dateTime);
+                    String date = DateFormat('dd MMM yyyy').format(dateTime);
+                    if(date!=prevDate){
+                      prevDate = date;
+                      addDate = 1;
+                    }
+                    if (time[0] == '0') {
+                      time = time.substring(1);
+                    }
+                    MesInfo mesInfo =
+                        MesInfo.fromJson(currentMessageList[index]);
+                    // print("MessageList ${currentMessageList[index]["timestamp"]}");
+                    // print("MessageList ${currentMessageList[index]}");
+                    // if(currentMessageList[index]){
 
+                    // }
+                    print("Total messages: ${currentMessageList.length}");
+                    return Column(
+                      children: [
+                        addDate==1?Container(child: Text("$date")):SizedBox(),
+                        MessageCard(
+                            // MesInfo.fromJson(currentMessageList[index]),
+                            mesInfo,
+                            widget.receiverInfo,
+                            time),
+                      ],
+                    );
+                  });
+            } else {
               return Center(
                 child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
               );
-          }
-        });
+            }
+          } else {}
+
+          return Center(
+            child: Text("Hello there!", style: TextStyle(fontSize: 20)),
+          );
+
+          // return Text("Something went wrong please report in the issue box at home screen");
+        }));
   }
 
   @override
@@ -253,11 +259,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // _scrollController.animateTo(
+    //   _scrollController.position.maxScrollExtent,
+    //   duration: Duration(milliseconds: 3),
+    //   curve: Curves.easeOut,
+    // );
   }
 
   Widget _chatInp() {
@@ -305,6 +312,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   MaterialButton(
                     onPressed: () async {
                       // print("message send option clicked");
+                      // print("Current user: ${FirebaseAuth.instance.currentUser?.email}");
+
                       if (_textController.text.isNotEmpty) {
                         // print(_textController.text);
                         // Timestamp t;
@@ -313,6 +322,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         var mes = {
                           "message": _textController.text,
                           "timestamp": t,
+                          // "timestamp": Timestamp.fromMillisecondsSinceEpoch(t),
+                          // "timestamp": Timestamp.now(),
                           "sender": StaticStore.currentUserEmail,
                           "receiver": widget.receiverInfo.email,
                           "status": "sent",
@@ -323,13 +334,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         // List<String?> s = [StaticStore.currentUserId,widget.receiverInfo.id];
                         // s.sort();
                         // String messageId = "${s[0]}_${s[1]}";
-                        // print(messageId);
+                        print("MessageToSend $mes");
                         await _firebaseCall.storeChats(widget.messageId, mes);
-                        // WidgetsBinding.instance.addPostFrameCallback((_) {
-                        //   _scrollToBottom();
-                        // });
                         _textController.text = '';
                       }
+                      // WidgetsBinding.instance.addPostFrameCallback((_) {
+                      //   _scrollToBottom();
+                      // });
                     },
                     padding: EdgeInsets.only(
                         top: 10, left: 10, right: 5, bottom: 10),
