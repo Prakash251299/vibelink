@@ -15,61 +15,48 @@ import 'package:vibe_link/view/Network/chatting/loading_user_img.dart';
 import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
 import 'package:vibe_link/view/Network/chatting/widget/cubit_state/chat_cubit.dart';
 import 'package:vibe_link/view/Network/chatting/widget/message_card.dart';
-// import 'package:linkify/view/Network/chatting/controller/image_video_picker.dart';
-// import 'package:linkify/view/Network/chatting/modal/mes_info.dart';
-// import 'package:linkify/view/Network/chatting/widget/message_card.dart';
-// import 'package:linkify/controller/store_to_firebase/firebase_call.dart';
-// import 'package:linkify/controller/variables/static_store.dart';
-// import 'package:linkify/model/user_info.dart';
-// import 'package:linkify/view/Network/chatting/loading_user_img.dart';
-// import 'package:wechat/messageCard.dart';
-// import 'apis.dart';
-// import 'chatUser.dart';
-// import 'message.dart';
 
-class ChatScreen extends StatefulWidget {
+// class ChatScreen extends StatefulWidget {
+//   UserInfoMine receiverInfo;
+//   String messageId;
+//   ChatScreen(this.receiverInfo, this.messageId, {super.key});
+
+//   @override
+//   State<ChatScreen> createState() => _ChatScreenState();
+// }
+
+class ChatScreen extends StatelessWidget {
+  // ChatScreen({super.key});
   UserInfoMine receiverInfo;
   String messageId;
   ChatScreen(this.receiverInfo, this.messageId, {super.key});
 
-  @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
 
-class _ChatScreenState extends State<ChatScreen> {
+// class _ChatScreenState extends State<ChatScreen> {
+
   final ScrollController _scrollController = ScrollController();
 
   TextEditingController _textController = TextEditingController();
   FirebaseCall _firebaseCall = FirebaseCall();
-  
-  void _scrollToBottom1() {
-    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 3),
-      curve: Curves.easeOut,
-    );
-  }
 
   @override
   void initState() {
     // TODO: implement initState
-    }
+  }
 
   Widget chatScreenWidget() {
     String prevDate = "1 Jan 1999";
     return BlocProvider(
-        create: (context) => ChatCubit()..getMessages(widget.messageId),
+        create: (context) => ChatCubit()..getMessages(messageId),
         child: BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
           print("chat homescreen");
           
           if (state.status == LoadPage.loading) {
-            // return SafeArea(child:Text("hiihi"));
-            // if (state.message.isEmpty) {
-            //   return Center(
-            //     child: Text("Say Hello!", style: TextStyle(fontSize: 20)),
-            //   );
-            // }
             
             return Container(
                 height: 50, child: Center(child: CircularProgressIndicator()));
@@ -143,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         MessageCard(
                             // MesInfo.fromJson(currentMessageList[index]),
                             mesInfo,
-                            widget.receiverInfo,
+                            receiverInfo,
                             time),
                       ],
                     );
@@ -173,21 +160,21 @@ class _ChatScreenState extends State<ChatScreen> {
             appBar: AppBar(
               backgroundColor: Colors.black,
               automaticallyImplyLeading: false,
-              flexibleSpace: _appBar(),
+              flexibleSpace: _appBar(context),
             ),
             body: Column(
               children: [
                 Expanded(
                   child: chatScreenWidget(),
                 ),
-                _chatInp(),
+                _chatInp(context),
               ],
             )),
       ),
     );
   }
 
-  Widget _appBar() {
+  Widget _appBar(context) {
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
     return Row(
       children: [
@@ -211,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
           child:
               // StaticStore.currentSongImg==""?
               // CachedNetworkImage(imageUrl: ""),
-              widget.receiverInfo.imgUrl == null
+              receiverInfo.imgUrl == null
                   ? Container(
                       width: 55,
                       height: 55,
@@ -222,7 +209,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   : CachedNetworkImage(
                       // imageUrl: user.avatar!,
 
-                      imageUrl: "${widget.receiverInfo.imgUrl}",
+                      imageUrl: "${receiverInfo.imgUrl}",
 
                       width: 55,
                       height: 55,
@@ -244,7 +231,7 @@ class _ChatScreenState extends State<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${widget.receiverInfo.displayName}",
+                "${receiverInfo.displayName}",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               Text(
@@ -259,15 +246,15 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _scrollToBottom() {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    // _scrollController.animateTo(
-    //   _scrollController.position.maxScrollExtent,
-    //   duration: Duration(milliseconds: 3),
-    //   curve: Curves.easeOut,
-    // );
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 3),
+      curve: Curves.easeOutCirc,
+    );
   }
 
-  Widget _chatInp() {
+  Widget _chatInp(context){
     return Padding(
       padding: EdgeInsets.symmetric(
           vertical: MediaQuery.of(context).size.height * 0.01),
@@ -287,6 +274,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
+                      // focusNode: ,
                       keyboardType: TextInputType.multiline,
                       controller: _textController,
                       maxLines: null,
@@ -300,7 +288,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   IconButton(
                     onPressed: () async {
                       await imageVideoPicker(
-                          context, widget.receiverInfo, widget.messageId);
+                          context, receiverInfo, messageId);
                     },
                     icon: Icon(Icons.image, color: Colors.blueAccent),
                   ),
@@ -313,6 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () async {
                       // print("message send option clicked");
                       // print("Current user: ${FirebaseAuth.instance.currentUser?.email}");
+                      
 
                       if (_textController.text.isNotEmpty) {
                         // print(_textController.text);
@@ -325,17 +314,17 @@ class _ChatScreenState extends State<ChatScreen> {
                           // "timestamp": Timestamp.fromMillisecondsSinceEpoch(t),
                           // "timestamp": Timestamp.now(),
                           "sender": StaticStore.currentUserEmail,
-                          "receiver": widget.receiverInfo.email,
+                          "receiver": receiverInfo.email,
                           "status": "sent",
                           "type": "text"
                         };
                         // var k = MesInfo.fromJson(mes);
                         // print(k.timestamp);
-                        // List<String?> s = [StaticStore.currentUserId,widget.receiverInfo.id];
+                        // List<String?> s = [StaticStore.currentUserId,receiverInfo.id];
                         // s.sort();
                         // String messageId = "${s[0]}_${s[1]}";
-                        print("MessageToSend $mes");
-                        await _firebaseCall.storeChats(widget.messageId, mes);
+                        // print("MessageToSend $mes");
+                        await _firebaseCall.storeChats(messageId, mes);
                         _textController.text = '';
                       }
                       // WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -5,36 +5,43 @@ import 'package:intl/intl.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/user_info.dart';
 import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
-// import 'package:linkify/view/Network/chatting/modal/mes_info.dart';
-// import 'package:linkify/controller/variables/static_store.dart';
-// import 'package:linkify/model/user_info.dart';
-// import 'apis.dart';
-// import 'chatUser.dart';
-// import 'message.dart';
-// import 'chatuserCard.dart';
 
-class MessageCard extends StatefulWidget {
-  
-  // final Message message;
-  // final ChatUser user;
-  // final String message;
+
+class MessageCard extends StatelessWidget {
+  // MessageCard({super.key});
   MesInfo _mesInfo;
   UserInfoMine _receiverInfo;
   String time;
   MessageCard(this._mesInfo,this._receiverInfo, this.time, {super.key});
-  // const MessageCard({super.key,required this.message,required this.user,});
-  @override
-  State<MessageCard> createState() => _MessageCardState();
-}
-// var from = 'prakashpratapsingh2512@gmail.com';
-// var from = 'prakashpratapsingh6@gmail.com';
-class _MessageCardState extends State<MessageCard> {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
+
+// class MessageCard extends StatefulWidget {
+  
+//   // final Message message;
+//   // final ChatUser user;
+//   // final String message;
+//   MesInfo _mesInfo;
+//   UserInfoMine _receiverInfo;
+//   String time;
+//   MessageCard(this._mesInfo,this._receiverInfo, this.time, {super.key});
+//   // const MessageCard({super.key,required this.message,required this.user,});
+//   @override
+//   State<MessageCard> createState() => _MessageCardState();
+// }
+// // var from = 'prakashpratapsingh2512@gmail.com';
+// // var from = 'prakashpratapsingh6@gmail.com';
+// class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    // print("MessageState: ${widget._mesInfo.timestamp.runtimeType}");
-    // DateTime dateTime = widget._mesInfo.timestamp;
-    // var date = DateTime.fromMillisecondsSinceEpoch(widget._mesInfo.timestamp!);
-    String time = widget.time;
+    // print("MessageState: ${_mesInfo.timestamp.runtimeType}");
+    // DateTime dateTime = _mesInfo.timestamp;
+    // var date = DateTime.fromMillisecondsSinceEpoch(_mesInfo.timestamp!);
+    // String time = time;
     // if(time[0]=='0'){
     //   time = time.substring(1);
     // }
@@ -45,12 +52,12 @@ class _MessageCardState extends State<MessageCard> {
     return 
     Column(
       children: [
-        widget._mesInfo.sender==widget._mesInfo.receiver?greenMess(time):widget._mesInfo.sender==StaticStore.currentUserEmail?greenMess(time):blueMess(time),
+        _mesInfo.sender==_mesInfo.receiver?greenMess(time,context):_mesInfo.sender==StaticStore.currentUserEmail?greenMess(time,context):blueMess(time,context),
       ],
     );
   }
 
-  Widget greenMess(time){
+  Widget greenMess(time,context){
     var mq = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment:MainAxisAlignment.spaceBetween,
@@ -59,7 +66,7 @@ class _MessageCardState extends State<MessageCard> {
           SizedBox(width:mq.width*.04),
           Icon(Icons.done_all_rounded, color: Colors.blue, size: 20),
           // Text("hello"),
-          // widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
+          // _mesInfo.message!=""?Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
         ]),
       Flexible(
         child: Column(
@@ -82,23 +89,23 @@ class _MessageCardState extends State<MessageCard> {
                 // )
               ),
             
-              child:widget._mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):widget._mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
+              child:_mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):_mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
             
-              // child: widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
+              // child: _mesInfo.message!=""?Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
             
               
-              // child: Text("${widget._mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
+              // child: Text("${_mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
             ),
             Text("${time}",style: TextStyle(fontSize: 10),),
             SizedBox(height: 20,)
           ],
         ),
       ),
-      // Text(widget.message.sent,style: TextStyle(fontSize: 13,color:Colors.black54),),
+      // Text(message.sent,style: TextStyle(fontSize: 13,color:Colors.black54),),
       // SizedBox(height: 5,width:2)
     ]);
   }
-  Widget blueMess(time){
+  Widget blueMess(time,context){
     var mq = MediaQuery.of(context).size;
     return Row(children:[
       Flexible(
@@ -116,9 +123,9 @@ class _MessageCardState extends State<MessageCard> {
                   bottomLeft: Radius.circular(30),
                 )
               ),
-              // child: Text("${widget._mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
-              // child: widget._mesInfo.message!=""?Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
-              child:widget._mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):widget._mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${widget._mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
+              // child: Text("${_mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
+              // child: _mesInfo.message!=""?Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
+              child:_mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):_mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
             ),
             Text("${time}",style: TextStyle(fontSize: 10),),
           ],
