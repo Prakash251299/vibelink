@@ -65,11 +65,10 @@ class MessageCard extends StatelessWidget {
         Row(children:[
           SizedBox(width:mq.width*.04),
           Icon(Icons.done_all_rounded, color: Colors.blue, size: 20),
-          // Text("hello"),
-          // _mesInfo.message!=""?Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
         ]),
       Flexible(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
               padding:EdgeInsets.all(mq.width*.04),
@@ -96,7 +95,14 @@ class MessageCard extends StatelessWidget {
               
               // child: Text("${_mesInfo.message}",style:TextStyle(fontSize: 15,color:Colors.black87)),
             ),
-            Text("${time}",style: TextStyle(fontSize: 10),),
+            // Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children:[
+            Padding(
+              padding:EdgeInsets.only(right:mq.width*.05),
+              child: Text("${time}",style: TextStyle(fontSize: 10),),
+            ),
+                    // ]),
             SizedBox(height: 20,)
           ],
         ),
@@ -110,6 +116,7 @@ class MessageCard extends StatelessWidget {
     return Row(children:[
       Flexible(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding:EdgeInsets.all(mq.width*.04),
@@ -127,7 +134,11 @@ class MessageCard extends StatelessWidget {
               // child: _mesInfo.message!=""?Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.type} data",style:TextStyle(fontSize:13,color:Colors.black54),),
               child:_mesInfo.type=="video"?Text("video data",style:TextStyle(fontSize:13,color:Colors.black54),):_mesInfo.type=="image"?Text("image data",style:TextStyle(fontSize:13,color:Colors.black54),):Text("${_mesInfo.message}",style:TextStyle(fontSize:13,color:Colors.black54),),
             ),
-            Text("${time}",style: TextStyle(fontSize: 10),),
+            // Text("${time}",style: TextStyle(fontSize: 10),),
+            Padding(
+              padding:EdgeInsets.only(left:mq.width*.05),
+              child: Text("${time}",style: TextStyle(fontSize: 10),),
+            ),
           ],
         ),
       ),

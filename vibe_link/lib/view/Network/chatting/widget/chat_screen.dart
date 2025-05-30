@@ -16,43 +16,52 @@ import 'package:vibe_link/view/Network/chatting/modal/mes_info.dart';
 import 'package:vibe_link/view/Network/chatting/widget/cubit_state/chat_cubit.dart';
 import 'package:vibe_link/view/Network/chatting/widget/message_card.dart';
 
-// class ChatScreen extends StatefulWidget {
-//   UserInfoMine receiverInfo;
-//   String messageId;
-//   ChatScreen(this.receiverInfo, this.messageId, {super.key});
-
-//   @override
-//   State<ChatScreen> createState() => _ChatScreenState();
-// }
-
-class ChatScreen extends StatelessWidget {
-  // ChatScreen({super.key});
+class ChatScreen extends StatefulWidget {
   UserInfoMine receiverInfo;
   String messageId;
   ChatScreen(this.receiverInfo, this.messageId, {super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+// class ChatScreen extends StatelessWidget {
+//   // ChatScreen({super.key});
+//   UserInfoMine receiverInfo;
+//   String messageId;
+//   ChatScreen(this.receiverInfo, this.messageId, {super.key});
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return const Placeholder();
+  // }
 // }
 
-// class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> {
 
   final ScrollController _scrollController = ScrollController();
 
   TextEditingController _textController = TextEditingController();
   FirebaseCall _firebaseCall = FirebaseCall();
+  int textFieldOpen=0;
 
   @override
   void initState() {
     // TODO: implement initState
   }
 
+  @override
+  void dispose(){
+    _scrollController.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
+
   Widget chatScreenWidget() {
     String prevDate = "1 Jan 1999";
+    List<dynamic> currentMessageList = [];
     return BlocProvider(
-        create: (context) => ChatCubit()..getMessages(messageId),
+        create: (context) => ChatCubit()..getMessages(widget.messageId),
         child: BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
           print("chat homescreen");
           
@@ -70,26 +79,31 @@ class ChatScreen extends StatelessWidget {
 
             // print(data.data());
             List<dynamic> currentMessageList = state.message;
-            print(
-                "Latest messages: ${currentMessageList[currentMessageList.length - 1]}");
-            // if(_scrollController.position!=_scrollController.position.maxScrollExtent){}
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              // if (_scrollController.hasClients) {
-              double maxScroll = _scrollController.position.maxScrollExtent;
-              double currentScroll = _scrollController.position.pixels;
-              // const threshold = 0.0; // You can adjust this
-              print("currScroll: $currentScroll");
-              print("Max scroll: $maxScroll");
+            // currentMessageList.addAll(state.message);
 
-              if (currentScroll+150 >= maxScroll) {
-                _scrollToBottom();
-              }
-              // if ((maxScroll - currentScroll).abs() < threshold) {
-              //   _scrollToBottom();
-              // }
-              // }
-              // _scrollToBottom();
-            });
+
+            // print(
+            //     "Latest messages: ${currentMessageList[currentMessageList.length - 1]}");
+            // // if(_scrollController.position!=_scrollController.position.maxScrollExtent){}
+            // WidgetsBinding.instance.addPostFrameCallback((_) {
+            //   // if (_scrollController.hasClients) {
+            //   double maxScroll = _scrollController.position.maxScrollExtent;
+            //   double currentScroll = _scrollController.position.pixels;
+            //   // const threshold = 0.0; // You can adjust this
+            //   print("currScroll: $currentScroll");
+            //   print("Max scroll: $maxScroll");
+
+            //   if (currentScroll+150 >= maxScroll) {
+            //     _scrollToBottom();
+            //   }
+            //   // if ((maxScroll - currentScroll).abs() < threshold) {
+            //   //   _scrollToBottom();
+            //   // }
+            //   // }
+            //   // _scrollToBottom();
+            // });
+
+
             if (currentMessageList.isNotEmpty) {
               return ListView.builder(
                   // reverse: true,
@@ -109,9 +123,14 @@ class ChatScreen extends StatelessWidget {
                         currentMessageList[index]["timestamp"]);
                     String time = DateFormat('hh:mm a').format(dateTime);
                     String date = DateFormat('dd MMM yyyy').format(dateTime);
-                    if(date!=prevDate){
-                      prevDate = date;
-                      addDate = 1;
+                    bool showDate = false;
+                    if (index == 0) {
+                      showDate = true;
+                    } else {
+                      var previous = currentMessageList[index - 1];
+                      var previousDateTime = DateTime.fromMillisecondsSinceEpoch(previous["timestamp"]);
+                      String previousDate = DateFormat('dd MMM yyyy').format(previousDateTime);
+                      showDate = date != previousDate;
                     }
                     if (time[0] == '0') {
                       time = time.substring(1);
@@ -122,15 +141,30 @@ class ChatScreen extends StatelessWidget {
                     // print("MessageList ${currentMessageList[index]}");
                     // if(currentMessageList[index]){
 
-                    // }
+                    // }right
                     print("Total messages: ${currentMessageList.length}");
                     return Column(
                       children: [
-                        addDate==1?Container(child: Text("$date")):SizedBox(),
+                        // addDate==1?Container(child: Text("$date")):SizedBox(),
+                        if (showDate)
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          width: 120,
+                          // color:Colors.grey,
+                          // color:Color.fromARGB(255, 221, 245, 255),
+                          // color:Colors.yellow[100],
+                          // color: Color(0xFFE0E0E0),
+                          // color:Color.fromARGB(255, 230, 230, 230),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                            color:Colors.grey.shade300,
+                          ),
+                          child: Center(child: Text(date,style: TextStyle(fontSize: 12,color: Colors.grey.shade800))),
+                        ),
                         MessageCard(
                             // MesInfo.fromJson(currentMessageList[index]),
                             mesInfo,
-                            receiverInfo,
+                            widget.receiverInfo,
                             time),
                       ],
                     );
@@ -164,8 +198,11 @@ class ChatScreen extends StatelessWidget {
             ),
             body: Column(
               children: [
-                Expanded(
-                  child: chatScreenWidget(),
+                Container(
+                  // height:MediaQuery.of(context).size.height/2,
+                  child: Expanded(
+                    child: chatScreenWidget(),
+                  ),
                 ),
                 _chatInp(context),
               ],
@@ -198,7 +235,7 @@ class ChatScreen extends StatelessWidget {
           child:
               // StaticStore.currentSongImg==""?
               // CachedNetworkImage(imageUrl: ""),
-              receiverInfo.imgUrl == null
+              widget.receiverInfo.imgUrl == null
                   ? Container(
                       width: 55,
                       height: 55,
@@ -209,7 +246,7 @@ class ChatScreen extends StatelessWidget {
                   : CachedNetworkImage(
                       // imageUrl: user.avatar!,
 
-                      imageUrl: "${receiverInfo.imgUrl}",
+                      imageUrl: "${widget.receiverInfo.imgUrl}",
 
                       width: 55,
                       height: 55,
@@ -231,7 +268,7 @@ class ChatScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${receiverInfo.displayName}",
+                "${widget.receiverInfo.displayName}",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               Text(
@@ -249,8 +286,8 @@ class ChatScreen extends StatelessWidget {
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 3),
-      curve: Curves.easeOutCirc,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.fastOutSlowIn,
     );
   }
 
@@ -274,6 +311,11 @@ class ChatScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: TextField(
+                      onTap: (){
+                        print("TextField tapped");
+                        // setState((){});
+                        textFieldOpen=1;
+                      },
                       // focusNode: ,
                       keyboardType: TextInputType.multiline,
                       controller: _textController,
@@ -288,7 +330,7 @@ class ChatScreen extends StatelessWidget {
                   IconButton(
                     onPressed: () async {
                       await imageVideoPicker(
-                          context, receiverInfo, messageId);
+                          context, widget.receiverInfo, widget.messageId);
                     },
                     icon: Icon(Icons.image, color: Colors.blueAccent),
                   ),
@@ -314,7 +356,7 @@ class ChatScreen extends StatelessWidget {
                           // "timestamp": Timestamp.fromMillisecondsSinceEpoch(t),
                           // "timestamp": Timestamp.now(),
                           "sender": StaticStore.currentUserEmail,
-                          "receiver": receiverInfo.email,
+                          "receiver": widget.receiverInfo.email,
                           "status": "sent",
                           "type": "text"
                         };
@@ -324,7 +366,7 @@ class ChatScreen extends StatelessWidget {
                         // s.sort();
                         // String messageId = "${s[0]}_${s[1]}";
                         // print("MessageToSend $mes");
-                        await _firebaseCall.storeChats(messageId, mes);
+                        await _firebaseCall.storeChats(widget.messageId, mes);
                         _textController.text = '';
                       }
                       // WidgetsBinding.instance.addPostFrameCallback((_) {

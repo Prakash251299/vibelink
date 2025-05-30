@@ -36,6 +36,7 @@ class ChatCubit extends Cubit<ChatState> {
     if (newMessages.isNotEmpty) {
       emit(state.copyWith(
         message: [...state.message, ...newMessages.reversed], // display oldest to newest
+        // message: [newMessages],
         status: LoadPage.loaded,
       ));
     }
