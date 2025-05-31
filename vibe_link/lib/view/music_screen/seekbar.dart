@@ -35,7 +35,8 @@ class _SeekBarState extends State<SeekBar> {
             if (StaticStore.queueIndex + 1 < StaticStore.myQueueTrack.length) {
               // _player.youtubeStop();
               if (StaticStore.nextPlay == 1) {
-                StaticStore.nextPlay = 0;
+                // StaticStore.nextPlay = 0;
+                StaticStore.setNextPlay(0);
                 StaticStore.queueIndex++;
                 _player
                     .youtubePlay(

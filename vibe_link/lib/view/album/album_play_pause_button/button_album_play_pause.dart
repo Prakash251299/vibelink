@@ -12,7 +12,9 @@ import 'package:vibe_link/model/album_track.dart';
 Future<void> playMine() async {
   YoutubeSongPlayer _player = YoutubeSongPlayer();
   if (StaticStore.nextPlay == 1) {
-          StaticStore.nextPlay = 0;
+          // StaticStore.nextPlay = 0;
+          StaticStore.setNextPlay(0);
+
           // }
           StaticStore.queueIndex++;
           if (StaticStore.queueIndex <= StaticStore.myQueueTrack.length - 1) {
@@ -23,6 +25,12 @@ Future<void> playMine() async {
               //   StaticStore.queueIndex--;
               //   return;
               // }
+              StaticStore.currentSong =
+                    StaticStore.myQueueTrack[StaticStore.queueIndex].name!;
+                StaticStore.currentArtists =
+                    StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists??[];
+                StaticStore.currentSongImg =
+                    StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl!;
     
               await _player
                   .youtubePlay(
@@ -30,20 +38,19 @@ Future<void> playMine() async {
                       StaticStore
                           .myQueueTrack[StaticStore.queueIndex].trackArtists?[0],StaticStore.queueIndex)
                   .then((value) {
-                StaticStore.currentSong =
-                    StaticStore.myQueueTrack[StaticStore.queueIndex].name!;
-                StaticStore.currentArtists =
-                    StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists??[];
-                StaticStore.currentSongImg =
-                    StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl!;
+                // StaticStore.currentSong =
+                //     StaticStore.myQueueTrack[StaticStore.queueIndex].name!;
+                // StaticStore.currentArtists =
+                //     StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists??[];
+                // StaticStore.currentSongImg =
+                //     StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl!;
                 StaticStore.playing = true;
                 StaticStore.pause = false;
               });
             });
-            // setState(() {});
           } else {
             StaticStore.queueIndex--;
-            StaticStore.nextPlay = 1;
+            StaticStore.setNextPlay(1);
           }
         }
 }

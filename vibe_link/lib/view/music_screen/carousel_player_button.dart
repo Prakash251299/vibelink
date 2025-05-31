@@ -72,7 +72,8 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
             // print("position");
             // print(StaticStore.player.position);
             if(StaticStore.nextPlay==1){
-              StaticStore.nextPlay=0;
+              // StaticStore.nextPlay=0;
+              StaticStore.setNextPlay(0);
 
             StaticStore.queueIndex--;
             if(StaticStore.queueIndex>=0){
@@ -95,7 +96,9 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
               // setState(() {});
             }else{
               StaticStore.queueIndex++;
-              StaticStore.nextPlay=1;
+              // StaticStore.nextPlay=1;
+              StaticStore.setNextPlay(1);
+
 
             }
             }
@@ -171,7 +174,9 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
           onPressed: () async {
 
             if(StaticStore.nextPlay==1){
-              StaticStore.nextPlay=0;
+              // StaticStore.nextPlay=0;
+              StaticStore.setNextPlay(0);
+
             // }
             StaticStore.queueIndex++;
             if(StaticStore.queueIndex<=StaticStore.myQueueTrack.length-1){
@@ -196,7 +201,9 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
               // setState(() {});
             }else{
               StaticStore.queueIndex--;
-              StaticStore.nextPlay=1;
+              // StaticStore.nextPlay=1;
+              StaticStore.setNextPlay(1);
+
 
             }
             }

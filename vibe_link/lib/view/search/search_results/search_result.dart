@@ -32,19 +32,6 @@ class SearchResultsPage extends StatefulWidget {
 }
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
-// class SearchResultsPage extends StatelessWidget {
-  // final MainController con;
-  // SearchResultsPage({
-  //   Key? key,
-  //   // required this.con,
-  // }) : super(key: key);
-
   SearchResultsCubit _searchResultsCubit = SearchResultsCubit();
   String artists = "";
   YoutubeSongPlayer _youtubePlayer = YoutubeSongPlayer();
@@ -80,6 +67,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   Scaffold(
                       appBar: CustomAppBar(
                         onPressed: () {
+                          // print();
                           // BlocProvider.of<SearchResultsCubit>(context).isSongToggle();
                         },
                         onChanged: (String? s) async {
@@ -127,7 +115,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                       //     state.songs[i].songname;
                                       return InkWell(
                                         onTap: () async {
-                                          // print("Clicked searching.....");
+                                          print("Clicked searching.....");
                                           if (state.songs.length > 0) {
                                             if (StaticStore.playing == false) {
                                               // if(StaticStore.pause==true){
@@ -135,53 +123,16 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                               if (StaticStore.currentSong ==
                                                   state.songs[i].name) {
                                                 await _youtubePlayer
-                                                    .youtubeResume().then((value) {
-                                                      StaticStore.playing = true;
-                                                    });
-                                              } else {
-                                                await _youtubePlayer
-                                                    .youtubeStop();
-                                                // _youtubePlayer.youtubePlay(state.songs[i].name);
-                                                await _youtubePlayer
-                                                    .youtubePlay(
-                                                        state.songs[i].name,
-                                                        state.songs[i]
-                                                            .artists[0],i).then((value) {
-
-                                                    StaticStore.currentSong =
-                                                        state.songs[i].name;
-                                                    StaticStore.currentSongImg =
-                                                        state.songs[i].imgUrl;
-                                                    StaticStore.currentArtists =
-                                                        List.from(
-                                                            state.songs[i].artists);
-                                                    StaticStore.playing = true;
+                                                    .youtubeResume()
+                                                    .then((value) {
+                                                  StaticStore.playing = true;
                                                 });
-                                              }
-                                              // setState(() {
-                                              // });
-                                              // StaticStore.pause=false;
-                                            } else {
-                                              if (StaticStore.currentSong ==
-                                                  state.songs[i].name) {
-                                                await _youtubePlayer
-                                                    .youtubePause();
-                                                StaticStore.pause = true;
-                                                // print("same");
-                                                // setState(() {
-                                                StaticStore.playing = false;
-                                                // });
                                               } else {
-                                                StaticStore.pause = false;
-                                                // }else{
                                                 await _youtubePlayer
                                                     .youtubeStop();
-                                                await _youtubePlayer
-                                                    .youtubePlay(
-                                                        state.songs[i].name,
-                                                        state.songs[i]
-                                                            .artists[0],i).then((value) {
-
+                                                if (StaticStore.nextPlay == 1) {
+                                                  StaticStore.setNextPlay(0);
+                                                }
                                                 StaticStore.currentSong =
                                                     state.songs[i].name;
                                                 StaticStore.currentSongImg =
@@ -189,15 +140,61 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                                 StaticStore.currentArtists =
                                                     List.from(
                                                         state.songs[i].artists);
-                                                // setState(() {
-                                                StaticStore.playing = true;
-                                                            });
-                                                // });
+                                                await _youtubePlayer
+                                                    .youtubePlay(
+                                                        state.songs[i].name,
+                                                        state.songs[i]
+                                                            .artists[0],
+                                                        i)
+                                                    .then((value) {
+                                                  // StaticStore.currentSong =
+                                                  //     state.songs[i].name;
+                                                  // StaticStore.currentSongImg =
+                                                  //     state.songs[i].imgUrl;
+                                                  // StaticStore.currentArtists =
+                                                  //     List.from(
+                                                  //         state.songs[i].artists);
+                                                  StaticStore.playing = true;
+                                                });
                                               }
-                                              // setState(() {
-                                              //   StaticStore.playing = false;
-                                              // });
-                                              // }
+                                            } else {
+                                              if (StaticStore.currentSong ==
+                                                  state.songs[i].name) {
+                                                await _youtubePlayer
+                                                    .youtubePause();
+                                                StaticStore.pause = true;
+                                                StaticStore.playing = false;
+                                              } else {
+                                                StaticStore.pause = false;
+                                                await _youtubePlayer
+                                                    .youtubeStop();
+                                                if (StaticStore.nextPlay == 1) {
+                                                  StaticStore.setNextPlay(0);
+                                                }
+                                                StaticStore.currentSong =
+                                                    state.songs[i].name;
+                                                StaticStore.currentSongImg =
+                                                    state.songs[i].imgUrl;
+                                                StaticStore.currentArtists =
+                                                    List.from(
+                                                        state.songs[i].artists);
+                                                await _youtubePlayer
+                                                    .youtubePlay(
+                                                        state.songs[i].name,
+                                                        state.songs[i]
+                                                            .artists[0],
+                                                        i)
+                                                    .then((value) {
+                                                  // StaticStore.currentSong =
+                                                  //     state.songs[i].name;
+                                                  // StaticStore.currentSongImg =
+                                                  //     state.songs[i].imgUrl;
+                                                  // StaticStore.currentArtists =
+                                                  //     List.from(
+                                                  //         state.songs[i].artists);
+                                                  StaticStore.playing = true;
+                                                });
+                                              }
                                             }
 
                                             await fetchQueueTrack(
@@ -216,10 +213,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                                           state.songs[i].imgUrl,
                                                         )));
                                           }
-
-                                          // StaticStore.myQueueTrack = [];
-                                          /* this setState is necessary for song screen information to get updated */
-                                          // setState(() {});
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(
@@ -233,30 +226,138 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                               Expanded(
                                                 child: Row(
                                                   children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              3),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl: state
-                                                            .songs[i].imgUrl,
-                                                        width: 50,
-                                                        height: 50,
-                                                        memCacheHeight: (50 *
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .devicePixelRatio)
-                                                            .round(),
-                                                        memCacheWidth: (50 *
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .devicePixelRatio)
-                                                            .round(),
-                                                        progressIndicatorBuilder:
-                                                            (context, url, l) =>
-                                                                const LoadingImage(),
-                                                        fit: BoxFit.cover,
-                                                      ),
+                                                    Stack(
+                                                      children: [
+                                                        StreamBuilder<int>(
+                                                          stream: StaticStore
+                                                              .nextPlayStream,
+                                                          initialData:
+                                                              StaticStore
+                                                                  .nextPlay,
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            final isNextPlaying = snapshot
+                                                                        .data ==
+                                                                    0 &&
+                                                                StaticStore
+                                                                        .currentSong ==
+                                                                    state
+                                                                        .songs[
+                                                                            i]
+                                                                        .name;
+
+                                                            return Stack(
+                                                              children: [
+                                                                // Image with reduced opacity if it's loading
+                                                                Opacity(
+                                                                  opacity:
+                                                                      isNextPlaying
+                                                                          ? 0.5
+                                                                          : 1.0,
+                                                                  child:
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(3),
+                                                                    child:
+                                                                        CachedNetworkImage(
+                                                                      imageUrl: state
+                                                                          .songs[
+                                                                              i]
+                                                                          .imgUrl,
+                                                                      width: 50,
+                                                                      height:
+                                                                          50,
+                                                                      memCacheHeight:
+                                                                          (50 * MediaQuery.of(context).devicePixelRatio)
+                                                                              .round(),
+                                                                      memCacheWidth:
+                                                                          (50 * MediaQuery.of(context).devicePixelRatio)
+                                                                              .round(),
+                                                                      progressIndicatorBuilder: (context,
+                                                                              url,
+                                                                              l) =>
+                                                                          const LoadingImage(),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  ),
+                                                                ),
+
+                                                                // Show loading indicator if nextPlay == 0 and current song is loading
+                                                                if (isNextPlaying)
+                                                                  Container(
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width: 24,
+                                                                      height:
+                                                                          24,
+                                                                      child: CircularProgressIndicator(
+                                                                          strokeWidth:
+                                                                              2),
+                                                                    ),
+                                                                  ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        ),
+
+                                                        //     ClipRRect(
+                                                        //       borderRadius:
+                                                        //           BorderRadius.circular(
+                                                        //               3),
+                                                        //       child: CachedNetworkImage(
+
+                                                        //         imageUrl: state
+                                                        //             .songs[i].imgUrl,
+                                                        //         width: 50,
+                                                        //         height: 50,
+                                                        //         memCacheHeight: (50 *
+                                                        //                 MediaQuery.of(
+                                                        //                         context)
+                                                        //                     .devicePixelRatio)
+                                                        //             .round(),
+                                                        //         memCacheWidth: (50 *
+                                                        //                 MediaQuery.of(
+                                                        //                         context)
+                                                        //                     .devicePixelRatio)
+                                                        //             .round(),
+                                                        //         progressIndicatorBuilder:
+                                                        //             (context, url, l) =>
+                                                        //                 const LoadingImage(),
+                                                        //         fit: BoxFit.cover,
+                                                        //       ),
+                                                        //     ),
+                                                        //     StreamBuilder<int>(
+                                                        //   stream: StaticStore
+                                                        //       .nextPlayStream,
+                                                        //   initialData:
+                                                        //       StaticStore.nextPlay,
+                                                        //   builder:
+                                                        //       (context, snapshot) {
+                                                        //     if (snapshot.hasData &&
+                                                        //         snapshot.data ==
+                                                        //             0 && StaticStore.currentSong==state.songs[i].name) {
+                                                        //       return Container(
+                                                        //         padding:
+                                                        //             EdgeInsets.all(
+                                                        //                 10),
+                                                        //         height: 55,
+                                                        //         width: 55,
+                                                        //         child:
+                                                        //             CircularProgressIndicator(),
+                                                        //       );
+                                                        //     } else {
+                                                        //       return SizedBox();
+                                                        //     }
+                                                        //   },
+                                                        // ),
+                                                      ],
                                                     ),
                                                     Flexible(
                                                       child: Padding(
@@ -424,39 +525,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   onChanged: onChanged,
                 ),
               ),
-
-
-              // Container(
-              //   color: Colors.grey.shade800,
-              //   child: IconButton(
-              //       splashRadius: 20,
-              //       icon:
-              //           // isSong ?
-              //           const Icon(
-              //         LineIcons.youtube,
-              //         color: Colors.white,
-              //       ),
-              //       // : const Icon(
-              //       //     LineIcons.user,
-              //       //     color: Colors.white,
-              //       //   ),
-              //       onPressed: () {
-              //         YoutubeSongPlayer _youtubePlayer = YoutubeSongPlayer();
-              //         if(searchSong==""){
-              //           return;
-              //         }
-              //         _youtubePlayer.youtubePlay(searchSong, "").then((value){
-              //           StaticStore.currentSong = searchSong;
-              //           StaticStore.currentArtists = [];
-              //           StaticStore.currentSongImg = "";
-              //           StaticStore.playing = true;
-              //           StaticStore.myQueueTrack=[];
-              //           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CarouselSongScreen(searchSong, "", "unknown", "")));
-              //         });
-              //       }),
-              // ),
-
-
             ],
           ),
         ),

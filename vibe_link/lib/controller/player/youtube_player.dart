@@ -34,7 +34,9 @@ class YoutubeSongPlayer{
     StaticStore.player.playerStateStream.listen((state) async {
       if (state.processingState == ProcessingState.completed) {
         print("song completed bro");
-        StaticStore.nextPlay=0;
+        // StaticStore.nextPlay=0;
+        StaticStore.setNextPlay(0);
+
         // StaticStore.songIndex;
         // StaticStore.songIndex++;
         // int ind = StaticStore.songIndex;
@@ -79,7 +81,10 @@ class YoutubeSongPlayer{
         }else{
           print("no songs to play next");
         }
-        StaticStore.nextPlay=1;
+        // StaticStore.nextPlay=1;
+        StaticStore.setNextPlay(1);
+
+
 
       }
       if (state.processingState == ProcessingState.idle) {
@@ -166,7 +171,9 @@ class YoutubeSongPlayer{
 
 
           StaticStore.player.play();
-          StaticStore.nextPlay=1;
+          // StaticStore.nextPlay=1;
+          StaticStore.setNextPlay(1);
+
         
         }
         catch(e){
@@ -225,7 +232,9 @@ class YoutubeSongPlayer{
 
 
           StaticStore.player.play();
-          StaticStore.nextPlay=1;
+          // StaticStore.nextPlay=1;
+          StaticStore.setNextPlay(1);
+
 
 
           }catch(e){

@@ -74,7 +74,9 @@ Future<void> deleteAllStaticData()async{
   StaticStore.myQueueTrack=[];
   StaticStore.queueIndex = 0;
   StaticStore.queueLoaded = 0;
-  StaticStore.nextPlay=1;
+  // StaticStore.nextPlay=1;
+  StaticStore.setNextPlay(1);
+
   StaticStore.screen = 0;
   StaticStore.requestStatusValue=[];
   StaticStore.userGenreWithCount = null;

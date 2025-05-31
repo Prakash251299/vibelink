@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:just_audio/just_audio.dart';
 // import 'package:linkify/model/home/first_page_categories.dart';
 // import 'package:linkify/model/album_track.dart';
@@ -43,7 +45,6 @@ class StaticStore{
   static List<AlbumTrack> myQueueTrack=[];
   static int queueIndex = 0;
   static int queueLoaded = 0;
-  static int nextPlay=1;
   static int screen = 0;
   static List<List<String>?>? requestStatusValue=[[],[],[]];
   static int notificationCounts=0;
@@ -53,4 +54,22 @@ class StaticStore{
   static var playlist = ConcatenatingAudioSource(
         children: [],
       );
+  // static int nextPlay=1;
+  static final StreamController<int> _nextPlayController =
+      StreamController<int>.broadcast();
+
+  static Stream<int> get nextPlayStream => _nextPlayController.stream;
+
+  static int _nextPlay = 1;
+
+  static int get nextPlay => _nextPlay;
+
+  static void setNextPlay(int value) {
+    _nextPlay = value;
+    _nextPlayController.add(value);
+  }
+
+  static void disposeStreams() {
+    _nextPlayController.close();
+  }
 }

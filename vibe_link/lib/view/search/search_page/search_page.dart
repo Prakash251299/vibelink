@@ -9,20 +9,11 @@ import 'package:vibe_link/model/playlists/playlist.dart';
 import 'package:vibe_link/view/search/cubit/search_cubit.dart';
 import 'package:vibe_link/view/search/search_page/genre_playlist_screen.dart';
 import 'package:vibe_link/view/sticky/sticky_widgets.dart';
-// import 'package:linkify/controller/search/genre_playlist.dart';
-// import 'package:linkify/controller/variables/static_store.dart';
-// import 'package:linkify/model/playlists/playlist.dart';
-// import 'package:linkify/view/sticky/sticky_widgets.dart';
-// import 'package:linkify/controller/variables/loading_enum.dart';
-// import 'package:linkify/view/search/cubit/search_cubit.dart';
-// import 'package:linkify/view/search/search_page/genre_playlist_screen.dart';
 import '../genreTag.dart';
 import '../search_results/search_result.dart';
 class SearchPage extends StatefulWidget {
-  // const SearchPage({super.key});
   const SearchPage({
     Key? key,
-    // required this.con,
   }) : super(key: key);
 
   @override
@@ -30,17 +21,9 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-// class SearchPage extends StatelessWidget {
-//   // final MainController con;
 
   @override
   void initState() {
-    // TODO: implement initState
     StaticStore.screen = 1;
     super.initState();
   }
@@ -52,9 +35,7 @@ class _SearchPageState extends State<SearchPage> {
     print("Searchpage");
     return BlocProvider(
         create: (context) => SearchCubit()..getGenre(),
-        // create:(_){},
         child: BlocBuilder<SearchCubit, SearchState>(
-            // child: BlocBuilder(
             builder: (context, state) {
           if (state.status == LoadPage.loading) {
             return Scaffold(
@@ -64,11 +45,6 @@ class _SearchPageState extends State<SearchPage> {
             );
           } else {
             return Scaffold(
-              // appBar: AppBar(
-              //   leading: IconButton(icon:Icon(Icons.arrow_back),onPressed: (){
-              //     print("back pressed");
-              //   },),
-              // ),
               body: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
@@ -112,50 +88,10 @@ class _SearchPageState extends State<SearchPage> {
                                   delegate: SliverSearchAppBar(),
                                 ),
                   
-                                // SliverPersistentHeader(
-                                //   pinned: true,
-                                //   delegate: SliverSearchAppBar(),
-                                // ),
                               ];
                             },
                             body: ListView(
                               children: [
-                                // Padding(
-                                //   padding:
-                                //       const EdgeInsets.symmetric(vertical: 18.0),
-                                //   child: Text(
-                                //     "Your Top genre",
-                                //     style: Theme.of(context)
-                                //         .textTheme
-                                //         .headlineMedium!
-                                //         .copyWith(
-                                //           fontSize: 18,
-                                //         ),
-                                //   ),
-                                // ),
-                                // GridView.builder(
-                                //   // itemCount: allTags.sublist(0, 4).length,
-                                //   // itemCount: StaticStore.userGenre[0].length,
-                                //   itemCount: 4,
-                                //   physics: const NeverScrollableScrollPhysics(),
-                                //   shrinkWrap: true,
-                                //   gridDelegate:
-                                //       const SliverGridDelegateWithFixedCrossAxisCount(
-                                //     crossAxisCount: 2,
-                                //     mainAxisSpacing: 14,
-                                //     crossAxisSpacing: 14,
-                                //     childAspectRatio: 16 / 8,
-                                //   ),
-                                //   itemBuilder: (context, i) {
-                                //     return TagWidget(
-                                //         tag: allTags.sublist(0, 4)[i],
-                                //         // genreName: StaticStore.userGenre!.length<4?"none":StaticStore.userGenre![i]
-                                //         genreName: StaticStore.userGenre==null || StaticStore.userGenre!.length<4?"N/A":StaticStore.userGenre![i],
-                                //         // StaticStore.userGenre[i]
-                                //         );
-                                //     // return SizedBox();
-                                //   },
-                                // ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 24.0),

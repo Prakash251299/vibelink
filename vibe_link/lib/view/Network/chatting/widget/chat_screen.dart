@@ -58,8 +58,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget chatScreenWidget() {
-    String prevDate = "1 Jan 1999";
-    List<dynamic> currentMessageList = [];
+    // String prevDate = "1 Jan 1999";
+    // List<dynamic> currentMessageList = [];
     return BlocProvider(
         create: (context) => ChatCubit()..getMessages(widget.messageId),
         child: BlocBuilder<ChatCubit, ChatState>(builder: (context, state) {
@@ -113,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: currentMessageList.length + 1,
                   // physics: BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    int addDate=0;
+                    // int addDate=0;
                     if (index == currentMessageList.length) {
                       return SizedBox(
                         height: 0,
@@ -142,7 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     // if(currentMessageList[index]){
 
                     // }right
-                    print("Total messages: ${currentMessageList.length}");
+                    // print("Total messages: ${currentMessageList.length}");
                     return Column(
                       children: [
                         // addDate==1?Container(child: Text("$date")):SizedBox(),

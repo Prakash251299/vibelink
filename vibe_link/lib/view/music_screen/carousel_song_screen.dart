@@ -98,104 +98,172 @@ class _SongScreenState extends State<CarouselSongScreen> {
   Widget build(BuildContext context) {
     // log('CheckState: build');
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_outlined, color: Colors.white),
-            onPressed: () {
-              setState(() {
-                StaticStore.musicScreenEnabled = false;
-              });
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      extendBodyBehindAppBar: true,
-      body: 
-      StreamBuilder<Object>(
-        stream: StaticStore.player.playerStateStream,
-        builder: (context, snapshot) {
-          return 
-          Stack(
-            fit: StackFit.expand,
-            children: [
-              const _BackgroundFilter(),
-              _MusicPlayer(
+        appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_outlined, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  StaticStore.musicScreenEnabled = false;
+                });
+                Navigator.pop(context);
+              }),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        extendBodyBehindAppBar: true,
+        body: StreamBuilder<Object>(
+          stream: StaticStore.player.playerStateStream,
+          builder: (context, snapshot) {
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                const _BackgroundFilter(),
+                _MusicPlayer(
                   widget.name,
-                  // widget.albumImg,
                   widget.trackId,
                   widget.trackArtists,
-                  widget.trackImg),
-          
-              Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 270.0,
-                  left: 20,
-                  right: 20,
-                  // vertical: 200.0,
+                  widget.trackImg,
                 ),
-                child: Center(
-                  child: Container(
-                    height:MediaQuery.of(context).size.height*45/100,
-                    // width: MediaQuery.of(context).size.height/2,
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 270.0,
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: Center(
+                    child: StreamBuilder<int>(
+                      stream: StaticStore.nextPlayStream,
+                      initialData: StaticStore.nextPlay,
+                      builder: (context, nextPlaySnapshot) {
+                        final isLoading = nextPlaySnapshot.data == 0;
 
-
-
-                    //   child:
-                    // ClipRect(
-                            
-                    child: 
-                    // StaticStore.myQueueTrack.length>StaticStore.queueIndex?
-                  
-                      StaticStore.currentSongImg!=""?
-                    Image.network(
-                      StaticStore.myQueueTrack.length>StaticStore.queueIndex?
-                      "${StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl}":widget.trackImg,
-                      // "",
-                  
-                  
-                      // widget.trackImg,
-                      // fit: BoxFit.fill,
-                      // width: 300 - _counter < 70 ? 70 : 300 - _counter,
-                      // height: 300 - _counter < 70 ? 70 : 300 - _counter,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                    ):Container(
-                      height:MediaQuery.of(context).size.height*60/100,
-                      // height:100,
-                      // width: 1000,
-                      decoration:BoxDecoration(
-                              image: DecorationImage(
-                                image: (AssetImage('icon/vibe_link.jpeg')),
-                                fit:BoxFit.fitHeight
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Opacity(
+                              opacity: isLoading ? 0.4 : 1.0,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                child: StaticStore.currentSongImg != ""
+                                    ? Image.network(
+                                        StaticStore.myQueueTrack.length >
+                                                StaticStore.queueIndex
+                                            ? StaticStore
+                                                .myQueueTrack[
+                                                    StaticStore.queueIndex]
+                                                .imgUrl
+                                            : widget.trackImg,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.60,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'icon/vibe_link.jpeg'),
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
+                            if (isLoading)
+                              const SizedBox(
+                                height: 30,
+                                width: 30,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
-              ),
-              // ClipRect(
-              //   child: CachedNetworkImage(imageUrl: song.coverUrl),
-              // ),
-              // Image.asset(
-              //   song.coverUrl,
-              //   fit: BoxFit.cover,
-              // ),
-            ],
-          );
-        }
-      ),
-    );
+              ],
+            );
+          },
+        )
+
+        // StreamBuilder<Object>(
+        //   stream: StaticStore.player.playerStateStream,
+        //   builder: (context, snapshot) {
+        //     return
+        //     Stack(
+        //       fit: StackFit.expand,
+        //       children: [
+        //         const _BackgroundFilter(),
+        //         _MusicPlayer(
+        //             widget.name,
+        //             // widget.albumImg,
+        //             widget.trackId,
+        //             widget.trackArtists,
+        //             widget.trackImg),
+
+        //         Padding(
+        //           padding: const EdgeInsets.only(
+        //             bottom: 270.0,
+        //             left: 20,
+        //             right: 20,
+        //           ),
+        //           child: Center(
+        //             child: Container(
+        //               height:MediaQuery.of(context).size.height*45/100,
+
+        //               child:
+        //                 StaticStore.currentSongImg!=""?
+        //               Image.network(
+        //                 StaticStore.myQueueTrack.length>StaticStore.queueIndex?
+        //                 "${StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl}":widget.trackImg,
+        //                 loadingBuilder: (BuildContext context, Widget child,
+        //                     ImageChunkEvent? loadingProgress) {
+        //                   if (loadingProgress == null) return child;
+        //                   return Center(
+        //                     child: CircularProgressIndicator(
+        //                       value: loadingProgress.expectedTotalBytes != null
+        //                           ? loadingProgress.cumulativeBytesLoaded /
+        //                               loadingProgress.expectedTotalBytes!
+        //                           : null,
+        //                     ),
+        //                   );
+        //                 },
+        //               ):Container(
+        //                 height:MediaQuery.of(context).size.height*60/100,
+        //                 decoration:BoxDecoration(
+        //                         image: DecorationImage(
+        //                           image: (AssetImage('icon/vibe_link.jpeg')),
+        //                           fit:BoxFit.fitHeight
+        //                         ),
+        //                       ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     );
+        //   }
+        // ),
+        );
   }
 }
 
@@ -221,120 +289,135 @@ class _MusicPlayer extends StatelessWidget {
         // vertical: 10.0,
       ),
       child: StreamBuilder<Object>(
-        stream: StaticStore.player.playerStateStream,
-        // stream: null,
-        builder: (context, snapshot) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                // song.title,
-                // "Song name",
-                // songs.name,
-                // this.name,
-                StaticStore.myQueueTrack.length>StaticStore.queueIndex?
-                "${StaticStore.myQueueTrack[StaticStore.queueIndex].name}":trackName,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+          stream: StaticStore.player.playerStateStream,
+          // stream: null,
+          builder: (context, snapshot) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  // song.title,
+                  // "Song name",
+                  // songs.name,
+                  // this.name,
+                  StaticStore.myQueueTrack.length > StaticStore.queueIndex
+                      ? "${StaticStore.myQueueTrack[StaticStore.queueIndex].name}"
+                      : trackName,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  // "",
+                  StaticStore.currentArtists.isEmpty
+                      ? "unknown"
+                      : StaticStore.myQueueTrack.length > StaticStore.queueIndex
+                          ? (StaticStore.myQueueTrack[StaticStore.queueIndex]
+                                      .trackArtists !=
+                                  null
+                              ? (StaticStore
+                                          .myQueueTrack[StaticStore.queueIndex]
+                                          .trackArtists!
+                                          .length >=
+                                      3
+                                  ? "${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]}, ${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[1]}, ${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[2]}"
+                                  : StaticStore
+                                              .myQueueTrack[
+                                                  StaticStore.queueIndex]
+                                              .trackArtists!
+                                              .length >=
+                                          2
+                                      ? "${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]}, ${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[1]}"
+                                      : "${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]}")
+                              : "unknown")
+                          : (trackArtists.length >= 3
+                              ? "${trackArtists[0]}, ${trackArtists[1]}, ${trackArtists[2]}"
+                              : trackArtists.length >= 2
+                                  ? "${trackArtists[0]}, ${trackArtists[1]}"
+                                  : "${trackArtists[0]}"),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                // const SizedBox(height: 30),
+                // StreamBuilder<SeekBarData>(
+                //   stream: _seekBarDataStream,
+                //   builder: (context, snapshot) {
+                //     final positionData = snapshot.data;
+                //     return
+                // create the seekbar here
+                // SizedBox(),
+                SeekBar(),
+                //   },
+                // ),
+                AlbumPlayerButtons(
+                  this.trackName,
+                  // this.albumImg,
+                  this.trackId,
+                  this.trackArtists,
+                  this.trackImg,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    StreamBuilder<Object>(
+                        stream: StaticStore.player.loopModeStream,
+                        builder: (context, snapshot) {
+                          return IconButton(
+                            iconSize: 35,
+                            onPressed: () {
+                              print(StaticStore.player.loopMode);
+                              if (StaticStore.player.loopMode == LoopMode.one) {
+                                StaticStore.player.setLoopMode(LoopMode.off);
+                              } else {
+                                StaticStore.player.setLoopMode(LoopMode.one);
+                              }
+                            },
+                            icon: StaticStore.player.loopMode == LoopMode.one
+                                ? Icon(
+                                    Icons.loop,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    Icons.loop,
+                                    color: Colors.white,
+                                  ),
+                          );
+                        }),
+                    IconButton(
+                      iconSize: 35,
+                      onPressed: () async {
+                        // await fetchQueueTrack(trackId);
+                        // print(StaticStore.myQueueTrack[0].imgUrl);
+
+                        // print(StaticStore.myQueueTrack[0].name);
+                        // await fetchQueueTrack(trackName,trackId,trackArtists,trackImg);
+
+                        // Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => QueueScreen()));
+
+                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>QueueScreen()));
+                        // Navigator.pop(context).then((v)=>{});
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                      ),
                     ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                // "",
-                StaticStore.currentArtists.isEmpty?"unknown":
-                StaticStore.myQueueTrack.length>StaticStore.queueIndex?(
-                StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!=null?(
-                  StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!.length>=3
-                
-                    ? "${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]}, ${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[1]}, ${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[2]}":
-                StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!.length>=2 
-                    ? "${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]}, ${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[1]}"
-                    : "${StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists?[0]}"):"unknown")
-                    :(trackArtists.length>=3?"${trackArtists[0]}, ${trackArtists[1]}, ${trackArtists[2]}":trackArtists.length>=2?"${trackArtists[0]}, ${trackArtists[1]}":"${trackArtists[0]}"),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white),
-                overflow: TextOverflow.ellipsis,
-              ),
-              // const SizedBox(height: 30),
-              // StreamBuilder<SeekBarData>(
-              //   stream: _seekBarDataStream,
-              //   builder: (context, snapshot) {
-              //     final positionData = snapshot.data;
-              //     return
-              // create the seekbar here
-              // SizedBox(),
-              SeekBar(),
-              //   },
-              // ),
-              AlbumPlayerButtons(
-                this.trackName,
-                // this.albumImg,
-                this.trackId,
-                this.trackArtists,
-                this.trackImg,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  StreamBuilder<Object>(
-                    stream: StaticStore.player.loopModeStream,
-                    builder: (context, snapshot) {
-                      return IconButton(
-                        iconSize: 35,
-                        onPressed: () {
-                          print(StaticStore.player.loopMode);
-                          if(StaticStore.player.loopMode==LoopMode.one){
-                            StaticStore.player.setLoopMode(LoopMode.off);
-                          }else{
-                            StaticStore.player.setLoopMode(LoopMode.one);
-                          }
-                        },
-                        icon: StaticStore.player.loopMode==LoopMode.one?Icon(
-                          Icons.loop,
-                          color: Colors.green,
-                        ):Icon(
-                          Icons.loop,
-                          color: Colors.white,
-                        ),
-                      );
-                    }
-                  ),
-                  IconButton(
-                    iconSize: 35,
-                    onPressed: () async {
-                      // await fetchQueueTrack(trackId);
-                      // print(StaticStore.myQueueTrack[0].imgUrl);
-
-
-                      // print(StaticStore.myQueueTrack[0].name);
-                      // await fetchQueueTrack(trackName,trackId,trackArtists,trackImg);
-
-
-                      // Navigator.pop(context);
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QueueScreen()));
-
-
-                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>QueueScreen()));
-                      // Navigator.pop(context).then((v)=>{});
-                    },
-                    icon: const Icon(
-                      Icons.menu,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-              footer(context),
-            ],
-          );
-        }
-      ),
+                  ],
+                ),
+                footer(context),
+              ],
+            );
+          }),
     );
   }
 }
@@ -346,8 +429,7 @@ class _BackgroundFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        Container(
+    return Container(
       child: ClipRect(), // put song image here for background
 
       decoration: BoxDecoration(

@@ -2,6 +2,8 @@
 CustomScrollView widget is better
 */
 
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +96,9 @@ class AlbumViewState extends State<AlbumView> {
                           child: Row(
                             children: [
                               Container(
-                                  width: MediaQuery.of(context).size.width - _counter - 100,
+                                  width: MediaQuery.of(context).size.width -
+                                      _counter -
+                                      100,
                                   padding: EdgeInsets.only(left: 10 + _counter),
                                   child: Text(
                                     '${widget.albumName}',
@@ -133,20 +137,9 @@ class AlbumViewState extends State<AlbumView> {
                                                   StaticStore.playing = true;
                                                 });
                                               } else {
-                                                await _player.youtubeStop().then((v)async{
                                                 await _player
-                                                    .youtubePlay(
-                                                        widget._albumTracks![0]
-                                                            .name,
-                                                        widget._albumTracks![0]
-                                                            .trackArtists?[0],0)
-                                                    .then((value) {
-                                                  // });
-                                                  // StaticStore.pause = false;
-                                                  StaticStore.myQueueTrack =
-                                                      widget._albumTracks!;
-                                                  StaticStore.queueLoaded = 1;
-                                                  StaticStore.queueIndex = 0;
+                                                    .youtubeStop()
+                                                    .then((v) async {
                                                   StaticStore.currentSong =
                                                       widget._albumTracks![0]
                                                           .name!;
@@ -155,11 +148,42 @@ class AlbumViewState extends State<AlbumView> {
                                                           .imgUrl!;
                                                   StaticStore.currentArtists =
                                                       List.from(widget
-                                                          ._albumTracks![0]
-                                                          .trackArtists??[]);
-                                                  StaticStore.playing = true;
-                                                  StaticStore.pause = false;
-                                                });
+                                                              ._albumTracks![0]
+                                                              .trackArtists ??
+                                                          []);
+                                                  await _player
+                                                      .youtubePlay(
+                                                          widget
+                                                              ._albumTracks![0]
+                                                              .name,
+                                                          widget
+                                                              ._albumTracks![0]
+                                                              .trackArtists?[0],
+                                                          0)
+                                                      .then((value) {
+                                                    // });
+                                                    // StaticStore.pause = false;
+                                                    StaticStore.myQueueTrack =
+                                                        widget._albumTracks!;
+                                                    StaticStore.queueLoaded = 1;
+                                                    StaticStore.queueIndex = 0;
+
+                                                    // StaticStore.currentSong =
+                                                    //     widget._albumTracks![0]
+                                                    //         .name!;
+                                                    // StaticStore.currentSongImg =
+                                                    //     widget._albumTracks![0]
+                                                    //         .imgUrl!;
+                                                    // StaticStore.currentArtists =
+                                                    //     List.from(widget
+                                                    //             ._albumTracks![
+                                                    //                 0]
+                                                    //             .trackArtists ??
+                                                    //         []);
+
+                                                    StaticStore.playing = true;
+                                                    StaticStore.pause = false;
+                                                  });
                                                 });
                                               }
                                             }
@@ -189,54 +213,71 @@ class AlbumViewState extends State<AlbumView> {
                                     // });
                                   } else {
                                     // print(widget._albumTracks?[index].name);
-                                    if(StaticStore.nextPlay==1){
-                                      StaticStore.nextPlay = 0;
-                                    await _player.youtubeStop().then((v)async{
-                                    await _player
-                                        .youtubePlay(
-                                            widget._albumTracks![index].name,
+                                    if (StaticStore.nextPlay == 1) {
+                                      StaticStore.setNextPlay(0);
+                                      // StreamController(onListen: (){
+                                      // StaticStore.nextPlay = 0;
+                                      // });
+                                      await _player
+                                          .youtubeStop()
+                                          .then((v) async {
+                                        StaticStore.currentSong =
+                                            widget._albumTracks![index].name!;
+                                        StaticStore.currentSongImg =
+                                            widget._albumTracks![index].imgUrl!;
+                                        StaticStore.currentArtists = List.from(
                                             widget._albumTracks![index]
-                                                .trackArtists?[0],index)
-                                        .then((value) {
-                                      // });
-                                      // StaticStore.pause = false;
-                                      
-                                      StaticStore.myQueueTrack =
-                                          widget._albumTracks!;
-                                      StaticStore.queueLoaded = 1;
-                                      StaticStore.queueIndex = index;
-                                      StaticStore.currentSong =
-                                          widget._albumTracks![index].name!;
-                                      StaticStore.currentSongImg =
-                                          widget._albumTracks![index].imgUrl!;
-                                      StaticStore.currentArtists = List.from(
-                                          widget._albumTracks![index]
-                                              .trackArtists??[]);
-                                      // setState(() {
+                                                    .trackArtists ??
+                                                []);
+                                        await _player
+                                            .youtubePlay(
+                                                widget
+                                                    ._albumTracks![index].name,
+                                                widget._albumTracks![index]
+                                                    .trackArtists?[0],
+                                                index)
+                                            .then((value) {
+                                          StaticStore.myQueueTrack =
+                                              widget._albumTracks!;
+                                          StaticStore.queueLoaded = 1;
+                                          StaticStore.queueIndex = index;
+                                          // StaticStore.currentSong =
+                                          //     widget._albumTracks![index].name!;
+                                          // StaticStore.currentSongImg = widget
+                                          //     ._albumTracks![index].imgUrl!;
+                                          // StaticStore.currentArtists =
+                                          //     List.from(widget
+                                          //             ._albumTracks![index]
+                                          //             .trackArtists ??
+                                          //         []);
 
-                                      StaticStore.playing = true;
-                                      StaticStore.pause = false;
-                                      // });
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CarouselSongScreen(
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .name,
-                                                      // widget.albumImg[index],
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .id,
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .trackArtists,
-                                                      // widget.trackImg[index]
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .imgUrl)));
-                                    });
-                                    });}
+                                          StaticStore.playing = true;
+                                          StaticStore.pause = false;
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CarouselSongScreen(
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .name,
+                                                          // widget.albumImg[index],
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .id,
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .trackArtists,
+                                                          // widget.trackImg[index]
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .imgUrl)));
+                                        });
+                                      });
+                                    }
                                   }
                                 } else {
                                   // if(StaticStore.pause==true){
@@ -250,97 +291,209 @@ class AlbumViewState extends State<AlbumView> {
                                     StaticStore.pause = false;
                                     await _player.youtubeResume();
                                   } else {
-                                    if(StaticStore.nextPlay==1){
-                                      StaticStore.nextPlay = 0;
-                                    await _player.youtubeStop();
+                                    if (StaticStore.nextPlay == 1) {
+                                      StaticStore.setNextPlay(0);
 
-                                    await _player
-                                        .youtubePlay(
-                                            widget._albumTracks![index].name,
-                                            widget._albumTracks![index]
-                                                .trackArtists?[0],index)
-                                        .then((value) {
+                                      // StreamController(onListen: (){
+                                      // StaticStore.nextPlay = 0;
                                       // });
-                                      StaticStore.myQueueTrack =
-                                          widget._albumTracks!;
-                                      StaticStore.queueLoaded = 1;
-                                      StaticStore.queueIndex = index;
+                                      // setState(() {
+                                      // StaticStore.nextPlay = 0;
+                                      // });
+                                      await _player.youtubeStop();
                                       StaticStore.currentSong =
                                           widget._albumTracks![index].name!;
                                       StaticStore.currentSongImg =
                                           widget._albumTracks![index].imgUrl!;
                                       StaticStore.currentArtists = List.from(
                                           widget._albumTracks![index]
-                                              .trackArtists??[]);
-                                      StaticStore.playing = true;
-                                      StaticStore.pause = false;
+                                                  .trackArtists ??
+                                              []);
 
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CarouselSongScreen(
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .name,
-                                                      // widget.albumImg[index],
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .id,
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .trackArtists,
-                                                      // widget.trackImg[index]
-                                                      widget
-                                                          ._albumTracks![index]
-                                                          .imgUrl)));
-                                    });
+                                      await _player
+                                          .youtubePlay(
+                                              widget._albumTracks![index].name,
+                                              widget._albumTracks![index]
+                                                  .trackArtists?[0],
+                                              index)
+                                          .then((value) {
+                                        // });
+                                        StaticStore.myQueueTrack =
+                                            widget._albumTracks!;
+                                        StaticStore.queueLoaded = 1;
+                                        StaticStore.queueIndex = index;
+                                        // StaticStore.currentSong =
+                                        //     widget._albumTracks![index].name!;
+                                        // StaticStore.currentSongImg =
+                                        //     widget._albumTracks![index].imgUrl!;
+                                        // StaticStore.currentArtists = List.from(
+                                        //     widget._albumTracks![index]
+                                        //             .trackArtists ??
+                                        //         []);
+                                        StaticStore.playing = true;
+                                        StaticStore.pause = false;
+
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CarouselSongScreen(
+                                                        widget
+                                                            ._albumTracks![
+                                                                index]
+                                                            .name,
+                                                        // widget.albumImg[index],
+                                                        widget
+                                                            ._albumTracks![
+                                                                index]
+                                                            .id,
+                                                        widget
+                                                            ._albumTracks![
+                                                                index]
+                                                            .trackArtists,
+                                                        // widget.trackImg[index]
+                                                        widget
+                                                            ._albumTracks![
+                                                                index]
+                                                            .imgUrl)));
+                                      });
                                     }
                                   }
                                 }
                               },
                               child: ListTile(
-                                leading: Column(
+                                leading: Stack(
                                     // mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(3),
-                                          bottomLeft: Radius.circular(3),
-                                        ),
-                                        child:
-                                            // CachedNetworkImage(imageUrl: ""),
-                                            CachedNetworkImage(
-                                          // imageUrl: user.avatar!,
+                                      StreamBuilder<int>(
+                                        stream: StaticStore.nextPlayStream,
+                                        initialData: StaticStore.nextPlay,
+                                        builder: (context, snapshot) {
+                                          final isNextPlaying =
+                                              snapshot.data == 0 &&
+                                                  StaticStore.currentSong ==
+                                                      widget._albumTracks?[index].name;
 
-                                          imageUrl:
-                                              "${widget._albumTracks?[index].imgUrl}",
-                                          // imageUrl: "",
+                                          return Stack(
+                                            children: [
+                                              // Image with reduced opacity if it's loading
+                                              Opacity(
+                                                opacity:
+                                                    isNextPlaying ? 0.5 : 1.0,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        "${widget._albumTracks?[index].imgUrl}",
+                                                    width: 50,
+                                                    height: 50,
+                                                    memCacheHeight: (50 *
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .devicePixelRatio)
+                                                        .round(),
+                                                    memCacheWidth: (50 *
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .devicePixelRatio)
+                                                        .round(),
+                                                    progressIndicatorBuilder:
+                                                        (context, url, l) =>
+                                                            const LoadingImage(),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
 
-                                          width: 55,
-                                          height: 55,
-                                          memCacheHeight:
-                                              (55 * devicePexelRatio).round(),
-                                          memCacheWidth:
-                                              (55 * devicePexelRatio).round(),
-                                          maxHeightDiskCache:
-                                              (55 * devicePexelRatio).round(),
-                                          maxWidthDiskCache:
-                                              (55 * devicePexelRatio).round(),
-                                          progressIndicatorBuilder:
-                                              (context, url, l) =>
-                                              LoadingImage(),
-                                          fit: BoxFit.cover,
-                                        ),
+                                              // Show loading indicator if nextPlay == 0 and current song is loading
+                                              if (isNextPlaying)
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  alignment: Alignment.center,
+                                                  child: SizedBox(
+                                                    width: 24,
+                                                    height: 24,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            strokeWidth: 2),
+                                                  ),
+                                                ),
+                                            ],
+                                          );
+                                        },
                                       ),
+
+                                      // ClipRRect(
+                                      //   borderRadius: BorderRadius.only(
+                                      //     topLeft: Radius.circular(3),
+                                      //     bottomLeft: Radius.circular(3),
+                                      //   ),
+                                      //   child:
+                                      //       // CachedNetworkImage(imageUrl: ""),
+                                      //       CachedNetworkImage(
+                                      //     // imageUrl: user.avatar!,
+
+                                      //     imageUrl:
+                                      //         "${widget._albumTracks?[index].imgUrl}",
+                                      //     // imageUrl: "",
+
+                                      //     width: 55,
+                                      //     height: 55,
+                                      //     memCacheHeight:
+                                      //         (55 * devicePexelRatio).round(),
+                                      //     memCacheWidth:
+                                      //         (55 * devicePexelRatio).round(),
+                                      //     maxHeightDiskCache:
+                                      //         (55 * devicePexelRatio).round(),
+                                      //     maxWidthDiskCache:
+                                      //         (55 * devicePexelRatio).round(),
+                                      //     progressIndicatorBuilder:
+                                      //         (context, url, l) =>
+                                      //             LoadingImage(),
+                                      //     fit: BoxFit.cover,
+                                      //   ),
+                                      // ),
+
+                                      // /**************/
+                                      // //For showing loading song to play
+                                      // StreamBuilder<int>(
+                                      //   stream: StaticStore.nextPlayStream,
+                                      //   initialData: StaticStore.nextPlay,
+                                      //   builder: (context, snapshot) {
+                                      //     if (snapshot.hasData &&
+                                      //         snapshot.data == 0 && StaticStore.currentSong==widget._albumTracks?[index].name) {
+                                      //       return Container(
+                                      //         padding: EdgeInsets.all(10),
+                                      //         height: 55,
+                                      //         width: 55,
+                                      //         child:
+                                      //             CircularProgressIndicator(),
+                                      //       );
+                                      //     } else {
+                                      //       return SizedBox();
+                                      //     }
+                                      //   },
+                                      // ),
+                                      // StaticStore.nextPlay==0?
+                                      // Container(
+                                      //   padding: EdgeInsets.all(10),
+                                      //   height:55,width:55,
+                                      //   child: CircularProgressIndicator(),
+                                      // ):SizedBox(),
+                                      /**************/
                                     ]),
                                 title: Text(
                                   "${widget._albumTracks?[index].name}",
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                subtitle: widget._albumTracks != null && widget._albumTracks![index].trackArtists!=null &&
-                                        widget._albumTracks![index].trackArtists!
-                                                .length >
+                                subtitle: widget._albumTracks != null &&
+                                        widget._albumTracks![index]
+                                                .trackArtists !=
+                                            null &&
+                                        widget._albumTracks![index]
+                                                .trackArtists!.length >
                                             1
                                     ? Text(
                                         '${widget._albumTracks?[index].trackArtists?[0]}, ${widget._albumTracks?[index].trackArtists?[1]}',
@@ -355,14 +508,14 @@ class AlbumViewState extends State<AlbumView> {
                                 trailing: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      
-                                      StreamBuilder<Object>( // for updating the button
-                                        stream: StaticStore.player.playerStateStream,
-                                        builder: (context, snapshot) {
-                                          return playPauseAlbumButton(
-                                              widget._albumTracks, index);
-                                        }
-                                      ),
+                                      StreamBuilder<Object>(
+                                          // for updating the button
+                                          stream: StaticStore
+                                              .player.playerStateStream,
+                                          builder: (context, snapshot) {
+                                            return playPauseAlbumButton(
+                                                widget._albumTracks, index);
+                                          }),
                                     ]),
                               ),
                             ),

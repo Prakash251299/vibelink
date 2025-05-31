@@ -89,20 +89,18 @@ Widget footer(var context) {
               //       builder: (_) => HomeScreen(),
               //     ));
 
-              if(StaticStore.screen==0){
+              if (StaticStore.screen == 0) {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => HomeScreen(),
-                  )).then((value) =>
-                Navigator.pop(context));
-              }else{
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => HomeScreen(),
-                  ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HomeScreen(),
+                    )).then((value) => Navigator.pop(context));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HomeScreen(),
+                    ));
               }
               // .then((value) => Navigator.pop(context));
             },
@@ -123,17 +121,16 @@ Widget footer(var context) {
 
               if (StaticStore.screen != 0) {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => SearchPage(),
-                  )).then((value) => 
-                Navigator.pop(context));
-              }else{
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => SearchPage(),
-                  ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SearchPage(),
+                    )).then((value) => Navigator.pop(context));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SearchPage(),
+                    ));
               }
 
               // .then((value) => Navigator.pop(context));
@@ -160,10 +157,12 @@ Widget footer(var context) {
               // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>PlaylistScreen()));
               // StaticStore.screen != 3?
               if (StaticStore.screen != 0) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PlaylistScreen())).then((value) => 
-                Navigator.pop(context));
-              }else{
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlaylistScreen()))
+                    .then((value) => Navigator.pop(context));
+              } else {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => PlaylistScreen()));
               }
@@ -186,14 +185,13 @@ Widget footer(var context) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Suggestion()));
                 // Navigator.pop(context);
-              }else{
-              // List<List<UserInfo>?> recommendedUsers = userButtonCaller();
+              } else {
+                // List<List<UserInfo>?> recommendedUsers = userButtonCaller();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Suggestion()));
               }
             },
           ),
-          
         ])),
   );
 }
@@ -267,17 +265,55 @@ Widget miniplayer(BuildContext context) {
                     // right: 16,
                   ),
                   child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      // StreamBuilder<int>(
+                      //   stream: StaticStore.nextPlayStream,
+                      //   initialData: StaticStore.nextPlay,
+                      //   builder: (context, snapshot) {
+                      //     final isNextPlaying = snapshot.data == 0;
+
+                      //     return Stack(
+                      //       alignment: Alignment.center,
+                      //       children: [
+                      //         Opacity(
+                      //           opacity: isNextPlaying ? 0.4 : 1.0,
+                      //           child: Container(
+                      //             width: 43,
+                      //             height: 45,
+                      //             decoration: StaticStore.currentSongImg != ""
+                      //                 ? BoxDecoration(
+                      //                     image: DecorationImage(
+                      //                       image: NetworkImage(
+                      //                           StaticStore.currentSongImg),
+                      //                       fit: BoxFit.cover,
+                      //                     ),
+                      //                   )
+                      //                 : BoxDecoration(
+                      //                     image: DecorationImage(
+                      //                       image: AssetImage(
+                      //                           'icon/vibe_link.jpeg'),
+                      //                       fit: BoxFit.cover,
+                      //                     ),
+                      //                   ),
+                      //           ),
+                      //         ),
+                      //         if (isNextPlaying)
+                      //           SizedBox(
+                      //             width: 20,
+                      //             height: 20,
+                      //             child:
+                      //                 CircularProgressIndicator(strokeWidth: 2),
+                      //           ),
+                      //       ],
+                      //     );
+                      //   },
+                      // ),
+
                       Container(
-                        // padding: EdgeInsets.only(right:80),
                         width: 43,
                         height: 45,
-                        // decoration: TextDecoration.none,
                         decoration: StaticStore.currentSongImg != ""
                             ? BoxDecoration(
-                                // color: Colors.red,
-                                // decoration: TextDecoration.none
                                 image: DecorationImage(
                                     image: NetworkImage(
                                         StaticStore.currentSongImg),
@@ -293,31 +329,12 @@ Widget miniplayer(BuildContext context) {
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // img
-
-                            // Container(
-                            //   // width: 150,
-                            //   // height: 80,
-
-                            //   decoration: BoxDecoration(
-                            //     color: Colors.red,
-
-                            //     // image: DecorationImage(
-                            //     // image: NetworkImage(list[index].img),
-                            //     // fit: BoxFit.cover),
-                            //   ),
-                            // ),
                             const SizedBox(
                               height: 8,
                             ),
-                            // name
                             SizedBox(
-                              // width: MediaQuery.of(context).size.width / 1.5,
                               width: 100,
-                              child: Text(
-                                  // "hello",
-                                  "${StaticStore.currentSong}",
-                                  // list[index].title,
+                              child: Text("${StaticStore.currentSong}",
                                   style: const TextStyle(
                                     decoration: TextDecoration.none,
                                     color: Color(0xffffffff),
@@ -333,15 +350,9 @@ Widget miniplayer(BuildContext context) {
                             const SizedBox(
                               height: 4,
                             ),
-                            // show-creator
                             SizedBox(
-                              // width: MediaQuery.of(context).size.width / 1.5,
                               width: MediaQuery.of(context).size.width / 1.5,
                               child: Text(
-                                  // list[index].creator ?? '',
-
-                                  // "jasjkd",
-
                                   StaticStore.currentArtists.length > 1
                                       ? "${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}"
                                       : StaticStore.currentArtists.length > 0 &&
@@ -362,42 +373,36 @@ Widget miniplayer(BuildContext context) {
                                   textAlign: TextAlign.left),
                             ),
                           ]),
-                      // Spacer(),
-
-                      // Icon(Icons.menu),
                       StreamBuilder<Object>(
-                        stream: StaticStore.player.playerStateStream,
-                        builder: (context, snapshot) {
-                          return Container(
-                            // height: 20,
-                            width: 20,
-                            // color: Colors.grey,
-                            child: IconButton(
-                                onPressed: () async {
-                                  if (StaticStore.pause == true) {
-                                    await _player.youtubeResume();
-                                    StaticStore.pause = false;
-                                    StaticStore.playing = true;
-                                  } else {
-                                    await _player.youtubePause();
-                                    StaticStore.pause = true;
-                                    StaticStore.playing = false;
-                                  }
-                                },
-                                icon: 
-                                StaticStore.player.playing == false
-                                    ? Icon(
-                                        CupertinoIcons.play,
-                                        color: Colors.white,
-                                      )
-                                    : Icon(
-                                        CupertinoIcons.pause,
-                                        color: Colors.white,
-                                      )
-                            ),
-                          );
-                        }
-                      ),
+                          stream: StaticStore.player.playerStateStream,
+                          builder: (context, snapshot) {
+                            return Container(
+                              // height: 20,
+                              width: 20,
+                              // color: Colors.grey,
+                              child: IconButton(
+                                  onPressed: () async {
+                                    if (StaticStore.pause == true) {
+                                      await _player.youtubeResume();
+                                      StaticStore.pause = false;
+                                      StaticStore.playing = true;
+                                    } else {
+                                      await _player.youtubePause();
+                                      StaticStore.pause = true;
+                                      StaticStore.playing = false;
+                                    }
+                                  },
+                                  icon: StaticStore.player.playing == false
+                                      ? Icon(
+                                          CupertinoIcons.play,
+                                          color: Colors.white,
+                                        )
+                                      : Icon(
+                                          CupertinoIcons.pause,
+                                          color: Colors.white,
+                                        )),
+                            );
+                          }),
                       // SizedBox(width:13),
                       Container(
                           // height: ,
@@ -430,22 +435,6 @@ Widget miniplayer(BuildContext context) {
   );
 }
 
-// @override
-// Widget build(BuildContext context) {
-//   // TODO: implement build
-//   throw UnimplementedError();
-// }
-// }
-
-// import 'battery_status.dart';
-// import 'index.dart';
-
-/// A widget that displays the battery level and status.
-// class DefaultBatteryIndicator extends StatelessWidget {
-//   DefaultBatteryIndicator({
-//     super.key,
-//     // required this.status,
-// var trackHeight = 10.0;
 var curve = Curves.ease;
 var duration = const Duration(seconds: 1);
 
@@ -453,7 +442,9 @@ Widget playNext(_player) {
   return IconButton(
     onPressed: () async {
       if (StaticStore.nextPlay == 1) {
-        StaticStore.nextPlay = 0;
+        // StaticStore.nextPlay = 0;
+        StaticStore.setNextPlay(0);
+
         // }
         StaticStore.queueIndex++;
         if (StaticStore.queueIndex <= StaticStore.myQueueTrack.length - 1) {
@@ -473,9 +464,11 @@ Widget playNext(_player) {
                 .then((value) {
               StaticStore.currentSong =
                   StaticStore.myQueueTrack[StaticStore.queueIndex].name!;
-              if(StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!=null){
-                StaticStore.currentArtists =
-                  StaticStore.myQueueTrack[StaticStore.queueIndex].trackArtists!;
+              if (StaticStore
+                      .myQueueTrack[StaticStore.queueIndex].trackArtists !=
+                  null) {
+                StaticStore.currentArtists = StaticStore
+                    .myQueueTrack[StaticStore.queueIndex].trackArtists!;
               }
               StaticStore.currentSongImg =
                   StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl!;
@@ -486,7 +479,8 @@ Widget playNext(_player) {
           // setState(() {});
         } else {
           StaticStore.queueIndex--;
-          StaticStore.nextPlay = 1;
+          // StaticStore.nextPlay = 1;
+          StaticStore.setNextPlay(0);
         }
       }
     },
