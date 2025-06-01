@@ -4,7 +4,7 @@ import 'package:just_audio/just_audio.dart';
 // import 'package:linkify/model/home/first_page_categories.dart';
 // import 'package:linkify/model/album_track.dart';
 // import 'package:linkify/model/user_info.dart';
-import 'package:spotify/spotify.dart';
+// import 'package:spotify/spotify.dart';
 import 'package:vibe_link/model/album_track.dart';
 import 'package:vibe_link/model/home/first_page_categories.dart';
 

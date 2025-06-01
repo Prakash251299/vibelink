@@ -401,11 +401,20 @@ class _MusicPlayer extends StatelessWidget {
                         // await fetchQueueTrack(trackName,trackId,trackArtists,trackImg);
 
                         // Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => QueueScreen()));
-
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>QueueScreen()));
-                        // Navigator.pop(context).then((v)=>{});
+                        Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  QueueScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(
+                              milliseconds: 400), // Smooth fade duration
+                        ));
                       },
                       icon: const Icon(
                         Icons.menu,

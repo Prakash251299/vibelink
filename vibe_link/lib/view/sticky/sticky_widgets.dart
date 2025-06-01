@@ -441,6 +441,9 @@ var duration = const Duration(seconds: 1);
 Widget playNext(_player) {
   return IconButton(
     onPressed: () async {
+      if(StaticStore.nextPlay==0){
+        return;
+      }
       if (StaticStore.nextPlay == 1) {
         // StaticStore.nextPlay = 0;
         StaticStore.setNextPlay(0);

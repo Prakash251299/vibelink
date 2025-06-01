@@ -137,7 +137,7 @@ class _SearchPageState extends State<SearchPage> {
                         StreamBuilder(
                           stream: StaticStore.player.playerStateStream,
                           builder: (context, snapshot1) {
-                            return StaticStore.playing == true || StaticStore.pause==true?
+                            return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true?
                             miniplayer(context)
                             : const SizedBox();
                           }

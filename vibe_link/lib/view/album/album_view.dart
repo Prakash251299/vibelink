@@ -8,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:vibe_link/controller/player/youtube_player.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
 import 'package:vibe_link/model/album_track.dart';
@@ -108,16 +109,18 @@ class AlbumViewState extends State<AlbumView> {
                                   )),
                               Spacer(),
                               Container(
-                                  // padding: EdgeInsets.only(right: 30),
                                   child: StreamBuilder<Object>(
                                       stream:
                                           StaticStore.player.playerStateStream,
                                       builder: (context, snapshot) {
                                         return IconButton(
-                                          // icon:Icon(Icons.play_circle,color: Colors.white,size:50),
                                           icon: playPauseAlbumButtonTop(
                                               widget._albumTracks, 0),
                                           onPressed: () async {
+                                            if (StaticStore.nextPlay == 0) {
+                                              // StaticStore.showToast(context);
+                                              return;
+                                            }
                                             print("number of songs");
                                             print(widget._albumTracks!.length);
 
@@ -203,6 +206,9 @@ class AlbumViewState extends State<AlbumView> {
                             InkWell(
                               borderRadius: BorderRadius.circular(15),
                               onTap: () async {
+                                if (StaticStore.nextPlay == 0) {
+                                  return;
+                                }
                                 if (StaticStore.player.playing == true) {
                                   if (StaticStore.currentSong ==
                                       widget._albumTracks![index].name) {
@@ -371,7 +377,9 @@ class AlbumViewState extends State<AlbumView> {
                                           final isNextPlaying =
                                               snapshot.data == 0 &&
                                                   StaticStore.currentSong ==
-                                                      widget._albumTracks?[index].name;
+                                                      widget
+                                                          ._albumTracks?[index]
+                                                          .name;
 
                                           return Stack(
                                             children: [
@@ -545,10 +553,33 @@ class AlbumViewState extends State<AlbumView> {
                 return true;
               },
             ),
+
+            // StreamBuilder<PlayerState>(
+            //   stream: StaticStore.player.playerStateStream,
+            //   builder: (context, snapshot) {
+            //     final playerState = snapshot.data;
+
+            //     if (playerState == null) return const SizedBox();
+            //     print("PlayerState: $playerState");
+
+            //     final playing = playerState.playing;
+            //     final processingState = playerState.processingState;
+
+            //     // You can adjust the logic here as per your UX need
+            //     if (playing ||
+            //         StaticStore.playing == true ||
+            //         StaticStore.pause == true) {
+            //       return miniplayer(context);
+            //     }
+
+            //     return const SizedBox();
+            //   },
+            // ),
+
             StreamBuilder(
                 stream: StaticStore.player.playerStateStream,
                 builder: (context, snapshot1) {
-                  return StaticStore.playing == true ||
+                  return StaticStore.player.playing == true || StaticStore.playing ||
                           StaticStore.pause == true
                       ?
                       // Text("hi")

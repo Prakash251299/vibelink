@@ -115,6 +115,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                       //     state.songs[i].songname;
                                       return InkWell(
                                         onTap: () async {
+                                          if(StaticStore.nextPlay==0){
+                                            return;
+                                          }
                                           print("Clicked searching.....");
                                           if (state.songs.length > 0) {
                                             if (StaticStore.playing == false) {
@@ -465,7 +468,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         StreamBuilder(
             stream: StaticStore.player.playerStateStream,
             builder: (context, snapshot1) {
-              return StaticStore.playing == true || StaticStore.pause == true
+              return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true
                   ? miniplayer(context)
                   : const SizedBox();
             }),

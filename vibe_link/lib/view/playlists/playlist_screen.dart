@@ -174,7 +174,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           StreamBuilder(
               stream: StaticStore.player.playerStateStream,
               builder: (context, snapshot1) {
-                return StaticStore.playing == true || StaticStore.pause == true
+                return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true
                     ?
                     // Text("hi")
                     miniplayer(context)

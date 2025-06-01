@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:shimmer/shimmer.dart';
 // import 'package:shimmer/shimmer.dart';
 // import 'package:on_audio_query/on_audio_query.dart';
@@ -54,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top:8.0,left:8.0),
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
           child: Container(height: 50, width: 250, color: Colors.grey[800]),
         ),
         const SizedBox(height: 7),
@@ -62,33 +63,35 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              for(int i=0;i<6;i++)...{
-              Shimmer.fromColors(
-                baseColor: Colors.grey[850]!,
-                highlightColor: Colors.grey[700]!,
-                child: 
-                Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 150,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(height: 150, color: Colors.grey[800]),
-                            const SizedBox(height: 7),
-                            Container(height: 25, width: 150, color: Colors.grey[800]),
-                            const SizedBox(height: 13),
-                          ],
+              for (int i = 0; i < 6; i++) ...{
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[850]!,
+                  highlightColor: Colors.grey[700]!,
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 150,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(height: 150, color: Colors.grey[800]),
+                              const SizedBox(height: 7),
+                              Container(
+                                  height: 25,
+                                  width: 150,
+                                  color: Colors.grey[800]),
+                              const SizedBox(height: 13),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
               }
             ],
           ),
@@ -121,11 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         baseColor: Colors.grey[850]!,
                         highlightColor: Colors.grey[700]!,
                         child: Container(
-                          margin: EdgeInsets.only(left:8.0),
-                          height: 42, 
-                          width: 250, 
-                          color: Colors.grey[800]
-                        )),
+                            margin: EdgeInsets.only(left: 8.0),
+                            height: 42,
+                            width: 250,
+                            color: Colors.grey[800])),
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
@@ -288,13 +290,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                        // StaticStore.player.processingState==ProcessingState.completed?
+                        // StreamBuilder<PlayerState>(
+                        //   stream: StaticStore.player.playerStateStream,
+                        //   builder: (context, snapshot) {
+                        //     final playerState = snapshot.data;
+
+                        //     if (playerState == null) return const SizedBox();
+
+                        //     final playing = playerState.playing;
+                        //     final processingState = playerState.processingState;
+
+                        //     // You can adjust the logic here as per your UX need
+                        //     if (playing ||
+                        //         StaticStore.playing == true ||
+                        //         StaticStore.pause == true) {
+                        //       return miniplayer(context);
+                        //     }
+
+                        //     return const SizedBox();
+                        //   },
+                        // ),
 
                         StreamBuilder(
                             stream: StaticStore.player.playerStateStream,
                             builder: (context, snapshot1) {
-                              return StaticStore.playing == true ||
-                                      StaticStore.pause == true
+                              return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true
                                   ?
                                   // Text("hi")
                                   miniplayer(context)

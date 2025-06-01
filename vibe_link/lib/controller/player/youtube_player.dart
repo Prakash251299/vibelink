@@ -1,9 +1,3 @@
-// my api key:- AIzaSyBERpvDh6R8JMFdBowOTgdqLRKIgXutzBk
-
-
-import 'dart:convert';
-// import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:audio_session/audio_session.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -14,33 +8,21 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:vibe_link/controller/player/play_song.dart';
 import 'package:vibe_link/controller/player/song_url_getter.dart';
 import 'package:vibe_link/controller/variables/static_store.dart';
-// import 'package:linkify/controller/notification/background.dart';
-// import 'package:linkify/controller/player/play_song.dart';
-// import 'package:linkify/controller/variables/static_store.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:html/dom.dart' as dom;
-
-
 
 class YoutubeSongPlayer{
   SongUrlGetter _songUrlGetter = SongUrlGetter();
   Future<void> youtubePlay(String? songName,String artist,ind) async {
     StaticStore.playlist.clear();
-    // int ind = 0;
-    StaticStore.player = AudioPlayer();
+    // StaticStore.player = AudioPlayer();
+    await StaticStore.player.seek(Duration.zero);
     StaticStore.queueIndex = ind;
     StaticStore.songIndex = ind;
     StaticStore.player.playerStateStream.listen((state) async {
       if (state.processingState == ProcessingState.completed) {
         print("song completed bro");
-        // StaticStore.nextPlay=0;
         StaticStore.setNextPlay(0);
 
-        // StaticStore.songIndex;
-        // StaticStore.songIndex++;
-        // int ind = StaticStore.songIndex;
-        // ind = StaticStore.songIndex;
         ind++;
         StaticStore.queueIndex = ind;
         if(ind<StaticStore.myQueueTrack.length){
@@ -58,7 +40,6 @@ class YoutubeSongPlayer{
           StaticStore.myQueueTrack[StaticStore.queueIndex].imgUrl = nextSongImage!=null?nextSongImage:"";
 
           StaticStore.playlist.add(AudioSource.uri(
-              // Uri.parse(songUrl),
               nextUrl,
               tag: MediaItem(
                 // Specify a unique ID for each media item:
@@ -68,20 +49,9 @@ class YoutubeSongPlayer{
                 artUri: nextSongImage!=null?Uri.parse(nextSongImage):Uri.parse(""),
               ),
             ),);
-
-
-
-
-
-
-
-
-
-
         }else{
           print("no songs to play next");
         }
-        // StaticStore.nextPlay=1;
         StaticStore.setNextPlay(1);
 
 
@@ -93,11 +63,8 @@ class YoutubeSongPlayer{
     });
 
     
-    print("youtube play song");
-    // print(StaticStore.myQueueTrack);
     print("youtube songName");
     print(songName);
-    // StaticStore.queueIndex
     if(songName==null){
       print("Song name is not given to youtube play function");
       return;
@@ -123,7 +90,6 @@ class YoutubeSongPlayer{
           print("3a");
           print(manifest.streams.first);
           var audio = await manifest.audioOnly.first;
-          // var audio = manifest.audioOnly.where((s) => s.codec('mp4')).firstOrNull;
           if(audio.toString().contains('mp4')==false){
             print("bad url");
             return;
@@ -140,38 +106,20 @@ class YoutubeSongPlayer{
           /* Change the name, image and artists for current clicked song for playing */
 
           StaticStore.playlist.add(AudioSource.uri(
-            // Uri.parse(songUrl),
             audioUrl,
-            // headers: headers,
             tag: MediaItem(
-              // Specify a unique ID for each media item:
               id: DateTime.now().millisecondsSinceEpoch.toString(),
               artist: StaticStore.currentArtists.length>=2?"${StaticStore.currentArtists[0]}, ${StaticStore.currentArtists[1]}":StaticStore.currentArtists.length==1?"${StaticStore.currentArtists[0]}":"unknown",
               title: "${StaticStore.currentSong}",
-              // artUri: Uri.parse(StaticStore.currentSongImg),
               artUri: StaticStore.myQueueTrack[ind].imgUrl!=null?Uri.parse(StaticStore.myQueueTrack[ind].imgUrl!):Uri.parse(""),
             ),
           ),);
-          // playSong(audioUrl);
           if (StaticStore.player.audioSource == null) {
             await StaticStore.player.setAudioSource(StaticStore.playlist);
-            // print("audiosource null");
           }
-          // var _isConnected = false;
-          // var _connectionSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-          //   _isConnected = (result != ConnectivityResult.none);
-          //   if (_isConnected) {
-          //     print("Internet is back, try to resume audio");
-          //     // Retry playing
-          //     if (StaticStore.player.playing == false && StaticStore.player.audioSource != null) {
-          //       StaticStore.player.play();
-          //     }
-          //   }
-          // });
 
 
           StaticStore.player.play();
-          // StaticStore.nextPlay=1;
           StaticStore.setNextPlay(1);
 
         
@@ -202,9 +150,7 @@ class YoutubeSongPlayer{
           print(audioUrl);
 
           StaticStore.playlist.add(AudioSource.uri(
-            // Uri.parse(songUrl),
             audioUrl,
-            // headers: headers,
             tag: MediaItem(
               // Specify a unique ID for each media item:
               id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -213,38 +159,17 @@ class YoutubeSongPlayer{
               artUri: Uri.parse(StaticStore.currentSongImg),
             ),
           ),);
-          // playSong(audioUrl);
           if (StaticStore.player.audioSource == null) {
             await StaticStore.player.setAudioSource(StaticStore.playlist);
-            // print("audiosource null");
           }
-          // var _isConnected = false;
-          // var _connectionSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-          //   _isConnected = (result != ConnectivityResult.none);
-          //   if (_isConnected) {
-          //     print("Internet is back, try to resume audio");
-          //     // Retry playing
-          //     if (StaticStore.player.playing == false && StaticStore.player.audioSource != null) {
-          //       StaticStore.player.play();
-          //     }
-          //   }
-          // });
-
-
           StaticStore.player.play();
-          // StaticStore.nextPlay=1;
           StaticStore.setNextPlay(1);
-
-
-
           }catch(e){
             print("failed even after changing the youtube api call method with error: $e");
           }
 
         }
         }
-      // }
-    // });
   }
 
   Future<void> youtubePause() async {
@@ -255,6 +180,7 @@ class YoutubeSongPlayer{
   }
   Future<void> youtubeResume() async {
     StaticStore.player.play();
+    StaticStore.setNextPlay(1);
   }
 
 }
