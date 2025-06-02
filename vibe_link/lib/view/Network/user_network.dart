@@ -157,11 +157,24 @@ class _NetworkUserState extends State<NetworkUser> {
                                                 "${s[0]}_${s[1]}";
 
                                             Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatScreen(
+                                              PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => ChatScreen(
                                                             friends![index],
-                                                            messageId)));
+                                                            messageId),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                                                // MaterialPageRoute(
+                                                //     builder: (context) =>
+                                                //         ChatScreen(
+                                                //             friends![index],
+                                                //             messageId))
+                                                            );
 
 
 

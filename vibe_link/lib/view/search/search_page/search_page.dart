@@ -11,6 +11,7 @@ import 'package:vibe_link/view/search/search_page/genre_playlist_screen.dart';
 import 'package:vibe_link/view/sticky/sticky_widgets.dart';
 import '../genreTag.dart';
 import '../search_results/search_result.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({
     Key? key,
@@ -21,13 +22,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-
   @override
   void initState() {
     StaticStore.screen = 1;
     super.initState();
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +34,7 @@ class _SearchPageState extends State<SearchPage> {
     print("Searchpage");
     return BlocProvider(
         create: (context) => SearchCubit()..getGenre(),
-        child: BlocBuilder<SearchCubit, SearchState>(
-            builder: (context, state) {
+        child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
           if (state.status == LoadPage.loading) {
             return Scaffold(
               body: Center(
@@ -52,98 +50,97 @@ class _SearchPageState extends State<SearchPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     // padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SafeArea(
-                      child: 
-                      // Stack(
-                      //   alignment: Alignment.bottomCenter,
-                      //   children: [
+                      child:
+                          // Stack(
+                          //   alignment: Alignment.bottomCenter,
+                          //   children: [
                           NestedScrollView(
-                            headerSliverBuilder:
-                                (BuildContext context, bool innerBoxIsScrolled) {
-                              return [
-                                const SliverToBoxAdapter(
-                                    child: SizedBox(
-                                  height: 40,
-                                )),
-                                SliverToBoxAdapter(
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 16.0),
-                                    child: Text(
-                                      "Search",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineMedium!
-                                          .copyWith(
-                                            fontSize: 36,
-                                          ),
-                                    ),
-                                  ),
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return [
+                            const SliverToBoxAdapter(
+                                child: SizedBox(
+                              height: 40,
+                            )),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Text(
+                                  "Search",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium!
+                                      .copyWith(
+                                        fontSize: 36,
+                                      ),
                                 ),
-                                const SliverToBoxAdapter(
-                                    child: SizedBox(
-                                  height: 5,
-                                )),
-                                SliverPersistentHeader(
-                                  pinned: true,
-                                  delegate: SliverSearchAppBar(),
-                                ),
-                  
-                              ];
-                            },
-                            body: ListView(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 24.0),
-                                  child: Text(
-                                    "Browse all genres",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                          fontSize: 18,
-                                        ),
-                                  ),
-                                ),
-                                GridView.builder(
-                                  itemCount: allTags.sublist(4).length,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 14,
-                                    crossAxisSpacing: 14,
-                                    childAspectRatio: 16 / 8,
-                                  ),
-                                  itemBuilder: (context, i) {
-                                    return TagWidget(
-                                        tag: allTags.sublist(4)[i],
-                                        genreName: tags[i]
-                                            .entries
-                                            .elementAt(0)
-                                            .value
-                                            .toString());
-                                    // return SizedBox();
-                                  },
-                                ),
-                                const SizedBox(height: 100),
-                                
-                              ],
+                              ),
                             ),
-                          ),
+                            const SliverToBoxAdapter(
+                                child: SizedBox(
+                              height: 5,
+                            )),
+                            SliverPersistentHeader(
+                              pinned: true,
+                              delegate: SliverSearchAppBar(),
+                            ),
+                          ];
+                        },
+                        body: ListView(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 24.0),
+                              child: Text(
+                                "Browse all genres",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                      fontSize: 18,
+                                    ),
+                              ),
+                            ),
+                            GridView.builder(
+                              itemCount: allTags.sublist(4).length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 14,
+                                crossAxisSpacing: 14,
+                                childAspectRatio: 16 / 8,
+                              ),
+                              itemBuilder: (context, i) {
+                                return TagWidget(
+                                    tag: allTags.sublist(4)[i],
+                                    genreName: tags[i]
+                                        .entries
+                                        .elementAt(0)
+                                        .value
+                                        .toString());
+                                // return SizedBox();
+                              },
+                            ),
+                            const SizedBox(height: 100),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                        StreamBuilder(
-                          stream: StaticStore.player.playerStateStream,
-                          builder: (context, snapshot1) {
-                            return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true?
-                            miniplayer(context)
+                  StreamBuilder(
+                      stream: StaticStore.player.playerStateStream,
+                      builder: (context, snapshot1) {
+                        return StaticStore.player.playing == true ||
+                                StaticStore.playing ||
+                                StaticStore.pause == true
+                            ? miniplayer(context)
                             : const SizedBox();
-                          }
-                        ),
-                      // )
-                      footer(context),
+                      }),
+                  // )
+                  footer(context),
                 ],
               ),
             );
@@ -168,12 +165,30 @@ class TagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        List<MyPlaylist>_playlist = genreName=="N/A"?[]:await fetchGenrePlaylists(genreName);
+        List<MyPlaylist> _playlist =
+            genreName == "N/A" ? [] : await fetchGenrePlaylists(genreName);
         // print(_playlist[0].imgUrl);
         // return;
-        genreName=="N/A"?null:_playlist.length<=0?null:Navigator.push(
-            context,
-            CupertinoPageRoute(builder: (context) => GenrePlaylistScreen(_playlist)));
+        genreName == "N/A"
+            ? null
+            : _playlist.length <= 0
+                ? null
+                : Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          GenrePlaylistScreen(_playlist),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 400),
+                    )
+                    // CupertinoPageRoute(builder: (context) => GenrePlaylistScreen(_playlist))
+                    );
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
@@ -257,11 +272,23 @@ class SliverSearchAppBar extends SliverPersistentHeaderDelegate {
       onTap: () {
         Navigator.push(
             context,
-            CupertinoPageRoute(
-                builder: (context) =>
-                    SearchResultsPage( 
-                        // con: con,
-                        )));
+            PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => SearchResultsPage(
+                    // con: con,
+                    ),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+            // CupertinoPageRoute(
+            //     builder: (context) => SearchResultsPage(
+            //         // con: con,
+            //         ))
+            );
       },
       child: Container(
         color: Colors.black,

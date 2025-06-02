@@ -18,6 +18,18 @@ Future<void> imageVideoPicker(var context, UserInfoMine receiverInfo, String mes
   // if(res[])
   // await getVideoController(res);
 
-  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PickedImageVideo(res,receiverInfo,messageId)));
+  Navigator.of(context).push(
+    PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => PickedImageVideo(res,receiverInfo,messageId),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+    // MaterialPageRoute(builder: (context)=>PickedImageVideo(res,receiverInfo,messageId))
+  );
   return;
 }

@@ -183,9 +183,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         : 0;
                                                 Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            RequestNotificationScreen()));
+                                                    PageRouteBuilder(
+                                                      pageBuilder: (context,
+                                                              animation,
+                                                              secondaryAnimation) =>
+                                                          RequestNotificationScreen(),
+                                                      transitionsBuilder:
+                                                          (context,
+                                                              animation,
+                                                              secondaryAnimation,
+                                                              child) {
+                                                        return FadeTransition(
+                                                          opacity: animation,
+                                                          child: child,
+                                                        );
+                                                      },
+                                                      transitionDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  400),
+                                                    )
+                                                    // MaterialPageRoute(
+                                                    //     builder: (context) =>
+                                                    //         RequestNotificationScreen())
+                                                    );
                                               },
                                               icon: Icon(
                                                 Icons.notifications_active,
@@ -196,9 +217,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                             onPressed: () async {
                                               Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          RequestNotificationScreen()));
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (context,
+                                                            animation,
+                                                            secondaryAnimation) =>
+                                                        RequestNotificationScreen(),
+                                                    transitionsBuilder:
+                                                        (context,
+                                                            animation,
+                                                            secondaryAnimation,
+                                                            child) {
+                                                      return FadeTransition(
+                                                        opacity: animation,
+                                                        child: child,
+                                                      );
+                                                    },
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 400),
+                                                  )
+                                                  // MaterialPageRoute(
+                                                  //     builder: (context) =>
+                                                  //         RequestNotificationScreen())
+                                                  );
                                             },
                                             icon: Icon(
                                               Icons.notifications,
@@ -314,7 +355,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         StreamBuilder(
                             stream: StaticStore.player.playerStateStream,
                             builder: (context, snapshot1) {
-                              return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true
+                              return StaticStore.player.playing == true ||
+                                      StaticStore.playing ||
+                                      StaticStore.pause == true
                                   ?
                                   // Text("hi")
                                   miniplayer(context)
@@ -368,9 +411,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Navigator.pop(
                                                       context); // popped the route widget too
                                                   Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              LoginScreen()));
+                                                      PageRouteBuilder(
+                                                    pageBuilder: (context,
+                                                            animation,
+                                                            secondaryAnimation) =>
+                                                        const LoginScreen(),
+                                                    transitionsBuilder:
+                                                        (context,
+                                                            animation,
+                                                            secondaryAnimation,
+                                                            child) {
+                                                      return FadeTransition(
+                                                        opacity: animation,
+                                                        child: child,
+                                                      );
+                                                    },
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 400),
+                                                  )
+                                                      // MaterialPageRoute(
+                                                      //     builder: (context) =>
+                                                      //         LoginScreen())
+                                                      );
                                                 },
                                               ),
                                             )

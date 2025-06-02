@@ -13,7 +13,6 @@ import 'package:vibe_link/view/home/loading.dart';
 // import 'package:linkify/view/album/album_view.dart';
 // import 'package:linkify/view/home/loading.dart';
 
-
 class HorizontalSongList extends StatelessWidget {
   // final List<SongModel> songs;
   // final MainController con;
@@ -41,14 +40,27 @@ class HorizontalSongList extends StatelessWidget {
             return InkWell(
               onTap: () async {
                 print("list album clicked");
-                List<AlbumTrack>? _albumTracks = await fetchPlaylistTracks(_categories?.playlists[i].id);
+                List<AlbumTrack>? _albumTracks =
+                    await fetchPlaylistTracks(_categories?.playlists[i].id);
 
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AlbumView(_categories?.playlists[i].imgUrl, _categories?.playlists[i].name, _albumTracks)));
-                
-                
-                
+                Navigator.of(context).push(PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      AlbumView(_categories?.playlists[i].imgUrl,
+                          _categories?.playlists[i].name, _albumTracks),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  transitionDuration: const Duration(milliseconds: 400),
+                )
+                    // MaterialPageRoute(builder: (context)=>AlbumView(_categories?.playlists[i].imgUrl, _categories?.playlists[i].name, _albumTracks))
+                    );
+
                 // print(_categories?.playlists[i]);
-                
+
                 // con.playSong(con.convertToAudio(songs), songs.indexOf(song));
               },
               onLongPress: () {
@@ -59,10 +71,9 @@ class HorizontalSongList extends StatelessWidget {
                     backgroundColor: Colors.black38,
                     context: context,
                     builder: (context) {
-                      return 
-                      SizedBox();
+                      return SizedBox();
                       // BottomSheetWidget(
-                        // con: con, song: song
+                      // con: con, song: song
                       // );
                     });
               },
@@ -77,9 +88,7 @@ class HorizontalSongList extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: 
-                        
-                        CachedNetworkImage(
+                        child: CachedNetworkImage(
                           // imageUrl: song.coverImageUrl!,
                           imageUrl: "${_categories?.playlists[i].imgUrl}",
                           // imageUrl: "",
@@ -104,8 +113,8 @@ class HorizontalSongList extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyMedium
-                            !.copyWith(color: Colors.white),
+                            .bodyMedium!
+                            .copyWith(color: Colors.white),
                       )
                     ],
                   ),

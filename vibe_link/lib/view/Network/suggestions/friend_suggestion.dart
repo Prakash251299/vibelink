@@ -52,12 +52,10 @@ class _SuggestionState extends State<Suggestion> {
   // MyWidget _myWidget = MyWidget();
   Friends _friends = Friends();
 
-  Widget people_page(state,recommendationIndex,recommendationType) {
+  Widget people_page(state, recommendationIndex, recommendationType) {
     // return Text("Hello ishu");
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.only(left: 18, top: 18.0, bottom: 15),
         child: Text(
@@ -98,7 +96,9 @@ class _SuggestionState extends State<Suggestion> {
                             topLeft: Radius.circular(3),
                             bottomLeft: Radius.circular(3),
                           ),
-                          child: state.recommendedUsers[recommendationIndex]?[i].imgUrl == null
+                          child: state.recommendedUsers[recommendationIndex]?[i]
+                                      .imgUrl ==
+                                  null
                               ? Container(
                                   width: 55,
                                   height: 55,
@@ -147,36 +147,46 @@ class _SuggestionState extends State<Suggestion> {
                               onPressed: () async {
                                 print("friend request sent");
 
-                                await storeFriendRequest(
-                                    state.recommendedUsers[recommendationIndex]?[i].email);
+                                await storeFriendRequest(state
+                                    .recommendedUsers[recommendationIndex]?[i]
+                                    .email);
 
                                 await _friends
-                                    .friendStatusStore(
-                                        state.recommendedUsers[recommendationIndex]?[i].email)
+                                    .friendStatusStore(state
+                                        .recommendedUsers[recommendationIndex]
+                                            ?[i]
+                                        .email)
                                     .then((value) {
                                   setState(() {
-                                    state.recommendedUsers[recommendationIndex] != null
-                                        ? StaticStore.requestStatusValue?[recommendationIndex]
-                                                ?[i] =
-                                            state.recommendedUsers[recommendationIndex]![i].id
+                                    state.recommendedUsers[
+                                                recommendationIndex] !=
+                                            null
+                                        ? StaticStore.requestStatusValue?[
+                                                recommendationIndex]?[i] =
+                                            state
+                                                .recommendedUsers[
+                                                    recommendationIndex]![i]
+                                                .id
                                                 .toString()
                                         : null;
                                   });
                                   print("updated");
                                 });
-                                print(StaticStore.requestStatusValue?[recommendationIndex]?[i]);
+                                print(StaticStore.requestStatusValue?[
+                                    recommendationIndex]?[i]);
                               },
                               icon:
                                   // Icon(Icons.send)
 
-                                  StaticStore.requestStatusValue?[recommendationIndex]?[i] ==
+                                  StaticStore.requestStatusValue?[
+                                                  recommendationIndex]?[i] ==
                                               "0" ||
-                                          StaticStore.requestStatusValue?[recommendationIndex]
-                                                  ?[i] ==
+                                          StaticStore.requestStatusValue?[
+                                                  recommendationIndex]?[i] ==
                                               ""
                                       ? Icon(Icons.send, color: Colors.white)
-                                      : StaticStore.requestStatusValue?[recommendationIndex]
-                                                  ?[i] ==
+                                      : StaticStore.requestStatusValue?[
+                                                  recommendationIndex]?[i] ==
                                               "1"
                                           ? Icon(
                                               Icons.done_outline,
@@ -206,42 +216,105 @@ class _SuggestionState extends State<Suggestion> {
                         ),
                         onTap: () async {
                           print("$recommendationType show more tapped");
-                          if(recommendationIndex==2){
+                          if (recommendationIndex == 2) {
                             List<UserInfoMine> totalUsers =
-                            await fetchAllFriends(50); // this value
-                            await getRequestStatus(totalUsers, recommendationIndex,50);
+                                await fetchAllFriends(50); // this value
+                            await getRequestStatus(
+                                totalUsers, recommendationIndex, 50);
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context1) => ShowmoreSuggestion(
-                                        totalUsers, "$recommendationType",recommendationIndex)));
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      ShowmoreSuggestion(
+                                          totalUsers,
+                                          "$recommendationType",
+                                          recommendationIndex),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      const Duration(milliseconds: 400),
+                                )
+                                // MaterialPageRoute(
+                                //     builder: (context1) => ShowmoreSuggestion(
+                                //         totalUsers, "$recommendationType",recommendationIndex))
+                                );
                             return;
                           }
-                          if(recommendationIndex==1){
+                          if (recommendationIndex == 1) {
                             List<UserInfoMine> totalUsers =
-                            await fetchGoodMatchFriends(50);
-                            await getRequestStatus(totalUsers, recommendationIndex,50);
+                                await fetchGoodMatchFriends(50);
+                            await getRequestStatus(
+                                totalUsers, recommendationIndex, 50);
 
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context1) => ShowmoreSuggestion(
-                                        state.recommendedUsers[recommendationIndex], "$recommendationType",recommendationIndex)));
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      ShowmoreSuggestion(
+                                          state.recommendedUsers[
+                                              recommendationIndex],
+                                          "$recommendationType",
+                                          recommendationIndex),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      const Duration(milliseconds: 400),
+                                )
+                                // MaterialPageRoute(
+                                // builder: (context1) => ShowmoreSuggestion(
+                                //     state.recommendedUsers[
+                                //         recommendationIndex],
+                                //     "$recommendationType",
+                                //     recommendationIndex))
+                                );
                             return;
-
                           }
-                          if(recommendationIndex==0){
+                          if (recommendationIndex == 0) {
                             List<UserInfoMine> totalUsers =
-                            await fetchBestMatchFriends(10);
-                            await getRequestStatus(totalUsers, recommendationIndex,50);
+                                await fetchBestMatchFriends(10);
+                            await getRequestStatus(
+                                totalUsers, recommendationIndex, 50);
 
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context1) => ShowmoreSuggestion(
-                                        state.recommendedUsers[recommendationIndex], "$recommendationType",recommendationIndex)));
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      ShowmoreSuggestion(
+                                          state.recommendedUsers[
+                                              recommendationIndex],
+                                          "$recommendationType",
+                                          recommendationIndex),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      const Duration(milliseconds: 400),
+                                )
+                                // MaterialPageRoute(
+                                //     builder: (context1) => ShowmoreSuggestion(
+                                //         state.recommendedUsers[
+                                //             recommendationIndex],
+                                //         "$recommendationType",
+                                //         recommendationIndex))
+                                );
                             return;
-
                           }
                         },
                       )
@@ -254,67 +327,74 @@ class _SuggestionState extends State<Suggestion> {
   }
 
   Widget networkShimmer() {
-    return 
-    // Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
+    return
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   children: [
         SingleChildScrollView(
-          // scrollDirection: Axis.horizontal,
-          scrollDirection: Axis.vertical,
-          // child: 
-          //     SizedBox(
-          //       height: MediaQuery.of(context).size.height,
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey[850]!,
-                  highlightColor: Colors.grey[700]!,
-                  child: 
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left:0.0),
-                        child: Container(height: 50, width:MediaQuery.of(context).size.width, color: Colors.grey[800]),
-                      ),
-                      const SizedBox(height: 3),
-                      Padding(
-                        padding: const EdgeInsets.only(top:8,left:15.0,right:15.0),
-                        child: SizedBox(
+      // scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
+      // child:
+      //     SizedBox(
+      //       height: MediaQuery.of(context).size.height,
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[850]!,
+        highlightColor: Colors.grey[700]!,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 0.0),
+              child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey[800]),
+            ),
+            const SizedBox(height: 3),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, left: 15.0, right: 15.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < 4; i++) ...{
+                      Container(height: 50, color: Colors.grey[800]),
+                      const SizedBox(height: 9),
+                      Container(
+                          height: 55,
                           width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              for(int i=0;i<4;i++)...{
-                                Container(height: 50, color: Colors.grey[800]),
-                                const SizedBox(height:9),
-                                Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
-                                const SizedBox(height: 10),
-                                Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
-                                const SizedBox(height: 50),
-                              },
-                
-                              // const SizedBox(height: 7),
-                              // Container(height: 50, color: Colors.grey[800]),
-                              // const SizedBox(height: 7),
-                              // Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
-                              // const SizedBox(height: 7),
-                              // Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                // ),
+                          color: Colors.grey[800]),
+                      const SizedBox(height: 10),
+                      Container(
+                          height: 55,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.grey[800]),
+                      const SizedBox(height: 50),
+                    },
+
+                    // const SizedBox(height: 7),
+                    // Container(height: 50, color: Colors.grey[800]),
+                    // const SizedBox(height: 7),
+                    // Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                    // const SizedBox(height: 7),
+                    // Container(height: 55, width: MediaQuery.of(context).size.width, color: Colors.grey[800]),
+                  ],
+                ),
               ),
-              // }
-          //   ],
-          // ),
-        );
+            ),
+          ],
+        ),
+        // ),
+      ),
+      // }
+      //   ],
+      // ),
+    );
     //   ],
     // );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -325,156 +405,158 @@ class _SuggestionState extends State<Suggestion> {
         // SizedBox();
 
         SafeArea(
-          child: Scaffold(
-                      appBar: AppBar(
-                        leading: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            )),
-                        // title: Text("Networks",style: TextStyle(color: Colors.white),),
-                        backgroundColor: Colors.black,
-                      ),
-                      body:
+            child: Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        // title: Text("Networks",style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.black,
+      ),
+      body:
 
-
-          // child: 
+          // child:
           BlocProvider(
               create: (context) => SuggestionCubit()..getRecommendedUsers(),
               // create:(_){},
               child: BlocBuilder<SuggestionCubit, SuggestionState>(
                   // child: BlocBuilder(
                   builder: (context, state) {
-                    // return Text("hi");
+                // return Text("hi");
                 // print("recommendedUsers: ${state.recommendedUsers}");
                 // return SizedBox();
                 if (state.status == LoadPage.loading) {
                   // return Center(child: CircularProgressIndicator());
                   return networkShimmer();
                 }
-          
+
                 if (state.status == LoadPage.loaded) {
                   // print(
-                      // "getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
-                  return 
-                  // SafeArea(
-                  //   child: Scaffold(
-                  //     appBar: AppBar(
-                  //       leading: IconButton(
-                  //           onPressed: () {
-                  //             Navigator.pop(context);
-                  //           },
-                  //           icon: Icon(
-                  //             Icons.arrow_back,
-                  //             color: Colors.white,
-                  //           )),
-                  //       // title: Text("Networks",style: TextStyle(color: Colors.white),),
-                  //       backgroundColor: Colors.black,
-                  //     ),
-                  //     body:
-                          state.recommendedUsers[0]?.length == 0 &&
-                                  state.recommendedUsers[1]?.length == 0 &&
-                                  state.recommendedUsers[2]?.length == 0
-                              ? Center(
-                                  child: Stack(
-                                  alignment: Alignment.topCenter,
-                                  // mainAxisAlignment: MainAxisAlignment.start,
+                  // "getRecommendedUsers: ${state.recommendedUsers[1]?[0].displayName}");
+                  return
+                      // SafeArea(
+                      //   child: Scaffold(
+                      //     appBar: AppBar(
+                      //       leading: IconButton(
+                      //           onPressed: () {
+                      //             Navigator.pop(context);
+                      //           },
+                      //           icon: Icon(
+                      //             Icons.arrow_back,
+                      //             color: Colors.white,
+                      //           )),
+                      //       // title: Text("Networks",style: TextStyle(color: Colors.white),),
+                      //       backgroundColor: Colors.black,
+                      //     ),
+                      //     body:
+                      state.recommendedUsers[0]?.length == 0 &&
+                              state.recommendedUsers[1]?.length == 0 &&
+                              state.recommendedUsers[2]?.length == 0
+                          ? Center(
+                              child: Stack(
+                              alignment: Alignment.topCenter,
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                // friendOptions(context, state.recommendedUsers[2]),
+                                friendOptions(context),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  // crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // friendOptions(context, state.recommendedUsers[2]),
-                                    friendOptions(context),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      // crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text("No users available"),
-                                      ],
-                                    ),
-                                    // footer(context),
+                                    Text("No users available"),
                                   ],
-                                ))
-                              : Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: [
-                                    // friendOptions(context),
-                                    // Container(
-                                    //   color: Colors.red,
-                                    //   child: footer(context)
-                                    // ),
-                                    ListView.builder(
-                                        itemCount: 1,
-                                        itemBuilder: (context1, snapshot1) {
-                                          return Stack(
-                                            alignment: Alignment.topCenter,
-                                            children: [
-                                              // friendOptions(context, state.recommendedUsers[2]),
-          
-                                              friendOptions(context),
-          
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 40),
-                                                child: Column(children: [
-                                                  
-          
-                                                  if (state.recommendedUsers[1]
-                                                          ?.length !=
-                                                      0) ...{
-                                                    people_page(state, 1, "Good match"),
-                                                  },
-          
-                                                  if (state.recommendedUsers[2]
-                                                          ?.length !=
-                                                      0) ...{
-                                                        people_page(state,2,"All users"),
-                                                    // Column(
-                                                    //     crossAxisAlignment:
-                                                    //         CrossAxisAlignment
-                                                    //             .start,
-                                                    //     children: [])
-                                                  },
-                                                  SizedBox(height: 100,),
-                                                ]),
-                                              ),
-          
-                                              // }
-                                            ],
-                                          );
-                                        }
-                                        //       );
-                                        //   // }
-                                        // }
-                                        ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          bottom:
-                                              MediaQuery.of(context).size.height -
-                                                  120),
-                                      // color: Colors.red,
-                                      child: friendOptions(context),
-                                    ),
-                                    StreamBuilder(
-                                        stream:
-                                            StaticStore.player.playerStateStream,
-                                        builder: (context, snapshot1) {
-                                          return StaticStore.player.playing == true || StaticStore.playing || StaticStore.pause == true
-                                              ?
-                                              // Text("hi")
-                                              miniplayer(context)
-                                              : const SizedBox();
-                                        }),
-                                    footer(context),
-                                  ],
+                                ),
+                                // footer(context),
+                              ],
+                            ))
+                          : Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                // friendOptions(context),
+                                // Container(
+                                //   color: Colors.red,
+                                //   child: footer(context)
                                 // ),
-                    // ),
-                  );
+                                ListView.builder(
+                                    itemCount: 1,
+                                    itemBuilder: (context1, snapshot1) {
+                                      return Stack(
+                                        alignment: Alignment.topCenter,
+                                        children: [
+                                          // friendOptions(context, state.recommendedUsers[2]),
+
+                                          friendOptions(context),
+
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 40),
+                                            child: Column(children: [
+                                              if (state.recommendedUsers[1]
+                                                      ?.length !=
+                                                  0) ...{
+                                                people_page(
+                                                    state, 1, "Good match"),
+                                              },
+                                              if (state.recommendedUsers[2]
+                                                      ?.length !=
+                                                  0) ...{
+                                                people_page(
+                                                    state, 2, "All users"),
+                                                // Column(
+                                                //     crossAxisAlignment:
+                                                //         CrossAxisAlignment
+                                                //             .start,
+                                                //     children: [])
+                                              },
+                                              SizedBox(
+                                                height: 100,
+                                              ),
+                                            ]),
+                                          ),
+
+                                          // }
+                                        ],
+                                      );
+                                    }
+                                    //       );
+                                    //   // }
+                                    // }
+                                    ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height -
+                                              120),
+                                  // color: Colors.red,
+                                  child: friendOptions(context),
+                                ),
+                                StreamBuilder(
+                                    stream:
+                                        StaticStore.player.playerStateStream,
+                                    builder: (context, snapshot1) {
+                                      return StaticStore.player.playing ==
+                                                  true ||
+                                              StaticStore.playing ||
+                                              StaticStore.pause == true
+                                          ?
+                                          // Text("hi")
+                                          miniplayer(context)
+                                          : const SizedBox();
+                                    }),
+                                footer(context),
+                              ],
+                              // ),
+                              // ),
+                            );
                 }
                 return SizedBox();
               })),
-          )
-        );
+    ));
     // }));
   }
 }
@@ -525,8 +607,19 @@ Widget friendOptions(context) {
       //   friends.add(temp);
       // }
       // print("friends option tapped");
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => NetworkUser("Friends")));
+      Navigator.of(context).push(PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            NetworkUser("Friends"),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 400),
+      )
+          // MaterialPageRoute(builder: (context) => NetworkUser("Friends"))
+          );
       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>NetworkUser(friends)));
     },
   );

@@ -77,11 +77,25 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                             await fetchPlaylistTracks(state.playlists[i].id);
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => AlbumView(
+                            PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => AlbumView(
                                     state.playlists[i].imgUrl,
                                     state.playlists[i].name,
-                                    _albumTracks)));
+                                    _albumTracks),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                            // MaterialPageRoute(
+                            //     builder: (context) => AlbumView(
+                            //         state.playlists[i].imgUrl,
+                            //         state.playlists[i].name,
+                            //         _albumTracks))
+                                    );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(

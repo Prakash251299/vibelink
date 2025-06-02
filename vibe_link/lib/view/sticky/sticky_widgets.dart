@@ -90,17 +90,67 @@ Widget footer(var context) {
               //     ));
 
               if (StaticStore.screen == 0) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => HomeScreen(),
-                    )).then((value) => Navigator.pop(context));
+                Navigator.of(context).pushAndRemoveUntil(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        HomeScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                  (Route<dynamic> route) =>
+                      false, // This removes all previous routes
+                );
+
+                // Navigator.push(
+                //   context,
+                //   PageRouteBuilder(
+                //     pageBuilder: (context, animation, secondaryAnimation) =>
+                //         HomeScreen(),
+                //     transitionsBuilder:
+                //         (context, animation, secondaryAnimation, child) {
+                //       return FadeTransition(
+                //         opacity: animation,
+                //         child: child,
+                //       );
+                //     },
+                //     transitionDuration: const Duration(milliseconds: 400),
+                //   ),
+                // ).then((value) => Navigator.pop(context));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (_) => HomeScreen(),
+                //     )).then((value) => Navigator.pop(context));
               } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => HomeScreen(),
-                    ));
+                Navigator.of(context).pushAndRemoveUntil(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        HomeScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                  (Route<dynamic> route) =>
+                      false, // This removes all previous routes
+                );
+
+                // Navigator.push(
+                //     context,
+
+                //     MaterialPageRoute(
+                //       builder: (_) => HomeScreen(),
+                //     ));
               }
               // .then((value) => Navigator.pop(context));
             },
@@ -121,16 +171,39 @@ Widget footer(var context) {
 
               if (StaticStore.screen != 0) {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => SearchPage(),
-                    )).then((value) => Navigator.pop(context));
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        SearchPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                ).then((value) => Navigator.pop(context));
               } else {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => SearchPage(),
-                    ));
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        SearchPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                  // MaterialPageRoute(
+                  //   builder: (_) => SearchPage(),
+                  // )
+                );
               }
 
               // .then((value) => Navigator.pop(context));
@@ -158,13 +231,37 @@ Widget footer(var context) {
               // StaticStore.screen != 3?
               if (StaticStore.screen != 0) {
                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PlaylistScreen()))
-                    .then((value) => Navigator.pop(context));
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const PlaylistScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 400),
+                    )).then((value) => Navigator.pop(context)
+                    //     MaterialPageRoute(
+                    //         builder: (context) => PlaylistScreen()))
+                    // .then((value) => Navigator.pop(context)
+                    );
               } else {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PlaylistScreen()));
+                PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => const PlaylistScreen(),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                    // MaterialPageRoute(builder: (context) => PlaylistScreen())
+                    );
               }
             },
           ),
@@ -183,12 +280,34 @@ Widget footer(var context) {
               // StaticStore.screen = 2;
               if (StaticStore.screen != 0) {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Suggestion()));
+                PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => Suggestion(),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                    // MaterialPageRoute(builder: (context) => Suggestion())
+                    );
                 // Navigator.pop(context);
               } else {
                 // List<List<UserInfo>?> recommendedUsers = userButtonCaller();
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Suggestion()));
+                PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => Suggestion(),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                    // MaterialPageRoute(builder: (context) => Suggestion())
+                    );
               }
             },
           ),
@@ -310,21 +429,19 @@ Widget miniplayer(BuildContext context) {
                       // ),
 
                       Container(
-                        width: 43,
-                        height: 45,
-                        decoration: StaticStore.currentSongImg != ""
-                            ? BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        StaticStore.currentSongImg),
-                                    fit: BoxFit.cover),
-                              )
-                            :BoxDecoration(
-                              image: DecorationImage(
-                                image: (AssetImage('icon/vibe_link.jpeg')),
-                              )
-                            )
-                      ),
+                          width: 43,
+                          height: 45,
+                          decoration: StaticStore.currentSongImg != ""
+                              ? BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          StaticStore.currentSongImg),
+                                      fit: BoxFit.cover),
+                                )
+                              : BoxDecoration(
+                                  image: DecorationImage(
+                                  image: (AssetImage('icon/vibe_link.jpeg')),
+                                ))),
                       SizedBox(width: 8),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,12 +542,28 @@ Widget miniplayer(BuildContext context) {
       // return;
       // Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewScreen()));
 
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: ((context) => CarouselSongScreen(
+      Navigator.of(context).push(
+        PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => CarouselSongScreen(
               StaticStore.currentSong,
               StaticStore.currentSong,
               StaticStore.currentArtists,
-              StaticStore.currentSongImg))));
+              StaticStore.currentSongImg),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+        // MaterialPageRoute(
+        //   builder: ((context) => CarouselSongScreen(
+        //       StaticStore.currentSong,
+        //       StaticStore.currentSong,
+        //       StaticStore.currentArtists,
+        //       StaticStore.currentSongImg)))
+              );
     },
   );
 }
@@ -441,7 +574,7 @@ var duration = const Duration(seconds: 1);
 Widget playNext(_player) {
   return IconButton(
     onPressed: () async {
-      if(StaticStore.nextPlay==0){
+      if (StaticStore.nextPlay == 0) {
         return;
       }
       if (StaticStore.nextPlay == 1) {

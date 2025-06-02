@@ -134,11 +134,35 @@ class _VideoScreenState extends State<ImageScreen> {
                               }
                               if(videoExtensions.contains(fileType(widget.res[_counter].path))){
                               Navigator.pop(context);
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoScreen(widget.res,_counter,widget.receiverInfo,widget.messageId)));
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => VideoScreen(widget.res,_counter,widget.receiverInfo,widget.messageId),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                                  // MaterialPageRoute(builder: (context) => VideoScreen(widget.res,_counter,widget.receiverInfo,widget.messageId))
+                                  );
                               }
                               if(imageExtensions.contains(fileType(widget.res[_counter].path))){
                               Navigator.pop(context);
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImageScreen(widget.res,_counter,widget.receiverInfo,widget.messageId)));
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => ImageScreen(widget.res,_counter,widget.receiverInfo,widget.messageId),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                                  // MaterialPageRoute(builder: (context) => ImageScreen(widget.res,_counter,widget.receiverInfo,widget.messageId))
+                                  );
                               }
                             },
                             onDismissed: (DismissDirection direction) {

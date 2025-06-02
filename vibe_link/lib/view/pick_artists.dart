@@ -58,9 +58,10 @@ class _PickArtistPageState extends State<PickArtistPage> {
       try {
         if (_isLoading) return 0;
         if (mounted) {
-        setState(() {
-          _isLoading = true;
-        });}
+          setState(() {
+            _isLoading = true;
+          });
+        }
         var res = await get(Uri.parse(
             'https://api.spotify.com/v1/search?q=popular&type=artist&limit=50&offset=$offset&access_token=$accessToken'));
 
@@ -128,7 +129,7 @@ class _PickArtistPageState extends State<PickArtistPage> {
   }
 
   var optionColor = Color.fromARGB(255, 50, 76, 79);
-  int count=0;
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -137,10 +138,13 @@ class _PickArtistPageState extends State<PickArtistPage> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
-            title: Text('Select artists',style: TextStyle(color: Colors.white),),
+            title: Text(
+              'Select artists',
+              style: TextStyle(color: Colors.white),
+            ),
             actions: [
               Opacity(
-                opacity: count>=3?1:0.3,
+                opacity: count >= 3 ? 1 : 0.3,
                 child: InkWell(
                   child: Container(
                       height: 40,
@@ -156,29 +160,46 @@ class _PickArtistPageState extends State<PickArtistPage> {
                         style: TextStyle(color: Colors.white),
                       ))),
                   onTap: () async {
-                    if(count<3){
+                    if (count < 3) {
                       return;
                     }
                     print("saving user artists");
                     // return;
                     /* User's artists are stored in firestore */
                     FirebaseCall _firebaseCall = FirebaseCall();
-                    List<String?>artistIds=[];
-                    
-                    for(int i=0;i<selected.length;i++){
-                      selected[i]==1&&artists[i].id!=null?artistIds.add(artists[i].id):null;
+                    List<String?> artistIds = [];
+
+                    for (int i = 0; i < selected.length; i++) {
+                      selected[i] == 1 && artists[i].id != null
+                          ? artistIds.add(artists[i].id)
+                          : null;
                     }
-                    await _firebaseCall.storeUserData(artistIds); // it stores user's info
+                    await _firebaseCall
+                        .storeUserData(artistIds); // it stores user's info
                     await _firebaseCall.getUserArtistsWithGenrePercentage();
                     await _firebaseCall.storeUserWithGenrePercentage();
                     // controller.dispose();
                     Navigator.pop(context);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>App()));
+                    Navigator.of(context).push(
+                      // MaterialPageRoute(builder: (context)=>App())
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const App(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 400),
+                      ),
+                    );
                   },
                 ),
               )
               // :SizedBox(),
-              ],
+            ],
           ),
           backgroundColor: Colors.black,
           body: Stack(

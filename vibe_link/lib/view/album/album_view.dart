@@ -260,27 +260,59 @@ class AlbumViewState extends State<AlbumView> {
                                           StaticStore.playing = true;
                                           StaticStore.pause = false;
                                           Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CarouselSongScreen(
-                                                          widget
-                                                              ._albumTracks![
-                                                                  index]
-                                                              .name,
-                                                          // widget.albumImg[index],
-                                                          widget
-                                                              ._albumTracks![
-                                                                  index]
-                                                              .id,
-                                                          widget
-                                                              ._albumTracks![
-                                                                  index]
-                                                              .trackArtists,
-                                                          // widget.trackImg[index]
-                                                          widget
-                                                              ._albumTracks![
-                                                                  index]
-                                                              .imgUrl)));
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  CarouselSongScreen(
+                                                      widget
+                                                          ._albumTracks![index]
+                                                          .name,
+                                                      // widget.albumImg[index],
+                                                      widget
+                                                          ._albumTracks![index]
+                                                          .id,
+                                                      widget
+                                                          ._albumTracks![index]
+                                                          .trackArtists,
+                                                      // widget.trackImg[index]
+                                                      widget
+                                                          ._albumTracks![index]
+                                                          .imgUrl),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 400),
+                                            ),
+                                            // MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         CarouselSongScreen(
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .name,
+                                            //             // widget.albumImg[index],
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .id,
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .trackArtists,
+                                            //             // widget.trackImg[index]
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .imgUrl))
+                                          );
                                         });
                                       });
                                     }
@@ -340,9 +372,10 @@ class AlbumViewState extends State<AlbumView> {
                                         StaticStore.pause = false;
 
                                         Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CarouselSongScreen(
+                                          PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  CarouselSongScreen(
                                                         widget
                                                             ._albumTracks![
                                                                 index]
@@ -360,7 +393,42 @@ class AlbumViewState extends State<AlbumView> {
                                                         widget
                                                             ._albumTracks![
                                                                 index]
-                                                            .imgUrl)));
+                                                            .imgUrl),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 400),
+                                            )
+                                            // MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         CarouselSongScreen(
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .name,
+                                            //             // widget.albumImg[index],
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .id,
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .trackArtists,
+                                            //             // widget.trackImg[index]
+                                            //             widget
+                                            //                 ._albumTracks![
+                                            //                     index]
+                                            //                 .imgUrl))
+                                                            );
                                       });
                                     }
                                   }
@@ -579,7 +647,8 @@ class AlbumViewState extends State<AlbumView> {
             StreamBuilder(
                 stream: StaticStore.player.playerStateStream,
                 builder: (context, snapshot1) {
-                  return StaticStore.player.playing == true || StaticStore.playing ||
+                  return StaticStore.player.playing == true ||
+                          StaticStore.playing ||
                           StaticStore.pause == true
                       ?
                       // Text("hi")

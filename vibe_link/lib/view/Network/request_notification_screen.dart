@@ -25,19 +25,17 @@ class RequestNotificationScreen extends StatefulWidget {
   RequestNotificationScreen({super.key});
 
   @override
-  State<RequestNotificationScreen> createState() => RequestNotificationScreenState();
+  State<RequestNotificationScreen> createState() =>
+      RequestNotificationScreenState();
 }
 
 class RequestNotificationScreenState extends State<RequestNotificationScreen> {
-
-
   final streamController = StreamController(
     onPause: () => print('Paused'),
     onResume: () => print('Resumed'),
     onCancel: () => print('Cancelled'),
     onListen: () => print('Listens'),
   );
-
 
   @override
   void initState() {
@@ -47,38 +45,39 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
-    return 
-    SafeArea(child: 
-      Scaffold(
-        backgroundColor: Colors.black,
-        appBar: 
-        AppBar(
-          leading: IconButton(icon:Icon(Icons.arrow_back),color: Colors.white,onPressed: (){
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
             Navigator.pop(context);
-          },),
-          title: Text("Friends requests",style:TextStyle(color:Colors.white)),
-          backgroundColor: Colors.black,
-
+          },
         ),
-        body: 
-
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            StreamBuilder(
+        title: Text("Friends requests", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+      ),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          StreamBuilder(
               stream: FetchRequestNotifications().asStream(),
               // stream: FirebaseFirestore.instance.collection('friendRequest').doc('${StaticStore.currentUserId}').snapshots(),
               builder: (context, snapshot) {
-                if(snapshot.connectionState==ConnectionState.waiting){
-                  return Center(child: CircularProgressIndicator(),);
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
                 // print(snapshot.data?.first.displayName);
-                List<UserInfoMine>?friendRequests = snapshot.data;
+                List<UserInfoMine>? friendRequests = snapshot.data;
                 // print("fetching request data from snapshot");
                 // // print(snapshot.data?.doc('sad').get());
                 // List<dynamic>? friendRequests = snapshot.data?.data()?['users'];
                 // List<UserInfo>? _userInfo;
-                // // _userInfo = 
+                // // _userInfo =
                 // // (friendRequests.length!=0?
                 // FetchRequestNotifications(friendRequests).then((value) {
                 //   _userInfo = value;
@@ -86,161 +85,190 @@ class RequestNotificationScreenState extends State<RequestNotificationScreen> {
                 //   // print("userInfo fetching from request_notification_screen");
                 // });
                 // print("$_userInfo");
-                return 
-                // SizedBox();
-                // return 
-                friendRequests!= null && friendRequests.length!=0?
-                ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              physics: AlwaysScrollableScrollPhysics(),
-                              itemCount: friendRequests.length,
-                
-                              itemBuilder: (context, index) {
-                                return Column(children: [
-                                  Card(
-                                    color: Colors.black,
-                                    child: Column(children: [
-                
-                                      InkWell(
-                                        borderRadius: BorderRadius.circular(15),
-                                        onTap: () async {
-                                          List<String?> s = [StaticStore.currentUserId,friendRequests[index].id];
-                                          s.sort();
-                                          String messageId = "${s[0]}_${s[1]}";
-                                          
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ChatScreen(friendRequests[index],messageId)));
-                                        },
-                                        child: ListTile(
-                                          leading: Column(
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(3),
-                                                    bottomLeft: Radius.circular(3),
-                                                  ),
-                                                  child:
-                                                  // StaticStore.currentSongImg==""?
-                                                      // CachedNetworkImage(imageUrl: ""),
-                                                      friendRequests[index].imgUrl?.length==null?
-                
-                                                      Container(
+                return
+                    // SizedBox();
+                    // return
+                    friendRequests != null && friendRequests.length != 0
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount: friendRequests.length,
+                            itemBuilder: (context, index) {
+                              return Column(children: [
+                                Card(
+                                  color: Colors.black,
+                                  child: Column(children: [
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(15),
+                                      onTap: () async {
+                                        List<String?> s = [
+                                          StaticStore.currentUserId,
+                                          friendRequests[index].id
+                                        ];
+                                        s.sort();
+                                        String messageId = "${s[0]}_${s[1]}";
+
+                                        Navigator.of(context).push(
+                                            PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              ChatScreen(friendRequests[index],
+                                                  messageId),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            return FadeTransition(
+                                              opacity: animation,
+                                              child: child,
+                                            );
+                                          },
+                                          transitionDuration:
+                                              const Duration(milliseconds: 400),
+                                        )
+                                            // MaterialPageRoute(builder: (context)=>ChatScreen(friendRequests[index],messageId))
+                                            );
+                                      },
+                                      child: ListTile(
+                                        leading: Column(children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(3),
+                                              bottomLeft: Radius.circular(3),
+                                            ),
+                                            child:
+                                                // StaticStore.currentSongImg==""?
+                                                // CachedNetworkImage(imageUrl: ""),
+                                                friendRequests[index]
+                                                            .imgUrl
+                                                            ?.length ==
+                                                        null
+                                                    ? Container(
                                                         width: 55,
                                                         height: 55,
                                                         child:
-                                                        const LoadingUserImage(),
+                                                            const LoadingUserImage(),
                                                       )
-                
-                
-                                                  /* For user's friends image */
-                                                  :
-                                                      CachedNetworkImage(
-                                                    imageUrl: friendRequests[index].imgUrl!=null?friendRequests[index].imgUrl!:'https://example.com/default-image.png',
-                                                    width: 55,
-                                                    height: 55,
-                                                    memCacheHeight:
-                                                        (55 * devicePexelRatio).round(),
-                                                    memCacheWidth:
-                                                        (55 * devicePexelRatio).round(),
-                                                    maxHeightDiskCache:
-                                                        (55 * devicePexelRatio).round(),
-                                                    maxWidthDiskCache:
-                                                        (55 * devicePexelRatio).round(),
-                                                    // progressIndicatorBuilder:
-                                                    //     (context, url, l) {
-                                                    //           return const LoadingImage();
-                                                    //     },
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ]),
-                                          title: Text(
-                                            
-                                            "${friendRequests[index].displayName}",
-                                            // "${friendRequests[index]?.id}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(color: Colors.white),
+
+                                                    /* For user's friends image */
+                                                    : CachedNetworkImage(
+                                                        imageUrl: friendRequests[
+                                                                        index]
+                                                                    .imgUrl !=
+                                                                null
+                                                            ? friendRequests[
+                                                                    index]
+                                                                .imgUrl!
+                                                            : 'https://example.com/default-image.png',
+                                                        width: 55,
+                                                        height: 55,
+                                                        memCacheHeight: (55 *
+                                                                devicePexelRatio)
+                                                            .round(),
+                                                        memCacheWidth: (55 *
+                                                                devicePexelRatio)
+                                                            .round(),
+                                                        maxHeightDiskCache: (55 *
+                                                                devicePexelRatio)
+                                                            .round(),
+                                                        maxWidthDiskCache: (55 *
+                                                                devicePexelRatio)
+                                                            .round(),
+                                                        // progressIndicatorBuilder:
+                                                        //     (context, url, l) {
+                                                        //           return const LoadingImage();
+                                                        //     },
+                                                        fit: BoxFit.cover,
+                                                      ),
                                           ),
-                                          subtitle: Text(
-                                            "${friendRequests[index].topArtists}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(color: Colors.grey),
-                                          ),
-                                          isThreeLine: true,
-                                          trailing: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          // widget.title=="Requests"?
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-
-
-
-                                            Container(
-                                              // width: 30,
-                                              child: 
-                                              // StreamBuilder(
-                                              //   stream: FetchRequestNotifications().asStream(),
-                                              //   builder: (context, snapshot) {
-                                              //     return 
-                                                  IconButton(
-                                                    onPressed: () async {
-
-
-                                                      // streamController.stream.listen(
-                                                      //   (event) => print('Event: $event'),
-                                                      //   onDone: () => print('Done'),
-                                                      //   onError: (error) => print(error),
-                                                      // );
-
-
-
-
-
-
-                                                      await rejectFriendRequest(friendRequests[index].email);
-                                                      StaticStore.notificationCounts--;
-                                                      setState(() {});
-
-
-                                                      
-                                                      // friendRequests.remove(friendRequests[index]);
-                                                    }, 
-                                                    icon: const Icon(Icons.delete,color: Colors.grey,)
-                                                  )
-                                                // }
-                                              // ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                await acceptFriendRequest(friendRequests[index].email);
-                                                StaticStore.notificationCounts--;
-                                                // friendRequests.remove(friendRequests[index]);
-                                                setState(() {});
-
-                                              }, 
-                                              icon: const Icon(Icons.add,color: Colors.grey,)
-                                            ),
-                                          ],),
-                                          // :SizedBox(),
-
                                         ]),
+                                        title: Text(
+                                          "${friendRequests[index].displayName}",
+                                          // "${friendRequests[index]?.id}",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(color: Colors.white),
                                         ),
+                                        subtitle: Text(
+                                          "${friendRequests[index].topArtists}",
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        isThreeLine: true,
+                                        trailing: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              // widget.title=="Requests"?
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                      // width: 30,
+                                                      child:
+                                                          // StreamBuilder(
+                                                          //   stream: FetchRequestNotifications().asStream(),
+                                                          //   builder: (context, snapshot) {
+                                                          //     return
+                                                          IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                // streamController.stream.listen(
+                                                                //   (event) => print('Event: $event'),
+                                                                //   onDone: () => print('Done'),
+                                                                //   onError: (error) => print(error),
+                                                                // );
+
+                                                                await rejectFriendRequest(
+                                                                    friendRequests[
+                                                                            index]
+                                                                        .email);
+                                                                StaticStore
+                                                                    .notificationCounts--;
+                                                                setState(() {});
+
+                                                                // friendRequests.remove(friendRequests[index]);
+                                                              },
+                                                              icon: const Icon(
+                                                                Icons.delete,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ))
+                                                      // }
+                                                      // ),
+                                                      ),
+                                                  IconButton(
+                                                      onPressed: () async {
+                                                        await acceptFriendRequest(
+                                                            friendRequests[
+                                                                    index]
+                                                                .email);
+                                                        StaticStore
+                                                            .notificationCounts--;
+                                                        // friendRequests.remove(friendRequests[index]);
+                                                        setState(() {});
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.add,
+                                                        color: Colors.grey,
+                                                      )),
+                                                ],
+                                              ),
+                                              // :SizedBox(),
+                                            ]),
                                       ),
-                                    ]),
-                                  ),
-                                ]);
-                              },
-                            ):
-                            Center(child: Text("No Requests"),);
-              }
-            ),
-            footer(context),
-          ],
-        ),
-                    
-      )
-    );
+                                    ),
+                                  ]),
+                                ),
+                              ]);
+                            },
+                          )
+                        : Center(
+                            child: Text("No Requests"),
+                          );
+              }),
+          footer(context),
+        ],
+      ),
+    ));
   }
 }

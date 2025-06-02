@@ -27,7 +27,6 @@ class CarouselSongs extends StatefulWidget {
 }
 
 class _CarouselSongsState extends State<CarouselSongs> {
-
   // PlaySpotifySong _playSpotifySong = PlaySpotifySong();
 
   Future<void> fetchAlbumSongs(var albumId, int ind) async {
@@ -71,23 +70,23 @@ class _CarouselSongsState extends State<CarouselSongs> {
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         id = data['items'][0]['id'];
-        name = data['items'][0]['name']??"";
+        name = data['items'][0]['name'] ?? "";
 
-        name==""?null:await fetchSimilarTracks(name, ind);
+        name == "" ? null : await fetchSimilarTracks(name, ind);
 
         return;
       } else {
         AccessError e = AccessError();
         var a = await e.handleError(res);
-        if(a==2){
+        if (a == 2) {
           print("null refresh token plaese go to login or restart the app");
           return;
         }
       }
     }
   }
+
   Future<void> fetchSimilarTracks(String songName, var ind) async {
-    
     // List<String>? name = [];
     // List<String>? id = [];
     List<String>? trackArtists = [];
@@ -98,59 +97,69 @@ class _CarouselSongsState extends State<CarouselSongs> {
       var accessToken = await _readWrite.getAccessToken();
 
       /* Fetching album tracks */
-      var res = await get(Uri.parse('https://api.spotify.com/v1/search?q=$songName+like+songs&type=track&limit=30&access_token=$accessToken'
+      var res = await get(Uri.parse(
+          'https://api.spotify.com/v1/search?q=$songName+like+songs&type=track&limit=30&access_token=$accessToken'
           // 'https://api.spotify.com/v1/recommendations?seed_tracks=$songId&limit=50&access_token=$accessToken'
-      // var res = await get(Uri.parse('https://api.spotify.com/v1/me/tracks?limit=30&time_range=short_term&access_token=$accessToken'
-      ));
+          // var res = await get(Uri.parse('https://api.spotify.com/v1/me/tracks?limit=30&time_range=short_term&access_token=$accessToken'
+          ));
       print(res.statusCode);
       if (res.statusCode == 200) {
-        List<AlbumTrack>? carouselTrack=[];
+        List<AlbumTrack>? carouselTrack = [];
         var data = jsonDecode(res.body);
-        for (int i = 0; i<data['tracks']['items'].length && i < 30; i++) {
-          trackArtists=[];
-          for(int j=0;data['tracks']['items'][i]!=null && data['tracks']['items'][i]['artists']!=null && j<data['tracks']['items'][i]['artists'].length;j++){
-            trackArtists.add(data['tracks']['items'][i]['artists'].length!=0?data['tracks']['items'][i]['artists'][j]['name']:"unknown");
+        for (int i = 0; i < data['tracks']['items'].length && i < 30; i++) {
+          trackArtists = [];
+          for (int j = 0;
+              data['tracks']['items'][i] != null &&
+                  data['tracks']['items'][i]['artists'] != null &&
+                  j < data['tracks']['items'][i]['artists'].length;
+              j++) {
+            trackArtists.add(data['tracks']['items'][i]['artists'].length != 0
+                ? data['tracks']['items'][i]['artists'][j]['name']
+                : "unknown");
           }
           AlbumTrack _albumTrack = AlbumTrack.fromJson({
-            "name":data['tracks']['items'][i]==null?"":data['tracks']['items'][i]['name'],
-            "id":data['tracks']['items'][i]==null?"":data['tracks']['items'][i]['id'],
-            "trackImg":data['tracks']['items'][i]==null?"":data['tracks']['items'][i]['album']['images'].length!=0?data['tracks']['items'][i]['album']['images'][0]['url']:"",
-            "trackArtists":trackArtists,
+            "name": data['tracks']['items'][i] == null
+                ? ""
+                : data['tracks']['items'][i]['name'],
+            "id": data['tracks']['items'][i] == null
+                ? ""
+                : data['tracks']['items'][i]['id'],
+            "trackImg": data['tracks']['items'][i] == null
+                ? ""
+                : data['tracks']['items'][i]['album']['images'].length != 0
+                    ? data['tracks']['items'][i]['album']['images'][0]['url']
+                    : "",
+            "trackArtists": trackArtists,
           });
 
           print(data['tracks']['items'][0]);
 
-          if(_albumTrack.name=="" || _albumTrack.id=="" || _albumTrack.imgUrl==""){
+          if (_albumTrack.name == "" ||
+              _albumTrack.id == "" ||
+              _albumTrack.imgUrl == "") {
             continue;
-          }else{
+          } else {
             carouselTrack.add(_albumTrack);
           }
 
           // fetching 50 similar songs
-        //   name.add(data['tracks'][i]['name']);
-        //   id.add(data['tracks'][i]['id']);
-        //   trackImg.add(data['tracks'][i]['album']['images'][0]['url']);
+          //   name.add(data['tracks'][i]['name']);
+          //   id.add(data['tracks'][i]['id']);
+          //   trackImg.add(data['tracks'][i]['album']['images'][0]['url']);
 
-        //   artistNames.add(trackArtists!);
-        //   trackArtists=[];
-        // }
-        // StaticStore.trackInfo[ind].addEntries({'id': id}.entries);
-        // StaticStore.trackInfo[ind].addEntries({'name': name}.entries);
-        // StaticStore.trackInfo[ind].addEntries({'artists': artistNames}.entries);
-        // StaticStore.trackInfo[ind].addEntries({'trackImg': trackImg}.entries);
-        // return;
-      } 
-      // StaticStore.trackInfo = carouselTrack;
-      StaticStore.trackInfo[ind] = List.from(carouselTrack);
-      return;
-
-    }
-
-
-
-
-
-
+          //   artistNames.add(trackArtists!);
+          //   trackArtists=[];
+          // }
+          // StaticStore.trackInfo[ind].addEntries({'id': id}.entries);
+          // StaticStore.trackInfo[ind].addEntries({'name': name}.entries);
+          // StaticStore.trackInfo[ind].addEntries({'artists': artistNames}.entries);
+          // StaticStore.trackInfo[ind].addEntries({'trackImg': trackImg}.entries);
+          // return;
+        }
+        // StaticStore.trackInfo = carouselTrack;
+        StaticStore.trackInfo[ind] = List.from(carouselTrack);
+        return;
+      }
 
       // if (res.statusCode == 200) {
       //   var data = jsonDecode(res.body);
@@ -171,15 +180,12 @@ class _CarouselSongsState extends State<CarouselSongs> {
       //   StaticStore.trackInfo[ind].addEntries({'artists': artistNames}.entries);
       //   StaticStore.trackInfo[ind].addEntries({'trackImg': trackImg}.entries);
       //   return;
-      // } 
-      
-      
-      
-      
+      // }
+
       else {
         AccessError e = AccessError();
         var a = await e.handleError(res);
-        if(a==2){
+        if (a == 2) {
           print("null refresh token plaese go to login or restart the app");
         }
       }
@@ -192,144 +198,169 @@ class _CarouselSongsState extends State<CarouselSongs> {
   Widget build(BuildContext context) {
     var devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
 
-    return 
-    
-    SafeArea(
+    return SafeArea(
       child: Stack(
         children: [
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
             // filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-            child: 
+            child:
                 // widget.albumInfo?['trackName']!=null
                 // widget.albumInfo?.length!=0
                 widget.albumInfo!['name']!.isNotEmpty
-                //  && widget.albumInfo?['trackName']?[0]!=""
-                ?
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Column(
-                //   children: [
-                    Padding(
-                      padding: EdgeInsets.all(17.0),
-                      child: Wrap(
-                        // alignment: WrapAlignment.center,
-                        // crossAxisAlignment: WrapCrossAlignment.center,
-                        runSpacing: 8,
-                        spacing: 8,
+                    //  && widget.albumInfo?['trackName']?[0]!=""
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          for (int i = 0; i < widget.albumInfo!['name']!.length && i < 6;i++) ...{
-                            InkWell(
-                              onTap: () async {
-                                print("Inside carousel");
-                                // await fetchUserGenre();
-                          
-                                setState(() {
-                                  StaticStore.carouselInd = i;
-                                });
+                          // Column(
+                          //   children: [
+                          Padding(
+                            padding: EdgeInsets.all(17.0),
+                            child: Wrap(
+                              // alignment: WrapAlignment.center,
+                              // crossAxisAlignment: WrapCrossAlignment.center,
+                              runSpacing: 8,
+                              spacing: 8,
+                              children: [
+                                for (int i = 0;
+                                    i < widget.albumInfo!['name']!.length &&
+                                        i < 6;
+                                    i++) ...{
+                                  InkWell(
+                                    onTap: () async {
+                                      print("Inside carousel");
+                                      // await fetchUserGenre();
 
-                                await fetchAlbumSongs(widget.albumInfo?['id']?[i], i);
-                                // StaticStore.myQueueTrack = ;
+                                      setState(() {
+                                        StaticStore.carouselInd = i;
+                                      });
 
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => 
-                                    AlbumView(
-                                      widget.albumInfo?['image']?[i],
-                                      widget.albumInfo?['trackName']?[i],
-                                      StaticStore.trackInfo[i],
-                                    ),
-                                    
-                                    // CarouselView(
-                                    //     widget.albumInfo?['image']?[i],
-                                    //     widget.albumInfo?['trackName']?[i],
+                                      await fetchAlbumSongs(
+                                          widget.albumInfo?['id']?[i], i);
+                                      // StaticStore.myQueueTrack = ;
 
-                                    //     StaticStore.trackInfo[i]['name'],
-                                    //     StaticStore.trackInfo[i]['id'],
-                                    //     StaticStore.trackInfo[i]['artists'],
-                                    //     StaticStore.trackInfo[i]['trackImg']
-                                    //     // widget.albumInfo?['artists']?[i],
-                                        
-                                    // )
-                                    
-                                    ));
-                          
-                                // });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white12,
-                                  // color: Colors.black,
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                width:
-                                    ((MediaQuery.of(context).size.width * .5) - 21.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(3),
-                                        bottomLeft: Radius.circular(3),
-                                      ),
-                                      child: CachedNetworkImage(
-                                        // imageUrl: user.avatar!,
-                                        imageUrl: widget.albumInfo?['image']?[i] ?? "",
-                                        // imageUrl: "",
-                          
-                                        width: 55,
-                                        height: 55,
-                                        memCacheHeight:
-                                            (55 * devicePexelRatio).round(),
-                                        memCacheWidth:
-                                            (55 * devicePexelRatio).round(),
-                                        maxHeightDiskCache:
-                                            (55 * devicePexelRatio).round(),
-                                        maxWidthDiskCache:
-                                            (55 * devicePexelRatio).round(),
-                                        progressIndicatorBuilder: (context, url, l) =>
-                                            const LoadingImage(),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          height: 30,
-                                          // width:auto,
-                                          child:
-                                          Text('${widget.albumInfo?['trackName']?[i]}   ',overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white),),
-                                              // Text("jejk"),
-                                              // Text("${widget.albumInfo?['name']?[i]}"),
-                          
-                                              // Text("hello",style:TextStyle(color:Colors.white)),
-                                          //     Marquee(
-                                          //   text: '${widget.albumInfo?['trackName']?[i]}   ',
-                                          //   // text: 'hi   ',
-                          
-                                          //   style: TextStyle(color: Colors.white),
-                                          //   velocity: 4,
-                                          // ),
+                                      Navigator.of(context).push(
+                                          PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            AlbumView(
+                                          widget.albumInfo?['image']?[i],
+                                          widget.albumInfo?['trackName']?[i],
+                                          StaticStore.trackInfo[i],
                                         ),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+                                        transitionDuration:
+                                            const Duration(milliseconds: 400),
+                                      )
+                                          // MaterialPageRoute(
+                                          //   builder: (context) =>
+                                          //   AlbumView(
+                                          //     widget.albumInfo?['image']?[i],
+                                          //     widget.albumInfo?['trackName']?[i],
+                                          //     StaticStore.trackInfo[i],
+                                          //   ),
+                                          //   )
+                                          );
+
+                                      // });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white12,
+                                        // color: Colors.black,
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      width:
+                                          ((MediaQuery.of(context).size.width *
+                                                  .5) -
+                                              21.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(3),
+                                              bottomLeft: Radius.circular(3),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              // imageUrl: user.avatar!,
+                                              imageUrl:
+                                                  widget.albumInfo?['image']
+                                                          ?[i] ??
+                                                      "",
+                                              // imageUrl: "",
+
+                                              width: 55,
+                                              height: 55,
+                                              memCacheHeight:
+                                                  (55 * devicePexelRatio)
+                                                      .round(),
+                                              memCacheWidth:
+                                                  (55 * devicePexelRatio)
+                                                      .round(),
+                                              maxHeightDiskCache:
+                                                  (55 * devicePexelRatio)
+                                                      .round(),
+                                              maxWidthDiskCache:
+                                                  (55 * devicePexelRatio)
+                                                      .round(),
+                                              progressIndicatorBuilder:
+                                                  (context, url, l) =>
+                                                      const LoadingImage(),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 30,
+                                                // width:auto,
+                                                child: Text(
+                                                  '${widget.albumInfo?['trackName']?[i]}   ',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                // Text("jejk"),
+                                                // Text("${widget.albumInfo?['name']?[i]}"),
+
+                                                // Text("hello",style:TextStyle(color:Colors.white)),
+                                                //     Marquee(
+                                                //   text: '${widget.albumInfo?['trackName']?[i]}   ',
+                                                //   // text: 'hi   ',
+
+                                                //   style: TextStyle(color: Colors.white),
+                                                //   velocity: 4,
+                                                // ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                }
+                              ],
                             ),
-                          }
-                        
+                          ),
+                          const SizedBox(height: 12),
+                          //   ],
+                          // ):SizedBox(),
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                //   ],
-                // ):SizedBox(),
-              ],
-            ):
-            // Text("sagd",style:TextStyle(color: Colors.white)),
-            SizedBox(),
+                      )
+                    :
+                    // Text("sagd",style:TextStyle(color: Colors.white)),
+                    SizedBox(),
           ),
         ],
       ),

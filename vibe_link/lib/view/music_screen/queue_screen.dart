@@ -139,12 +139,31 @@ class _QueueScreenState extends State<QueueScreen> {
 
                                   Navigator.pop(context);
 
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CarouselSongScreen(
-                                      _queueTracks[position].name,
-                                      _queueTracks[position].id,
-                                      _queueTracks[position].trackArtists,
-                                      _queueTracks[position].imgUrl)));
+                                  Navigator.of(context).push(PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        CarouselSongScreen(
+                                            _queueTracks[position].name,
+                                            _queueTracks[position].id,
+                                            _queueTracks[position].trackArtists,
+                                            _queueTracks[position].imgUrl),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                    transitionDuration:
+                                        const Duration(milliseconds: 400),
+                                  )
+                                      //   MaterialPageRoute(
+                                      // builder: (context) => CarouselSongScreen(
+                                      //     _queueTracks[position].name,
+                                      //     _queueTracks[position].id,
+                                      //     _queueTracks[position].trackArtists,
+                                      //     _queueTracks[position].imgUrl))
+                                      );
 
                                   // int countOfScreens=0;
                                   // Navigator.popUntil(context, CarouselSongScreen());

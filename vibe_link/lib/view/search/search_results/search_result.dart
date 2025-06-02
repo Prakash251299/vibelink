@@ -206,15 +206,32 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                                 state.songs[i].artists,
                                                 state.songs[i].imgUrl);
                                             Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CarouselSongScreen(
+                                              PageRouteBuilder(
+  pageBuilder: (context, animation, secondaryAnimation) => CarouselSongScreen(
                                                           state.songs[i].name,
                                                           state.songs[i].id,
                                                           state
                                                               .songs[i].artists,
                                                           state.songs[i].imgUrl,
-                                                        )));
+                                                        ),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  },
+  transitionDuration: const Duration(milliseconds: 400),
+)
+                                                // MaterialPageRoute(
+                                                //     builder: (context) =>
+                                                        // CarouselSongScreen(
+                                                        //   state.songs[i].name,
+                                                        //   state.songs[i].id,
+                                                        //   state
+                                                        //       .songs[i].artists,
+                                                        //   state.songs[i].imgUrl,
+                                                        // ))
+                                                        );
                                           }
                                         },
                                         child: Padding(
