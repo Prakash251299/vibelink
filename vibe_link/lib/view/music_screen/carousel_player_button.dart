@@ -105,8 +105,9 @@ class _PlayerButtonsState extends State<AlbumPlayerButtons> {
                 });
                 // setState(() {});
               } else {
-                StaticStore.queueIndex++;
-                // StaticStore.nextPlay=1;
+                // StaticStore.queueIndex++; // replaced this with below line
+                StaticStore.queueIndex = StaticStore.myQueueTrack.length-1;
+                
                 StaticStore.setNextPlay(1);
               }
             }

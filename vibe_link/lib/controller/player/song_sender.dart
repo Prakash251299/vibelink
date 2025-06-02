@@ -30,65 +30,6 @@ Future<void> send_to_play(List<AlbumTrack>songs, int index)async{
           }
         await playSong1(currentUrl,nextUrl,index);
      }
-
-    // StaticStore.player.playerStateStream.listen((state) async {
-    //   // if(state.processingState == ProcessingState.) {
-
-    //   // }
-    //   print("reached to play");
-      // if (state.processingState == ProcessingState.completed) {
-      //   print("song completed");
-    //     StaticStore.songIndex++;
-    //     index++;
-
-        // if (index < songs.length) {
-        //   if (nextUrl == null) {
-        //     // If the next song is not ready, fetch it now
-        //     nextUrl = await _songUrlGetter.fetchSongUrl(songs[index].name.toString(),songs[index].trackArtists?[0]);
-        //   }
-
-    //       if (nextUrl != null) {
-    //         currentUrl = nextUrl;
-            // await playSong(currentUrl);
-
-    //         // Prefetch the next song for smoother playback
-    //         nextUrl = (index + 1 < songs.length)
-    //             ? await _songUrlGetter.fetchSongUrl(songs[index + 1].name.toString(),songs[index+1].trackArtists?[0])
-    //             : null;
-    //       }
-    //     }
-    //   }
-    // });
-
-
-    // if(songName==null){
-    //   print("Song name is not given to youtube play function");
-    //   return;
-    // }
-    // if(songName!=""){
-    //   songName+=" $artist lyrical";
-    //     try{
-    //       final yt = YoutubeExplode();
-    //       print("songName $songName");
-    //       final video = (await yt.search.search(songName)).first;
-    //       // print("1a");
-    //       final videoId = video.id.value;
-    //       print("2a videoid - $videoId");
-    //       var manifest = await yt.videos.streams.getManifest(videoId);
-    //       // var manifest = await yt.videos.streams.getManifest(videoId);
-    //       print("3a");
-    //       print(manifest.streams.first);
-    //       var audio = await manifest.audioOnly.first;
-    //       var audioUrl = await audio.url;
-    //       print("audio url");
-    //       print(audioUrl);
-    //       playSong(audioUrl);
-    //       StaticStore.nextPlay=1;
-    //     }
-    //     catch(e){
-    //       print("Youtube player can't play songs $e");
-    //     }
-    //   }
   }
   Future<void> youtubePause() async {
     StaticStore.player.pause();
