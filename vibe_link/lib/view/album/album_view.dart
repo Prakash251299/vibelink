@@ -259,64 +259,28 @@ class AlbumViewState extends State<AlbumView> {
 
                                           StaticStore.playing = true;
                                           StaticStore.pause = false;
-                                          Navigator.of(context)
-                                              .push(PageRouteBuilder(
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                CarouselSongScreen(
-                                                    widget._albumTracks![index]
-                                                        .name,
-                                                    // widget.albumImg[index],
-                                                    widget._albumTracks![index]
-                                                        .id,
-                                                    widget._albumTracks![index]
-                                                        .trackArtists,
-                                                    // widget.trackImg[index]
-                                                    widget._albumTracks![index]
-                                                        .imgUrl),
-                                            transitionsBuilder: (context,
-                                                animation,
-                                                secondaryAnimation,
-                                                child) {
-                                              const begin = Offset(
-                                                  1.0, 0.0); // Slide from right
-                                              const end = Offset.zero;
-                                              final tween =
-                                                  Tween(begin: begin, end: end);
-                                              final offsetAnimation =
-                                                  animation.drive(tween);
-
-                                              return SlideTransition(
-                                                position: offsetAnimation,
-                                                child: child,
-                                              );
-                                            },
-                                            transitionDuration: Duration(
-                                                milliseconds:
-                                                    300), // Customize duration
-                                          ));
-                                          // Navigator.of(context).push(
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             CarouselSongScreen(
-                                          //                 widget
-                                          //                     ._albumTracks![
-                                          //                         index]
-                                          //                     .name,
-                                          //                 // widget.albumImg[index],
-                                          //                 widget
-                                          //                     ._albumTracks![
-                                          //                         index]
-                                          //                     .id,
-                                          //                 widget
-                                          //                     ._albumTracks![
-                                          //                         index]
-                                          //                     .trackArtists,
-                                          //                 // widget.trackImg[index]
-                                          //                 widget
-                                          //                     ._albumTracks![
-                                          //                         index]
-                                          //                     .imgUrl)));
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CarouselSongScreen(
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .name,
+                                                          // widget.albumImg[index],
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .id,
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .trackArtists,
+                                                          // widget.trackImg[index]
+                                                          widget
+                                                              ._albumTracks![
+                                                                  index]
+                                                              .imgUrl)));
                                         });
                                       });
                                     }
@@ -615,8 +579,7 @@ class AlbumViewState extends State<AlbumView> {
             StreamBuilder(
                 stream: StaticStore.player.playerStateStream,
                 builder: (context, snapshot1) {
-                  return StaticStore.player.playing == true ||
-                          StaticStore.playing ||
+                  return StaticStore.player.playing == true || StaticStore.playing ||
                           StaticStore.pause == true
                       ?
                       // Text("hi")
