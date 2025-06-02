@@ -20,6 +20,9 @@ class YoutubeSongPlayer{
     StaticStore.songIndex = ind;
     StaticStore.player.playerStateStream.listen((state) async {
       if (state.processingState == ProcessingState.completed) {
+        if(StaticStore.nextPlay==0){
+          return;
+        }
         print("song completed bro");
         StaticStore.setNextPlay(0);
 

@@ -26,7 +26,10 @@ class _SeekBarState extends State<SeekBar> {
     return StreamBuilder(
         stream: StaticStore.player.positionStream,
         builder: (context, snapshot1) {
-          if (StaticStore.player.processingState == ProcessingState.completed) {
+          if (StaticStore.player.processingState == ProcessingState.completed && StaticStore.nextPlay==0){
+            // if(StaticStore.nextPlay==0){
+            //   return SizedBox();
+            // }
             YoutubeSongPlayer _player = YoutubeSongPlayer();
             StaticStore.pause = false;
             if (StaticStore.queueIndex == StaticStore.myQueueTrack.length - 1) {

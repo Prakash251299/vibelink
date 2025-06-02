@@ -10,6 +10,9 @@ import 'package:vibe_link/model/album_track.dart';
 // import 'package:linkify/view/sticky/sticky_widgets.dart';
 
 Future<void> playMine() async {
+  if(StaticStore.nextPlay == 0){
+    return;
+  }
   YoutubeSongPlayer _player = YoutubeSongPlayer();
   if (StaticStore.nextPlay == 1) {
           // StaticStore.nextPlay = 0;
@@ -59,6 +62,7 @@ Widget playPauseAlbumButton(List<AlbumTrack>? _albumTracks,int position){
     stream: StaticStore.player.playerStateStream,
     builder: (context, snapshot) {
       if(StaticStore.player.processingState==ProcessingState.completed){
+
         playMine();
         return Icon(Icons.play_arrow,color: Colors.grey,);
       }

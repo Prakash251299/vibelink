@@ -44,11 +44,6 @@ Future<void> playSong(songUrl) async {
       }
       
       await StaticStore.player.play();
-      // StaticStore.player.playerStateStream.listen((state) async {
-      //   if (state.processingState == ProcessingState.completed) {
-      //     print("song completed");
-      //   }
-      // });
     } catch (e, stackTrace) {
       // Catch load errors: 404, invalid url ...
       print("Error loading playlist: $e");
@@ -85,11 +80,6 @@ Future<void> playSong1(songUrl,nextSongUrl,index) async {
       // await StaticStore.player.setLoopMode(LoopMode.all); // Enables auto-next
       // await StaticStore.player.; // Enables auto-next
       StaticStore.player.play();
-      // StaticStore.player.playerStateStream.listen((state) async {
-      //   if (state.processingState == ProcessingState.completed) {
-      //     print("song completed");
-      //   }
-      // });
     } catch (e, stackTrace) {
       // Catch load errors: 404, invalid url ...
       print("Error loading playlist: $e");
