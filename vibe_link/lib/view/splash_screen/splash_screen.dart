@@ -14,7 +14,17 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => MyApp()),
+        PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => MyApp(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 400),
+      ),
+        // MaterialPageRoute(builder: (_) => MyApp()),
       );
     });
   }

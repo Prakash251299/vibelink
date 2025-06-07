@@ -110,8 +110,14 @@ class MyAppState extends State<MyApp> {
           print(snapshot.data);
             if (!snapshot.hasData) {
               // while data is loading:
-              // return SizedBox();
-              return SplashScreen();
+              return MaterialApp(home: 
+                Container(
+                  color: Colors.black,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              );
+              // return SplashScreen();
               // Center(
               //   child: CircularProgressIndicator(),
               // );

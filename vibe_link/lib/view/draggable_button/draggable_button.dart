@@ -19,7 +19,7 @@ class DraggableFloatingButton extends StatefulWidget {
 
 class _DraggableFloatingButtonState extends State<DraggableFloatingButton> {
     double posX=320;
-    double posY=720;
+    double posY=700;
   // var context;
   // double height;
   // double width;

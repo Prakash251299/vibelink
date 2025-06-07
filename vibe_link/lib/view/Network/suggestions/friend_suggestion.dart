@@ -59,7 +59,8 @@ class _SuggestionState extends State<Suggestion> {
     // int len = state.recommendedUsers[recommendationIndex] != null?state.recommendedUsers[recommendationIndex]!.length*100:0;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
-        padding: const EdgeInsets.only(left: 18, top: 18.0, bottom: 15),
+        padding: const EdgeInsets.only(left: 18, top: 0, bottom: 15),
+        // padding: const EdgeInsets.only(left: 18, top: 18.0, bottom: 0),
         child: Text(
           "$recommendationType",
           style: TextStyle(fontSize: 22),
@@ -67,7 +68,7 @@ class _SuggestionState extends State<Suggestion> {
       ),
       Container(
         // color: Colors.red,
-        height:MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         // height: state.recommendedUsers[recommendationIndex] != null &&
         //         state.recommendedUsers[recommendationIndex]!.length >= 2
         //     ? state.recommendedUsers[recommendationIndex]!.length.toDouble()*100
@@ -77,135 +78,149 @@ class _SuggestionState extends State<Suggestion> {
             // physics: NeverScrollableScrollPhysics(),
             // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
             itemCount:
-            // 10,
-                state.recommendedUsers[recommendationIndex] != null?state.recommendedUsers[recommendationIndex]!.length:0,
+                // 10,
+                state.recommendedUsers[recommendationIndex] != null
+                    ? state.recommendedUsers[recommendationIndex]!.length
+                    : 0,
 
-
-                // state.recommendedUsers[2]!=null
-                    //     && state.recommendedUsers[recommendationIndex]!.length >= 2
-                    // ? 2
-                    // : 1,
+            // state.recommendedUsers[2]!=null
+            //     && state.recommendedUsers[recommendationIndex]!.length >= 2
+            // ? 2
+            // : 1,
             // itemCount:null,
             itemBuilder: (context, i) {
-              return StaticStore.requestStatusValue?[recommendationIndex]?[i]=="1"?SizedBox():Card(
-                color: Colors.black,
-                child: Column(children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(15),
-                    onTap: () async {},
-                    child: ListTile(
-                      // dense: false,
-                      // contentPadding: EdgeInsets.only(bottom:10),
-                      leading: Column(children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(3),
-                            bottomLeft: Radius.circular(3),
-                          ),
-                          child: state.recommendedUsers[recommendationIndex]?[i]
-                                      .imgUrl ==
-                                  null
-                              ? Container(
-                                  width: 55,
-                                  height: 55,
-                                  child: const LoadingUserImage(),
-                                )
-                              : CachedNetworkImage(
-                                  // imageUrl: user.avatar!,
-
-                                  // imageUrl: "${widget._albumTracks?[position].imgUrl}",
-                                  imageUrl:
-                                      "${state.recommendedUsers[recommendationIndex]?[i].imgUrl}",
-                                  // imageUrl: "",
-
-                                  width: 55,
-                                  height: 55,
-                                  memCacheHeight:
-                                      (55 * devicePexelRatio).round(),
-                                  memCacheWidth:
-                                      (55 * devicePexelRatio).round(),
-                                  maxHeightDiskCache:
-                                      (55 * devicePexelRatio).round(),
-                                  maxWidthDiskCache:
-                                      (55 * devicePexelRatio).round(),
-                                  progressIndicatorBuilder: (context, url, l) =>
-                                      LoadingImage(icon: Icon(LineIcons.user)),
-                                  fit: BoxFit.cover,
+              return StaticStore.requestStatusValue?[recommendationIndex]?[i] ==
+                      "1"
+                  ? SizedBox()
+                  : Card(
+                      color: Colors.black,
+                      child: Column(children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () async {},
+                          child: ListTile(
+                            // dense: false,
+                            // contentPadding: EdgeInsets.only(bottom:10),
+                            leading: Column(children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(3),
+                                  bottomLeft: Radius.circular(3),
                                 ),
+                                child: state
+                                            .recommendedUsers[
+                                                recommendationIndex]?[i]
+                                            .imgUrl ==
+                                        null
+                                    ? Container(
+                                        width: 55,
+                                        height: 55,
+                                        child: const LoadingUserImage(),
+                                      )
+                                    : CachedNetworkImage(
+                                        // imageUrl: user.avatar!,
+
+                                        // imageUrl: "${widget._albumTracks?[position].imgUrl}",
+                                        imageUrl:
+                                            "${state.recommendedUsers[recommendationIndex]?[i].imgUrl}",
+                                        // imageUrl: "",
+
+                                        width: 55,
+                                        height: 55,
+                                        memCacheHeight:
+                                            (55 * devicePexelRatio).round(),
+                                        memCacheWidth:
+                                            (55 * devicePexelRatio).round(),
+                                        maxHeightDiskCache:
+                                            (55 * devicePexelRatio).round(),
+                                        maxWidthDiskCache:
+                                            (55 * devicePexelRatio).round(),
+                                        progressIndicatorBuilder:
+                                            (context, url, l) => LoadingImage(
+                                                icon: Icon(LineIcons.user)),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ]),
+                            title: Text(
+                              // "${widget._albumTracks?[position].name}",
+                              "${state.recommendedUsers[recommendationIndex]?[i].displayName}",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            subtitle: Text(
+                              "User",
+                              style: TextStyle(color: Colors.white70),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            isThreeLine: true,
+                            trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      print("friend request sent");
+
+                                      await storeFriendRequest(state
+                                          .recommendedUsers[recommendationIndex]
+                                              ?[i]
+                                          .email);
+
+                                      await _friends
+                                          .friendStatusStore(state
+                                              .recommendedUsers[
+                                                  recommendationIndex]?[i]
+                                              .email)
+                                          .then((value) {
+                                        setState(() {
+                                          state.recommendedUsers[
+                                                      recommendationIndex] !=
+                                                  null
+                                              ? StaticStore.requestStatusValue?[
+                                                      recommendationIndex]?[i] =
+                                                  state
+                                                      .recommendedUsers[
+                                                          recommendationIndex]![
+                                                          i]
+                                                      .id
+                                                      .toString()
+                                              : null;
+                                        });
+                                        print("updated");
+                                      });
+                                      print(StaticStore.requestStatusValue?[
+                                          recommendationIndex]?[i]);
+                                    },
+                                    icon:
+                                        // Icon(Icons.send)
+
+                                        StaticStore.requestStatusValue?[
+                                                            recommendationIndex]
+                                                        ?[i] ==
+                                                    "0" ||
+                                                StaticStore.requestStatusValue?[
+                                                            recommendationIndex]
+                                                        ?[i] ==
+                                                    ""
+                                            ? Icon(Icons.send,
+                                                color: Colors.white)
+                                            : StaticStore.requestStatusValue?[
+                                                            recommendationIndex]
+                                                        ?[i] ==
+                                                    "1"
+                                                ? Icon(
+                                                    Icons.done_outline,
+                                                    color: Colors.white,
+                                                  )
+                                                : Icon(
+                                                    Icons.watch_later_outlined,
+                                                    color: Colors.white),
+                                  )
+                                ]),
+                          ),
                         ),
                       ]),
-                      title: Text(
-                        // "${widget._albumTracks?[position].name}",
-                        "${state.recommendedUsers[recommendationIndex]?[i].displayName}",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      subtitle: Text(
-                        "User",
-                        style: TextStyle(color: Colors.white70),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      isThreeLine: true,
-                      trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                print("friend request sent");
-
-                                await storeFriendRequest(state
-                                    .recommendedUsers[recommendationIndex]?[i]
-                                    .email);
-
-                                await _friends
-                                    .friendStatusStore(state
-                                        .recommendedUsers[recommendationIndex]
-                                            ?[i]
-                                        .email)
-                                    .then((value) {
-                                  setState(() {
-                                    state.recommendedUsers[
-                                                recommendationIndex] !=
-                                            null
-                                        ? StaticStore.requestStatusValue?[
-                                                recommendationIndex]?[i] =
-                                            state
-                                                .recommendedUsers[
-                                                    recommendationIndex]![i]
-                                                .id
-                                                .toString()
-                                        : null;
-                                  });
-                                  print("updated");
-                                });
-                                print(StaticStore.requestStatusValue?[
-                                    recommendationIndex]?[i]);
-                              },
-                              icon:
-                                  // Icon(Icons.send)
-
-                                  StaticStore.requestStatusValue?[
-                                                  recommendationIndex]?[i] ==
-                                              "0" ||
-                                          StaticStore.requestStatusValue?[
-                                                  recommendationIndex]?[i] ==
-                                              ""
-                                      ? Icon(Icons.send, color: Colors.white)
-                                      : StaticStore.requestStatusValue?[
-                                                  recommendationIndex]?[i] ==
-                                              "1"
-                                          ? Icon(
-                                              Icons.done_outline,
-                                              color: Colors.white,
-                                            )
-                                          : Icon(Icons.watch_later_outlined,
-                                              color: Colors.white),
-                            )
-                          ]),
-                    ),
-                  ),
-                ]),
-              );
+                    );
             }),
       ),
       // state.recommendedUsers[recommendationIndex] != null
@@ -468,7 +483,7 @@ class _SuggestionState extends State<Suggestion> {
                                 alignment: Alignment.topCenter,
                                 children: [
                                   /* Commented below line for replacing it with draggable button */
-                                  // friendOptions(context), 
+                                  // friendOptions(context),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -494,8 +509,8 @@ class _SuggestionState extends State<Suggestion> {
 
                                             Container(
                                               // height:1000,
-                                              margin: const EdgeInsets.only(
-                                                  top: 0),
+                                              margin:
+                                                  const EdgeInsets.only(top: 0),
                                               child: Column(children: [
                                                 if (state.recommendedUsers[1]
                                                         ?.length !=
@@ -508,7 +523,6 @@ class _SuggestionState extends State<Suggestion> {
                                                 // ),
                                               ]),
                                             ),
-
                                           ],
                                         );
                                       }
@@ -547,7 +561,10 @@ class _SuggestionState extends State<Suggestion> {
                 })),
         floatingActionButton: DraggableFloatingButton(
           color: Colors.green,
-          icon: Icon(LineIcons.userFriends,color: Colors.white,),
+          icon: Icon(
+            LineIcons.userFriends,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.of(context).push(PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>

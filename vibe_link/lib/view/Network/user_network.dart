@@ -143,9 +143,11 @@ class _NetworkUserState extends State<NetworkUser> {
                                             print("For chatting");
                                             // print(friends?[index].email);
                                             ReadWrite _readWrite = ReadWrite();
-                                            String currentUserEmail = await _readWrite.getEmail();
+                                            String currentUserEmail =
+                                                await _readWrite.getEmail();
                                             // SharedPreferences _prefs = SharedPreferences();
-                                            StaticStore.currentUserEmail = currentUserEmail;
+                                            StaticStore.currentUserEmail =
+                                                currentUserEmail;
                                             // print(StaticStore.currentUserEmail);
                                             // return;
                                             List<String?> s = [
@@ -157,27 +159,30 @@ class _NetworkUserState extends State<NetworkUser> {
                                                 "${s[0]}_${s[1]}";
 
                                             Navigator.of(context).push(
-                                              PageRouteBuilder(
-  pageBuilder: (context, animation, secondaryAnimation) => ChatScreen(
-                                                            friends![index],
-                                                            messageId),
-  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    return FadeTransition(
-      opacity: animation,
-      child: child,
-    );
-  },
-  transitionDuration: const Duration(milliseconds: 400),
-)
+                                                PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  ChatScreen(friends![index],
+                                                      messageId),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 400),
+                                            )
                                                 // MaterialPageRoute(
                                                 //     builder: (context) =>
                                                 //         ChatScreen(
                                                 //             friends![index],
                                                 //             messageId))
-                                                            );
-
-
-
+                                                );
                                           },
                                           child: ListTile(
                                             leading: Column(children: [
