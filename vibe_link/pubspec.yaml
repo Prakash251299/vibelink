@@ -83,7 +83,6 @@ dependencies:
   audio_session: ^0.1.19
   flutter_background_service: ^5.0.5
   flutter_local_notifications: ^17.1.2
-  flutter_launcher_icons: ^0.13.1
   # webview_cookie_manager: ^2.0.6
   # media_kit: ^1.1.10+1
   # media_kit_video: ^1.2.4
@@ -113,6 +112,8 @@ dependencies:
   # Draggable button
 
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -123,6 +124,25 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: "^0.14.3"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.jpeg"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/logo.jpeg"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  # windows:
+  #   generate: true
+  #   image_path: "assets/logo.jpeg"
+  #   icon_size: 48 # min:48, max:256, default: 48
+  # macos:
+  #   generate: true
+  #   image_path: "assets/logo.jpeg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -139,6 +159,8 @@ flutter:
     - icon/vibe_link.jpeg
     - assets/google.svg
     - assets/signin.png
+    - assets/loading_img.jpeg
+    - assets/logo.jpeg
     - .env
   #   - images/a_dot_ham.jpeg
 

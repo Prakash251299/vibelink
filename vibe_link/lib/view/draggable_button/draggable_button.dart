@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibe_link/controller/variables/static_store.dart';
 
 class DraggableFloatingButton extends StatefulWidget {
   final VoidCallback onPressed;
@@ -17,7 +18,7 @@ class DraggableFloatingButton extends StatefulWidget {
 }
 
 class _DraggableFloatingButtonState extends State<DraggableFloatingButton> {
-    double posX=350;
+    double posX=320;
     double posY=720;
   // var context;
   // double height;

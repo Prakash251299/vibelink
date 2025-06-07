@@ -4,10 +4,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:vibe_link/controller/login/login.dart';
+import 'package:vibe_link/controller/variables/static_store.dart';
 // import 'package:vibe_link/controller/local_songs/get_local_songs/permission/permission_handler.dart';
 import 'package:vibe_link/model/search/song_model.dart';
 import 'package:vibe_link/view/Login/login_screen.dart';
 import 'package:vibe_link/view/home/bottom_nav_bar.dart';
+import 'package:vibe_link/view/splash_screen/splash_screen.dart';
 // import 'package:on_audio_query/on_audio_query.dart';
 
 void main() async {
@@ -24,7 +26,11 @@ void main() async {
   await Firebase.initializeApp();
   await dotenv.load(fileName: ".env");
   
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SplashScreen(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -40,6 +46,7 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    
     // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>loginScreen()));
   }
 
@@ -103,9 +110,11 @@ class MyAppState extends State<MyApp> {
           print(snapshot.data);
             if (!snapshot.hasData) {
               // while data is loading:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              // return SizedBox();
+              return SplashScreen();
+              // Center(
+              //   child: CircularProgressIndicator(),
+              // );
             } else {
               // data loaded:
               

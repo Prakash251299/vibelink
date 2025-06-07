@@ -51,6 +51,8 @@ class StaticStore{
   static double miniplayerMargin=50;
   static int songIndex=0;
   static String country = 'IN';
+  static Map<String,double> deviceSize = {"height":100,"width":100};
+
   static var playlist = ConcatenatingAudioSource(
         children: [],
       );

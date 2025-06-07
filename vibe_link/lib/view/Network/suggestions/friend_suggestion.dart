@@ -56,6 +56,7 @@ class _SuggestionState extends State<Suggestion> {
   Widget people_page(state, recommendationIndex, recommendationType) {
     // return Text("Hello ishu");
     final devicePexelRatio = MediaQuery.of(context).devicePixelRatio;
+    // int len = state.recommendedUsers[recommendationIndex] != null?state.recommendedUsers[recommendationIndex]!.length*100:0;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.only(left: 18, top: 18.0, bottom: 15),
@@ -65,24 +66,28 @@ class _SuggestionState extends State<Suggestion> {
         ),
       ),
       Container(
-        height: state.recommendedUsers[recommendationIndex] != null &&
-                state.recommendedUsers[recommendationIndex]!.length >= 2
-            ? 200
-            : 100,
+        // color: Colors.red,
+        height:MediaQuery.of(context).size.height,
+        // height: state.recommendedUsers[recommendationIndex] != null &&
+        //         state.recommendedUsers[recommendationIndex]!.length >= 2
+        //     ? state.recommendedUsers[recommendationIndex]!.length.toDouble()*100
+        //     : 100,
         child: ListView.builder(
             scrollDirection: Axis.vertical,
-            physics: NeverScrollableScrollPhysics(),
+            // physics: NeverScrollableScrollPhysics(),
             // itemCount: _recommendedUserInfo!.length<=2?_recommendedUserInfo.length:2,
             itemCount:
-                // state.recommendedUsers[2]!=null?state.recommendedUsers[2]!.length:0,
+            // 10,
+                state.recommendedUsers[recommendationIndex] != null?state.recommendedUsers[recommendationIndex]!.length:0,
 
-                state.recommendedUsers[recommendationIndex] != null &&
-                        state.recommendedUsers[recommendationIndex]!.length >= 2
-                    ? 2
-                    : 1,
+
+                // state.recommendedUsers[2]!=null
+                    //     && state.recommendedUsers[recommendationIndex]!.length >= 2
+                    // ? 2
+                    // : 1,
             // itemCount:null,
             itemBuilder: (context, i) {
-              return Card(
+              return StaticStore.requestStatusValue?[recommendationIndex]?[i]=="1"?SizedBox():Card(
                 color: Colors.black,
                 child: Column(children: [
                   InkWell(
@@ -203,127 +208,127 @@ class _SuggestionState extends State<Suggestion> {
               );
             }),
       ),
-      state.recommendedUsers[recommendationIndex] != null
-          ? (state.recommendedUsers[recommendationIndex]!.length > 2
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 18.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        child: Text(
-                          "show more",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onTap: () async {
-                          print("$recommendationType show more tapped");
-                          if (recommendationIndex == 2) {
-                            List<UserInfoMine> totalUsers =
-                                await fetchAllFriends(50); // this value
-                            await getRequestStatus(
-                                totalUsers, recommendationIndex, 50);
-                            Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      ShowmoreSuggestion(
-                                          totalUsers,
-                                          "$recommendationType",
-                                          recommendationIndex),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
-                                )
-                                // MaterialPageRoute(
-                                //     builder: (context1) => ShowmoreSuggestion(
-                                //         totalUsers, "$recommendationType",recommendationIndex))
-                                );
-                            return;
-                          }
-                          if (recommendationIndex == 1) {
-                            List<UserInfoMine> totalUsers =
-                                await fetchGoodMatchFriends(50);
-                            await getRequestStatus(
-                                totalUsers, recommendationIndex, 50);
+      // state.recommendedUsers[recommendationIndex] != null
+      //     ? (state.recommendedUsers[recommendationIndex]!.length > 2
+      //         ? Padding(
+      //             padding: const EdgeInsets.only(bottom: 18.0),
+      //             child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               children: [
+      //                 InkWell(
+      //                   child: Text(
+      //                     "show more",
+      //                     style: TextStyle(color: Colors.white),
+      //                   ),
+      //                   onTap: () async {
+      //                     print("$recommendationType show more tapped");
+      //                     if (recommendationIndex == 2) {
+      //                       List<UserInfoMine> totalUsers =
+      //                           await fetchAllFriends(50); // this value
+      //                       await getRequestStatus(
+      //                           totalUsers, recommendationIndex, 50);
+      //                       Navigator.push(
+      //                           context,
+      //                           PageRouteBuilder(
+      //                             pageBuilder: (context, animation,
+      //                                     secondaryAnimation) =>
+      //                                 ShowmoreSuggestion(
+      //                                     totalUsers,
+      //                                     "$recommendationType",
+      //                                     recommendationIndex),
+      //                             transitionsBuilder: (context, animation,
+      //                                 secondaryAnimation, child) {
+      //                               return FadeTransition(
+      //                                 opacity: animation,
+      //                                 child: child,
+      //                               );
+      //                             },
+      //                             transitionDuration:
+      //                                 const Duration(milliseconds: 400),
+      //                           )
+      //                           // MaterialPageRoute(
+      //                           //     builder: (context1) => ShowmoreSuggestion(
+      //                           //         totalUsers, "$recommendationType",recommendationIndex))
+      //                           );
+      //                       return;
+      //                     }
+      //                     if (recommendationIndex == 1) {
+      //                       List<UserInfoMine> totalUsers =
+      //                           await fetchGoodMatchFriends(50);
+      //                       await getRequestStatus(
+      //                           totalUsers, recommendationIndex, 50);
 
-                            Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      ShowmoreSuggestion(
-                                          state.recommendedUsers[
-                                              recommendationIndex],
-                                          "$recommendationType",
-                                          recommendationIndex),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
-                                )
-                                // MaterialPageRoute(
-                                // builder: (context1) => ShowmoreSuggestion(
-                                //     state.recommendedUsers[
-                                //         recommendationIndex],
-                                //     "$recommendationType",
-                                //     recommendationIndex))
-                                );
-                            return;
-                          }
-                          if (recommendationIndex == 0) {
-                            List<UserInfoMine> totalUsers =
-                                await fetchBestMatchFriends(10);
-                            await getRequestStatus(
-                                totalUsers, recommendationIndex, 50);
+      //                       Navigator.push(
+      //                           context,
+      //                           PageRouteBuilder(
+      //                             pageBuilder: (context, animation,
+      //                                     secondaryAnimation) =>
+      //                                 ShowmoreSuggestion(
+      //                                     state.recommendedUsers[
+      //                                         recommendationIndex],
+      //                                     "$recommendationType",
+      //                                     recommendationIndex),
+      //                             transitionsBuilder: (context, animation,
+      //                                 secondaryAnimation, child) {
+      //                               return FadeTransition(
+      //                                 opacity: animation,
+      //                                 child: child,
+      //                               );
+      //                             },
+      //                             transitionDuration:
+      //                                 const Duration(milliseconds: 400),
+      //                           )
+      //                           // MaterialPageRoute(
+      //                           // builder: (context1) => ShowmoreSuggestion(
+      //                           //     state.recommendedUsers[
+      //                           //         recommendationIndex],
+      //                           //     "$recommendationType",
+      //                           //     recommendationIndex))
+      //                           );
+      //                       return;
+      //                     }
+      //                     if (recommendationIndex == 0) {
+      //                       List<UserInfoMine> totalUsers =
+      //                           await fetchBestMatchFriends(10);
+      //                       await getRequestStatus(
+      //                           totalUsers, recommendationIndex, 50);
 
-                            Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      ShowmoreSuggestion(
-                                          state.recommendedUsers[
-                                              recommendationIndex],
-                                          "$recommendationType",
-                                          recommendationIndex),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
-                                )
-                                // MaterialPageRoute(
-                                //     builder: (context1) => ShowmoreSuggestion(
-                                //         state.recommendedUsers[
-                                //             recommendationIndex],
-                                //         "$recommendationType",
-                                //         recommendationIndex))
-                                );
-                            return;
-                          }
-                        },
-                      )
-                    ],
-                  ),
-                )
-              : SizedBox())
-          : SizedBox(),
+      //                       Navigator.push(
+      //                           context,
+      //                           PageRouteBuilder(
+      //                             pageBuilder: (context, animation,
+      //                                     secondaryAnimation) =>
+      //                                 ShowmoreSuggestion(
+      //                                     state.recommendedUsers[
+      //                                         recommendationIndex],
+      //                                     "$recommendationType",
+      //                                     recommendationIndex),
+      //                             transitionsBuilder: (context, animation,
+      //                                 secondaryAnimation, child) {
+      //                               return FadeTransition(
+      //                                 opacity: animation,
+      //                                 child: child,
+      //                               );
+      //                             },
+      //                             transitionDuration:
+      //                                 const Duration(milliseconds: 400),
+      //                           )
+      //                           // MaterialPageRoute(
+      //                           //     builder: (context1) => ShowmoreSuggestion(
+      //                           //         state.recommendedUsers[
+      //                           //             recommendationIndex],
+      //                           //         "$recommendationType",
+      //                           //         recommendationIndex))
+      //                           );
+      //                       return;
+      //                     }
+      //                   },
+      //                 )
+      //               ],
+      //             ),
+      //           )
+      //         : SizedBox())
+      //     : SizedBox(),
     ]);
   }
 
@@ -488,6 +493,7 @@ class _SuggestionState extends State<Suggestion> {
                                             // friendOptions(context),
 
                                             Container(
+                                              // height:1000,
                                               margin: const EdgeInsets.only(
                                                   top: 0),
                                               child: Column(children: [
@@ -497,9 +503,9 @@ class _SuggestionState extends State<Suggestion> {
                                                   people_page(
                                                       state, 1, "Your match"),
                                                 },
-                                                SizedBox(
-                                                  height: 100,
-                                                ),
+                                                // SizedBox(
+                                                //   height: 100,
+                                                // ),
                                               ]),
                                             ),
 

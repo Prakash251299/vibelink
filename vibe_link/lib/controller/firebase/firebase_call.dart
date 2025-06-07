@@ -222,7 +222,7 @@ class FirebaseCall {
 }
 
 Future<String> requestIdGenerator(String otherUser) async {
-  print("generating id");
+  // print("generating id");
   ReadWrite _readWrite =ReadWrite();
   String currentUserEmail = await _readWrite.getEmail();
   List<String?> s = [currentUserEmail, otherUser];
@@ -269,9 +269,9 @@ class _FriendsState extends State<Friends> {
 }
 
 Future<String> getFriendStatus(requestReceiver) async {
-  print("fetching requestId");
+  // print("fetching requestId");
   var requestId = await requestIdGenerator(requestReceiver);
-  print(requestId);
+  // print(requestId);
   // return "";
   var db = FirebaseFirestore.instance;
   try {

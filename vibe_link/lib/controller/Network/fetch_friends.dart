@@ -49,45 +49,38 @@ Future<List<UserInfoMine>> fetchGoodMatchFriends(int numberOfUsers) async {
   return goodMatch;
 }
 
-Future<void> getRequestStatus(List<UserInfoMine>? users, int recommendationIndex, int limit) async {
-  // List<dynamic>Error happened at homecubit in getRecommendedUsers function
+Future<void> getRequestStatus(List<UserInfoMine>? users, int recommendationIndex) async {
   List<String>? temp = [];
   temp = StaticStore.requestStatusValue?[recommendationIndex];
   if (users != null) {
-    print("bestmatch has data");
-    // print(users.length);
-    // return ;
-    for (int i = 0; i < users.length && i<limit; i++){
+    // print("bestmatch has data");
+    for (int i = 0; i < users.length; i++){
       temp?.add(await getFriendStatus(users[i].email));
     }
-    print("bestmatch has stored data");
+    // print("bestmatch has stored data");
     StaticStore.requestStatusValue?.add(temp);
   } else {
     StaticStore.requestStatusValue?.add([]);
   }
-  // print(StaticStore.requestStatusValue);
 }
 
 Future<List<List<UserInfoMine>?>?> connectionCaller()  async {
-  StaticStore.requestStatusValue?.clear(); 
+  StaticStore.requestStatusValue?.clear();
 
   /* The below array store requeststatus value which is '0' if nothing done, 'userEmailId' if request sent and '1' if request has been accepted */
   StaticStore.requestStatusValue = [[], [], []];
-  List<UserInfoMine> bestMatch = await fetchBestMatchFriends(3);
-  List<UserInfoMine> goodMatch = await fetchGoodMatchFriends(3);
-  // print(goodMatch?.length);
+  // right now only 20 matches are fetched (Implement the load more users on scroll)
+  List<UserInfoMine> bestMatch = await fetchBestMatchFriends(20);
+  List<UserInfoMine> goodMatch = await fetchGoodMatchFriends(20);
 
-  List<UserInfoMine>? allUsers = await fetchAllFriends(3);
 
-  await getRequestStatus(bestMatch, 0,2);
-  // print("goodmatch length");
-  // print(goodMatch?[0].displayName);
-  // print(goodMatch?[0].email);
-  await getRequestStatus(goodMatch, 1,2);
-  // await getRequestStatus([], 1);
-  await getRequestStatus(allUsers, 2,2);
+  /* Below code fetches all users (but no use so commented) */
+  // List<UserInfoMine>? allUsers = await fetchAllFriends(3);
+  List<UserInfoMine>? allUsers=[];
 
-  // return [bestMatch,goodMatch,allUsers];
+  await getRequestStatus(bestMatch, 0);
+  await getRequestStatus(goodMatch, 1);
+  await getRequestStatus(allUsers, 2);
   return [bestMatch,goodMatch,allUsers];
 }
 
