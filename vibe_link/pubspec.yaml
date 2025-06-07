@@ -110,6 +110,8 @@ dependencies:
   # Messaging
   intl: ^0.20.2
 
+  # Draggable button
+
 
 dev_dependencies:
   flutter_test:
