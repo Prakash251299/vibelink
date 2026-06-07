@@ -7,7 +7,7 @@ A music powered social platform that connects people based on their music taste.
 
 - 🔗 Connect users based on Spotify listening habits
 - 💬 Real-time chat and interaction
-- 🧠 Smart matching using recommendation logic
+- 🧠 Recommendation system optimized for scalable user matching
 - 📊 Data-driven user categorization using top genres
 - 🔐 Firebase Authentication & Firestore backend
 
